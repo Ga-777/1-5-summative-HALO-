@@ -10,14 +10,15 @@ namespace _1_5_summative__HALO_
         private SpriteBatch _spriteBatch;
         Rectangle window;
         MouseState mouse;
-        enum GameState
+        enum Screen
         {
             MainMenu,
             Playing,
             GameOver
         }
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture;
-        Rectangle cityrect, cityrect2, peilcanrect, covenantshiprect;
+        Screen screen = Screen.MainMenu;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture;
+        Rectangle cityrect, cityrect2, peilcanrect, covenantshiprect, ringrect;
         Vector2 citypos;
         int lifes = 3;
         public Game1()
@@ -57,40 +58,54 @@ namespace _1_5_summative__HALO_
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            mouse = Mouse.GetState();
+            if (screen == Screen.MainMenu)
             {
-                peilcanrect.X -= 5;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                peilcanrect.X += 5;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                peilcanrect.Y -= 5;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                peilcanrect.Y += 5;
-            }
 
-            cityrect.X -= 2;
-            cityrect2.X -= 2;
-            
-            covenantshiprect.X -= 1;
-            if (covenantshiprect.X <= -750)
-            {
-                covenantshiprect.X = 800;
+                if (mouse.LeftButton == ButtonState.Pressed)
+                {
+                    screen = Screen.Playing;
+                    
+                }
+
             }
-            if (cityrect.X <= -1000)
+            if (screen == Screen.Playing)
             {
-                cityrect.X = 1000;
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    peilcanrect.X -= 5;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    peilcanrect.X += 5;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    peilcanrect.Y -= 5;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    peilcanrect.Y += 5;
+                }
+
+                cityrect.X -= 2;
+                cityrect2.X -= 2;
+
+                covenantshiprect.X -= 1;
+                if (covenantshiprect.X <= -750)
+                {
+                    covenantshiprect.X = 800;
+                }
+                if (cityrect.X <= -1000)
+                {
+                    cityrect.X = 1000;
+                }
                 if (cityrect2.X <= -1000)
                 {
                     cityrect2.X = 1000;
+                }
             }
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -100,11 +115,18 @@ namespace _1_5_summative__HALO_
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
-            _spriteBatch.Draw(covenant_shipTexture, covenantshiprect, Color.White);
-            _spriteBatch.Draw(cityTexture, cityrect, Color.White);
-            _spriteBatch.Draw(cityTexture, cityrect2, Color.White);
+            if (screen == Screen.MainMenu)
+            {
+                
+            }
+            if (screen == Screen.Playing)
+            {
+                _spriteBatch.Draw(covenant_shipTexture, covenantshiprect, Color.White);
+                _spriteBatch.Draw(cityTexture, cityrect, Color.White);
+                _spriteBatch.Draw(cityTexture, cityrect2, Color.White);
 
                 _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+            }
             
             _spriteBatch.End();
 
