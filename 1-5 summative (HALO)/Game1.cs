@@ -18,7 +18,7 @@ namespace _1_5_summative__HALO_
         }
         Screen screen = Screen.MainMenu;
         Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture;
-        Rectangle cityrect, cityrect2, peilcanrect, covenantshiprect, ringrect;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect;
         Vector2 citypos;
         int lifes = 3;
         public Game1()
@@ -37,8 +37,18 @@ namespace _1_5_summative__HALO_
             _graphics.ApplyChanges();
             cityrect = new Rectangle(0, 0, 1000, 500);
             cityrect2 = new Rectangle(1000, 0, 1000, 500);
+
+            cityrect3 = new Rectangle(1000, 0, 1000, 500);
+
+            cityrect3 = new Rectangle(1000, 0, 500, 250);
+
+            cityrect4 = new Rectangle(1000, 0, 500, 250);
+
             peilcanrect = new Rectangle(200, 50, 70, 50);
+
             covenantshiprect = new Rectangle(500, 0, 250, 200);
+
+            ringrect = new Rectangle(0, 0, 800, 500);
 
 
             base.Initialize();
@@ -50,6 +60,7 @@ namespace _1_5_summative__HALO_
                 cityTexture = Content.Load<Texture2D>("cityforeandbackground");
             peilcanTexture = Content.Load<Texture2D>("peilcan2");
             covenant_shipTexture = Content.Load<Texture2D>("covenant_ship");
+            ringTexture = Content.Load<Texture2D>("ring");
 
             // TODO: use this.Content to load your game content here
         }
@@ -104,6 +115,7 @@ namespace _1_5_summative__HALO_
                 {
                     cityrect2.X = 1000;
                 }
+                
             }
 
             // TODO: Add your update logic here
@@ -117,7 +129,7 @@ namespace _1_5_summative__HALO_
             _spriteBatch.Begin();
             if (screen == Screen.MainMenu)
             {
-                
+                _spriteBatch.Draw(ringTexture, ringrect, Color.White);
             }
             if (screen == Screen.Playing)
             {
