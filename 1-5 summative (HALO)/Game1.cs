@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -10,6 +11,7 @@ namespace _1_5_summative__HALO_
         private SpriteBatch _spriteBatch;
         Rectangle window;
         MouseState mouse;
+        Random random;
         enum Screen
         {
             MainMenu,
@@ -17,8 +19,8 @@ namespace _1_5_summative__HALO_
             GameOver
         }
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect;
         Vector2 citypos;
         int lifes = 3;
         public Game1()
@@ -50,8 +52,10 @@ namespace _1_5_summative__HALO_
 
             ringrect = new Rectangle(0, 0, 800, 500);
 
+            bansheerect = new Rectangle(800, 0, 60, 40);
 
-            base.Initialize();
+
+			base.Initialize();
         }
 
         protected override void LoadContent()
@@ -61,9 +65,10 @@ namespace _1_5_summative__HALO_
             peilcanTexture = Content.Load<Texture2D>("peilcan2");
             covenant_shipTexture = Content.Load<Texture2D>("covenant_ship");
             ringTexture = Content.Load<Texture2D>("ring");
+            bansheeTexture = Content.Load<Texture2D>("banshee");
 
-            // TODO: use this.Content to load your game content here
-        }
+			// TODO: use this.Content to load your game content here
+		}
 
         protected override void Update(GameTime gameTime)
         {
@@ -103,7 +108,8 @@ namespace _1_5_summative__HALO_
                 cityrect2.X -= 2;
 
                 covenantshiprect.X -= 1;
-                if (covenantshiprect.X <= -750)
+                bansheerect.X -= 3;
+				if (covenantshiprect.X <= -750)
                 {
                     covenantshiprect.X = 800;
                 }
@@ -115,8 +121,13 @@ namespace _1_5_summative__HALO_
                 {
                     cityrect2.X = 1000;
                 }
-                
-            }
+                if (bansheerect.X <= -150)
+                {
+                    bansheerect.X = 850;
+                    bansheerect.Y = new Random().Next(0, 450); 
+				}
+
+			}
 
             // TODO: Add your update logic here
 
@@ -136,8 +147,9 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(covenant_shipTexture, covenantshiprect, Color.White);
                 _spriteBatch.Draw(cityTexture, cityrect, Color.White);
                 _spriteBatch.Draw(cityTexture, cityrect2, Color.White);
+                _spriteBatch.Draw(bansheeTexture, bansheerect, Color.White);
 
-                _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+				_spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
             }
             
             _spriteBatch.End();
