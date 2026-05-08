@@ -5,23 +5,25 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _1_5_summative__HALO_
 {
+    enum Screen
+    {
+        MainMenu,
+        Playing,
+        GameOver
+    }
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         Rectangle window;
         MouseState mouse;
-        Random random;
-        enum Screen
-        {
-            MainMenu,
-            Playing,
-            GameOver
-        }
+        Random generator = new Random();  
+
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect;
-        Vector2 citypos;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect;
+        float timer = 0;
+        
         int lifes = 3;
         public Game1()
         {
@@ -54,27 +56,45 @@ namespace _1_5_summative__HALO_
 
             bansheerect = new Rectangle(800, 0, 60, 40);
 
+            build1rect = new Rectangle(-250, 250, 300, 250);
 
-			base.Initialize();
+            unscshiprect = new Rectangle(1010, 100, 100, 50);
+
+            bansheerect2 = new Rectangle(900, 0, 60, 40);
+
+            base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
                 cityTexture = Content.Load<Texture2D>("cityforeandbackground");
+
             peilcanTexture = Content.Load<Texture2D>("peilcan2");
+
             covenant_shipTexture = Content.Load<Texture2D>("covenant_ship");
+
             ringTexture = Content.Load<Texture2D>("ring");
+
             bansheeTexture = Content.Load<Texture2D>("banshee");
 
-			// TODO: use this.Content to load your game content here
-		}
+            skyTexture = Content.Load<Texture2D>("sky");
+
+                build1Texture = Content.Load<Texture2D>("building1");
+
+                unscShipTexture = Content.Load<Texture2D>("UNSC_ship");
+
+            // TODO: use this.Content to load your game content here
+        }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            
             mouse = Mouse.GetState();
+            
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (screen == Screen.MainMenu)
             {
 
@@ -103,13 +123,18 @@ namespace _1_5_summative__HALO_
                 {
                     peilcanrect.Y += 5;
                 }
-
+                
                 cityrect.X -= 2;
                 cityrect2.X -= 2;
-
+                build1rect.X -= 1;
                 covenantshiprect.X -= 1;
-                bansheerect.X -= 3;
-				if (covenantshiprect.X <= -750)
+                
+                unscshiprect.X -= 1;
+                if (build1rect.X <= -300)
+                {
+                    build1rect.X = generator.Next(1100, 3000);
+                }
+                if (covenantshiprect.X <= -750)
                 {
                     covenantshiprect.X = 800;
                 }
@@ -126,8 +151,83 @@ namespace _1_5_summative__HALO_
                     bansheerect.X = 850;
                     bansheerect.Y = new Random().Next(0, 450); 
 				}
+                if (peilcanrect.Intersects(build1rect))
+                {   lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                }
+                if (peilcanrect.Intersects(bansheerect))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    bansheerect.X = 850;
+                    bansheerect.Y = new Random().Next(0, 450);
+                }
+                if (unscshiprect.X <= -250)
+                {
+                    unscshiprect.X = new Random().Next(1000, 3000);
+                    unscshiprect.Y = new Random().Next(0, 200);
+                }
+                if (peilcanrect.X <= -100)
+                {
+                    peilcanrect.X = 900;
+                }
+                else if (peilcanrect.X >= 900)
+                {
+                    peilcanrect.X = -100;
+                }
+                if (peilcanrect.Y <= -100)
+                {
+                    peilcanrect.Y = 600;
+                }
+                else if (peilcanrect.Y >= 600)
+                {
+                    peilcanrect.Y = -100;
+                }
+                if (lifes <= 0)
+                {
+                    screen = Screen.GameOver;
+                }
+                if (bansheerect2.X <= -150)
+                {
+                    bansheerect2.X = 850;
+                    bansheerect2.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(bansheerect2))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    bansheerect2.X = 850;
+                    bansheerect2.Y = new Random().Next(0, 450);
+                }
+                if (timer >= 0)
+                {
+                    bansheerect.X -= 3;
+                    
 
-			}
+                }
+                if (timer >= 15)
+                {
+                    
+                    bansheerect.X -= 4;
+                    bansheerect2.X -= 4;
+                    
+                    
+                }
+                if (timer >= 30)
+                {
+                    bansheerect.X -= 5;
+                    bansheerect2.X -= 5;
+                }
+                if (timer >= 45)
+                {
+                    bansheerect.X -= 6;
+                    bansheerect2.X -= 6;
+                }
+
+            }
 
             // TODO: Add your update logic here
 
@@ -144,12 +244,23 @@ namespace _1_5_summative__HALO_
             }
             if (screen == Screen.Playing)
             {
-                _spriteBatch.Draw(covenant_shipTexture, covenantshiprect, Color.White);
-                _spriteBatch.Draw(cityTexture, cityrect, Color.White);
-                _spriteBatch.Draw(cityTexture, cityrect2, Color.White);
-                _spriteBatch.Draw(bansheeTexture, bansheerect, Color.White);
+                _spriteBatch.Draw(skyTexture, window, Color.White);
 
-				_spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+                _spriteBatch.Draw(unscShipTexture, unscshiprect, Color.White);
+
+                _spriteBatch.Draw(covenant_shipTexture, covenantshiprect, Color.White);
+
+                _spriteBatch.Draw(cityTexture, cityrect, Color.White);
+
+                _spriteBatch.Draw(cityTexture, cityrect2, Color.White);
+
+                _spriteBatch.Draw(build1Texture, build1rect, Color.White);
+
+                _spriteBatch.Draw(bansheeTexture, bansheerect, Color.White);
+                
+                _spriteBatch.Draw(bansheeTexture, bansheerect2, Color.White);
+                
+                _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
             }
             
             _spriteBatch.End();
