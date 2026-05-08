@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -20,10 +21,10 @@ namespace _1_5_summative__HALO_
         Random generator = new Random();  
 
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect;
         float timer = 0;
-        
+        SoundEffectInstance haloTheme, haloflyingtheme;
         int lifes = 3;
         public Game1()
         {
@@ -62,6 +63,8 @@ namespace _1_5_summative__HALO_
 
             bansheerect2 = new Rectangle(900, 0, 60, 40);
 
+            logorect = new Rectangle(200, 100, 400, 300);
+
             base.Initialize();
         }
 
@@ -82,7 +85,17 @@ namespace _1_5_summative__HALO_
 
                 build1Texture = Content.Load<Texture2D>("building1");
 
-                unscShipTexture = Content.Load<Texture2D>("UNSC_ship");
+            unscShipTexture = Content.Load<Texture2D>("UNSC_ship");
+
+            logoTexture = Content.Load<Texture2D>("halo_logo");
+            
+            haloTheme = Content.Load<SoundEffect>("halo_theme").CreateInstance();
+
+            SoundEffect haloThemeSoundEffect = Content.Load<SoundEffect>("halo_theme");
+
+            haloflyingtheme = Content.Load<SoundEffect>("halo_fly").CreateInstance();
+
+            SoundEffectInstance haloFlyingThemeSoundEffectInstance = Content.Load<SoundEffect>("halo_fly").CreateInstance();
 
             // TODO: use this.Content to load your game content here
         }
@@ -94,19 +107,22 @@ namespace _1_5_summative__HALO_
             
             mouse = Mouse.GetState();
             
-            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
             if (screen == Screen.MainMenu)
             {
-
+                haloTheme.Play();
                 if (mouse.LeftButton == ButtonState.Pressed)
                 {
                     screen = Screen.Playing;
-                    
+                    haloTheme.Stop();
+
                 }
 
             }
             if (screen == Screen.Playing)
             {
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                haloflyingtheme.Play();
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     peilcanrect.X -= 5;
@@ -241,6 +257,8 @@ namespace _1_5_summative__HALO_
             if (screen == Screen.MainMenu)
             {
                 _spriteBatch.Draw(ringTexture, ringrect, Color.White);
+                _spriteBatch.Draw(logoTexture, logorect, Color.White);
+
             }
             if (screen == Screen.Playing)
             {

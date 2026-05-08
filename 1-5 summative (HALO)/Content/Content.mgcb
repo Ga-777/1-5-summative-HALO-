@@ -73,6 +73,30 @@
 /processorParam:TextureFormat=Color
 /build:covenant_ship.png
 
+#begin halo_fly.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:halo_fly.wav
+
+#begin halo_logo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:halo_logo.png
+
+#begin halo_theme.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:halo_theme.wav
+
 #begin peilcan.png
 /importer:TextureImporter
 /processor:TextureProcessor
