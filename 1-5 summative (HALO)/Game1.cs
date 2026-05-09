@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Http.Headers;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,8 +23,8 @@ namespace _1_5_summative__HALO_
         Random generator = new Random();  
 
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, explosionTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, explosionrect;
         float timer = 0;
         SoundEffectInstance haloTheme, haloflyingtheme;
         int lifes = 3;
@@ -65,7 +67,9 @@ namespace _1_5_summative__HALO_
 
             logorect = new Rectangle(200, 100, 400, 300);
 
-            base.Initialize();
+            explosionrect = new Rectangle(0, 0, 100, 100);
+
+			base.Initialize();
         }
 
         protected override void LoadContent()
@@ -97,8 +101,10 @@ namespace _1_5_summative__HALO_
 
             SoundEffectInstance haloFlyingThemeSoundEffectInstance = Content.Load<SoundEffect>("halo_fly").CreateInstance();
 
-            // TODO: use this.Content to load your game content here
-        }
+            explosionTexture = Content.Load<Texture2D>("explosion");
+
+			// TODO: use this.Content to load your game content here
+		}
 
         protected override void Update(GameTime gameTime)
         {
@@ -111,11 +117,15 @@ namespace _1_5_summative__HALO_
             if (screen == Screen.MainMenu)
             {
                 haloTheme.Play();
+                if (haloTheme.State == SoundState.Stopped) 
+                {
+                    haloTheme.Play();
+                }
                 if (mouse.LeftButton == ButtonState.Pressed)
                 {
                     screen = Screen.Playing;
                     haloTheme.Stop();
-
+                    
                 }
 
             }
@@ -123,7 +133,11 @@ namespace _1_5_summative__HALO_
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 haloflyingtheme.Play();
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                if (haloflyingtheme.State == SoundState.Stopped) 
+                {
+                    haloflyingtheme.Play();
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     peilcanrect.X -= 5;
                 }
@@ -171,6 +185,7 @@ namespace _1_5_summative__HALO_
                 {   lifes--;
                     peilcanrect.X = 200;
                     peilcanrect.Y = 50;
+
                 }
                 if (peilcanrect.Intersects(bansheerect))
                 {
@@ -279,7 +294,28 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(bansheeTexture, bansheerect2, Color.White);
                 
                 _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
-            }
+
+                if (peilcanrect.Intersects(bansheerect))
+                {
+                    
+					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
+                    _spriteBatch.Draw(explosionTexture, bansheerect, Color.White);
+					
+				}
+				if (peilcanrect.Intersects(bansheerect2))
+				{
+
+					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
+					_spriteBatch.Draw(explosionTexture, bansheerect2, Color.White); 
+
+				}
+				if (peilcanrect.Intersects(build1rect))
+				{
+
+					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
+					
+				}
+			}
             
             _spriteBatch.End();
 
