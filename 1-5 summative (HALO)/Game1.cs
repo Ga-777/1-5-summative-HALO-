@@ -12,17 +12,21 @@ namespace _1_5_summative__HALO_
         Playing,
         GameOver
     }
+    
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private float bulletTimer = 0;
+        private float bulletTime = 3;
+        bool bulletActive = false;
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();  
 
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect;
         float timer = 0;
         SoundEffectInstance haloTheme, haloflyingtheme;
         int lifes = 3;
@@ -65,6 +69,8 @@ namespace _1_5_summative__HALO_
 
             logorect = new Rectangle(200, 100, 400, 300);
 
+            bulletrect = new Rectangle(0, 0, 20, 10);
+
             base.Initialize();
         }
 
@@ -97,6 +103,8 @@ namespace _1_5_summative__HALO_
 
             SoundEffectInstance haloFlyingThemeSoundEffectInstance = Content.Load<SoundEffect>("halo_fly").CreateInstance();
 
+            bulletTexture = Content.Load<Texture2D>("bullet");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -106,8 +114,9 @@ namespace _1_5_summative__HALO_
                 Exit();
             
             mouse = Mouse.GetState();
-            
-            
+            bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+
             if (screen == Screen.MainMenu)
             {
                 haloTheme.Play();
@@ -242,6 +251,37 @@ namespace _1_5_summative__HALO_
                     bansheerect.X -= 6;
                     bansheerect2.X -= 6;
                 }
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    bulletrect.X = peilcanrect.X + peilcanrect.Width;
+                    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
+                    bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    bulletActive = true;
+
+                    
+                    
+                }
+                if (bulletTimer >= bulletTime)
+                {
+
+                    bulletrect.X = peilcanrect.X + peilcanrect.Width;
+                    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
+                    bulletTimer = 0;
+                    bulletActive = false;
+                }
+                if (bulletActive == true)
+                {
+                    bulletrect.X += 10;
+                }
+                if (bulletrect.Intersects(bansheerect))
+                {
+                    bansheerect.X = 800;
+                    bulletActive = false;
+                    bulletrect.X = peilcanrect.X + peilcanrect.Width;
+                    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
+                    bulletTimer = 0;
+                    bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                }
 
             }
 
@@ -277,7 +317,13 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(bansheeTexture, bansheerect, Color.White);
                 
                 _spriteBatch.Draw(bansheeTexture, bansheerect2, Color.White);
-                
+
+                if (bulletActive == true)
+                {
+                    _spriteBatch.Draw(bulletTexture, bulletrect, Color.White);
+                    
+                }
+
                 _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
             }
             
