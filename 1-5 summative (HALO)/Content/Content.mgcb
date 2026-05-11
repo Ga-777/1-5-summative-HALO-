@@ -49,6 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:bullet.png
 
+#begin bulletfire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bulletfire.wav
+
 #begin cityforeandbackground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -144,6 +150,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:peilcan2.png
+
+#begin peilcansound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:peilcansound.wav
+
+#begin radio1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:radio1.wav
 
 #begin ring.png
 /importer:TextureImporter

@@ -27,10 +27,12 @@ namespace _1_5_summative__HALO_
         Random generator = new Random();  
         //
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect;
+
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect;
+
         float timer = 0;
-        SoundEffectInstance haloTheme, haloflyingtheme;
+        SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire;
         int lifes = 3;
         public Game1()
         {
@@ -71,7 +73,15 @@ namespace _1_5_summative__HALO_
 
             logorect = new Rectangle(200, 100, 400, 300);
 
-            base.Initialize();
+
+            bulletrect = new Rectangle(0, 0, 20, 10);
+
+            
+
+            explosionrect = new Rectangle(0, 0, 100, 100);
+
+			base.Initialize();
+
         }
 
         protected override void LoadContent()
@@ -103,8 +113,19 @@ namespace _1_5_summative__HALO_
 
             SoundEffectInstance haloFlyingThemeSoundEffectInstance = Content.Load<SoundEffect>("halo_fly").CreateInstance();
 
+            peilcanSound = Content.Load<SoundEffect>("peilcansound").CreateInstance(); 
+
+            bulletTexture = Content.Load<Texture2D>("bullet");
+
+            explosionTexture = Content.Load<Texture2D>("explosion");
+
+            radio1 = Content.Load<SoundEffect>("radio1").CreateInstance();
+
+            bulletfire = Content.Load<SoundEffect>("bulletfire").CreateInstance();
+
             // TODO: use this.Content to load your game content here
         }
+
 
         protected override void Update(GameTime gameTime)
         {
@@ -134,6 +155,7 @@ namespace _1_5_summative__HALO_
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 haloflyingtheme.Play();
+                peilcanSound.Play();
                 if (haloflyingtheme.State == SoundState.Stopped) 
                 {
                     haloflyingtheme.Play();
@@ -246,17 +268,20 @@ namespace _1_5_summative__HALO_
                     bansheerect.X -= 4;
                     bansheerect2.X -= 4;
                     
-                    
+
+
                 }
                 if (timer >= 30)
                 {
                     bansheerect.X -= 5;
                     bansheerect2.X -= 5;
+                    
                 }
                 if (timer >= 45)
                 {
                     bansheerect.X -= 6;
                     bansheerect2.X -= 6;
+                    radio1.Play();
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
@@ -264,9 +289,10 @@ namespace _1_5_summative__HALO_
                     bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
                     bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     bulletActive = true;
+                    bulletfire.Play();
 
-                    
-                    
+
+
                 }
                 if (bulletTimer >= bulletTime)
                 {
@@ -288,6 +314,15 @@ namespace _1_5_summative__HALO_
                     bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
                     bulletTimer = 0;
                     bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                }
+                if (bulletrect.Intersects(bansheerect2))
+                {
+                    bansheerect2.X = 800;
+                    bulletActive = false;
+                    bulletrect.X = peilcanrect.X + peilcanrect.Width;
+                    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
+                    bulletTimer = 0;
+                    bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                 }
 
             }
@@ -353,7 +388,17 @@ namespace _1_5_summative__HALO_
 					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
 					
 				}
-			}
+                if (bulletrect.Intersects(bansheerect))
+                {
+                    
+                    _spriteBatch.Draw(explosionTexture, bansheerect, Color.White);
+                }
+                if (bulletrect.Intersects(bansheerect2))
+                {
+                    
+                    _spriteBatch.Draw(explosionTexture, bansheerect2, Color.White);
+                }
+            }
             
             _spriteBatch.End();
 
