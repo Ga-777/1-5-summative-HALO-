@@ -28,12 +28,12 @@ namespace _1_5_summative__HALO_
         //
         Screen screen = Screen.MainMenu;
 
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect;
-
-        float timer = 0;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect;
+        Rectangle peilcanHitbox, bansheeHitbox, build1Hitbox;
+		float timer = 0;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire;
-        int lifes = 3;
+        int lifes = 3, phantomHealth = 3;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -76,9 +76,13 @@ namespace _1_5_summative__HALO_
 
             bulletrect = new Rectangle(0, 0, 20, 10);
 
-            
+            phantomrect = new Rectangle(1200, 300, 140, 100);
 
-            explosionrect = new Rectangle(0, 0, 100, 100);
+
+
+			explosionrect = new Rectangle(0, 0, 100, 100);
+
+            build1Hitbox = new Rectangle(build1rect.X, build1rect.Y, build1rect.Width, build1rect.Height);
 
 			base.Initialize();
 
@@ -123,8 +127,10 @@ namespace _1_5_summative__HALO_
 
             bulletfire = Content.Load<SoundEffect>("bulletfire").CreateInstance();
 
-            // TODO: use this.Content to load your game content here
-        }
+            phantomTexture = Content.Load<Texture2D>("covenant2");
+
+			// TODO: use this.Content to load your game content here
+		}
 
 
         protected override void Update(GameTime gameTime)
@@ -181,6 +187,8 @@ namespace _1_5_summative__HALO_
                 cityrect2.X -= 2;
                 build1rect.X -= 1;
                 covenantshiprect.X -= 1;
+                phantomrect.X -= 2;
+                phantomrect.Y += 1;
                 
                 unscshiprect.X -= 1;
                 if (build1rect.X <= -300)
@@ -191,7 +199,22 @@ namespace _1_5_summative__HALO_
                 {
                     covenantshiprect.X = 800;
                 }
-                if (cityrect.X <= -1000)
+                if (phantomrect.X <= -250)
+                {
+					phantomrect.X = new Random().Next(1000, 1500);
+					phantomrect.Y = new Random().Next(0, 200);
+				}
+                if (phantomrect.Y >= 800)
+                {
+					phantomrect.X = new Random().Next(1000, 1500);
+					phantomrect.Y = new Random().Next(0, 200);
+				}
+                if (phantomrect.Y <= -800)
+                {
+					phantomrect.X = new Random().Next(1000, 1500);
+					phantomrect.Y = new Random().Next(0, 200);
+				}
+				if (cityrect.X <= -1000)
                 {
                     cityrect.X = 1000;
                 }
@@ -217,6 +240,15 @@ namespace _1_5_summative__HALO_
                     peilcanrect.Y = 50;
                     bansheerect.X = 850;
                     bansheerect.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(phantomrect))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 450);
+                    
                 }
                 if (unscshiprect.X <= -250)
                 {
@@ -324,8 +356,23 @@ namespace _1_5_summative__HALO_
                     bulletTimer = 0;
                     bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                 }
+                if (bulletrect.Intersects(phantomrect))
+                {
+                    phantomHealth--;
+                    bulletActive = false;
+                    bulletrect.X = peilcanrect.X + peilcanrect.Width;
+                    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
+                    bulletTimer = 0;
+                   
+                }
+				if (phantomHealth == 0)
+                {                     
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 450);
+                    phantomHealth = 3;
+				}
 
-            }
+			}
 
             // TODO: Add your update logic here
 
@@ -360,7 +407,9 @@ namespace _1_5_summative__HALO_
                 
                 _spriteBatch.Draw(bansheeTexture, bansheerect2, Color.White);
 
-                if (bulletActive == true)
+                _spriteBatch.Draw(phantomTexture, phantomrect, Color.White);
+
+				if (bulletActive == true)
                 {
                     _spriteBatch.Draw(bulletTexture, bulletrect, Color.White);
                     
