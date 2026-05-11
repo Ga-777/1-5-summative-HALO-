@@ -23,7 +23,7 @@ namespace _1_5_summative__HALO_
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();  
-
+        //
         Screen screen = Screen.MainMenu;
         Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture;
         Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect;
