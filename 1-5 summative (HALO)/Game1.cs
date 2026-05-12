@@ -133,7 +133,6 @@ namespace _1_5_summative__HALO_
 
             bulletfire = Content.Load<SoundEffect>("bulletfire").CreateInstance();
 
-
             brothersInArms = Content.Load<SoundEffect>("03. Martin O'Donnell - Brothers in Arms").CreateInstance();
 
             // TODO: use this.Content to load your game content here
