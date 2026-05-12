@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Threading;
 using Microsoft.Xna.Framework;
@@ -28,13 +29,14 @@ namespace _1_5_summative__HALO_
         Random generator = new Random();  
         //
         Screen screen = Screen.MainMenu;
-
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect;
-
-        float timer = 0;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect;
+        Rectangle peilcanHitbox, bansheeHitbox, build1Hitbox;
+		float timer = 0;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms;
-        int lifes = 3;
+        int lifes = 3, phantomHealth = 3;
+        List<Rectangle> bullets;
+        Vector2 bulletspeed; 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -79,13 +81,20 @@ namespace _1_5_summative__HALO_
 
             phantomrect = new Rectangle(1200, 300, 140, 100);
 
+            
 
-
-			explosionrect = new Rectangle(0, 0, 100, 100);
+            explosionrect = new Rectangle(0, 0, 100, 100);
 
             build1Hitbox = new Rectangle(build1rect.X, build1rect.Y, build1rect.Width, build1rect.Height);
-
-			base.Initialize();
+            bulletspeed = new Vector2(10, 0);
+            bullets = new List<Rectangle>();
+            for (int i = 0; i < 100; i++)
+            {
+                bulletrect = new Rectangle(peilcanrect.X, peilcanrect.Y + peilcanrect.Height / 2 - 5, 20, 10);
+                bullets.Add(bulletrect);
+            }
+            
+            base.Initialize();
 
         }
 
@@ -128,14 +137,16 @@ namespace _1_5_summative__HALO_
 
             bulletfire = Content.Load<SoundEffect>("bulletfire").CreateInstance();
 
+
             brothersInArms = Content.Load<SoundEffect>("03. Martin O'Donnell - Brothers in Arms").CreateInstance();
 
-            // TODO: use this.Content to load your game content here
-        }
+          
+        
             phantomTexture = Content.Load<Texture2D>("covenant2");
 
 			// TODO: use this.Content to load your game content here
 		}
+
 
 
         protected override void Update(GameTime gameTime)
@@ -320,29 +331,40 @@ namespace _1_5_summative__HALO_
                     bansheerect2.X -= 6;
                     radio1.Play();
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                if (bulletActive == true)
                 {
-                    bulletrect.X = peilcanrect.X + peilcanrect.Width;
-                    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
+                    
+                    
+                    
+                    for (int i = 0; i < 100; i++)
+                    {
+
+                         
+                       
+                        bullets[i] = new Rectangle(peilcanrect.X + (int)bulletspeed.X, peilcanrect.Y, bullets[i].Width, bullets[i].Y );
+
+
+
+                    }
+                    //bulletrect.X = peilcanrect.X + peilcanrect.Width;
+                    //bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
                     bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     bulletActive = true;
                     bulletfire.Play();
 
-
+                    
 
                 }
-                if (bulletTimer >= bulletTime)
-                {
+                //if (bulletTimer >= bulletTime)
+                //{
 
-                    bulletrect.X = peilcanrect.X + peilcanrect.Width;
-                    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
-                    bulletTimer = 0;
-                    bulletActive = false;
-                }
-                if (bulletActive == true)
-                {
-                    bulletrect.X += 10;
-                }
+                //    bulletrect.X = peilcanrect.X + peilcanrect.Width;
+                //    bulletrect.Y = peilcanrect.Y + peilcanrect.Height / 2 - 5;
+                //    bulletTimer = 0;
+                //    bulletActive = false;
+                //}
+                
+
                 if (bulletrect.Intersects(bansheerect))
                 {
                     bansheerect.X = 800;
@@ -376,8 +398,16 @@ namespace _1_5_summative__HALO_
                     phantomrect.Y = new Random().Next(0, 450);
                     phantomHealth = 3;
 				}
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    bulletActive = true;
+                }
+                if (Keyboard.GetState().IsKeyUp(Keys.Space))
+                {
+                    bulletActive = false;
+                }
 
-			}
+            }
 
             // TODO: Add your update logic here
 
@@ -409,16 +439,21 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(build1Texture, build1rect, Color.White);
 
                 _spriteBatch.Draw(bansheeTexture, bansheerect, Color.White);
-                
+
                 _spriteBatch.Draw(bansheeTexture, bansheerect2, Color.White);
 
                 _spriteBatch.Draw(phantomTexture, phantomrect, Color.White);
 
-				if (bulletActive == true)
-                {
-                    _spriteBatch.Draw(bulletTexture, bulletrect, Color.White);
-                    
-                }
+
+
+                
+                    for (int i = 0; i < bullets.Count; i++)
+                    {
+                        _spriteBatch.Draw(bulletTexture, bullets[i], Color.White);
+                    }
+                
+                
+                
 
                 _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
 
