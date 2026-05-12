@@ -11,6 +11,7 @@ namespace _1_5_summative__HALO_
     enum Screen
     {
         MainMenu,
+        PreScreen,
         Playing,
         GameOver
     }
@@ -32,7 +33,7 @@ namespace _1_5_summative__HALO_
         Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect;
 
         float timer = 0;
-        SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire;
+        SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms;
         int lifes = 3;
         public Game1()
         {
@@ -123,6 +124,8 @@ namespace _1_5_summative__HALO_
 
             bulletfire = Content.Load<SoundEffect>("bulletfire").CreateInstance();
 
+            brothersInArms = Content.Load<SoundEffect>("03. Martin O'Donnell - Brothers in Arms").CreateInstance();
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -143,7 +146,7 @@ namespace _1_5_summative__HALO_
                 {
                     haloTheme.Play();
                 }
-                if (mouse.LeftButton == ButtonState.Pressed)
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                 {
                     screen = Screen.Playing;
                     haloTheme.Stop();
