@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using private_1_5_summative_HALO;
+
 
 namespace _1_5_summative__HALO_
 {
@@ -31,12 +31,12 @@ namespace _1_5_summative__HALO_
         Random generator = new Random();  
         //
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture, buttonTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture, buttonTexture, scarabTexture, bossShipTexture;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect, scarabrect, bossShiprect;
         Rectangle peilcanHitbox, bansheeHitbox, build1Hitbox;
 		float timer = 0, bulletSpeed = 10f, interval = 0.2f;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms;
-        int lifes = 3, phantomHealth = 3;
+        int lifes = 3, phantomHealth = 3, scarabHealth = 50, bossShipHealth = 50;
         List<Vector2> bulletPositions = new List<Vector2>();
         List<Vector2> bulletVelocities = new List<Vector2>();
 
@@ -92,9 +92,11 @@ namespace _1_5_summative__HALO_
 
             build1Hitbox = new Rectangle(build1rect.X, build1rect.Y, build1rect.Width, build1rect.Height);
          
+            scarabrect = new Rectangle(850, 700, 400, 250);
 
+            bossShiprect = new Rectangle(4050, 200, 700, 250);
 
-			base.Initialize();
+            base.Initialize();
 
         }
 
@@ -144,8 +146,11 @@ namespace _1_5_summative__HALO_
 
 			phantomTexture = Content.Load<Texture2D>("covenant2");
 
-			// TODO: use this.Content to load your game content here
-		}
+            scarabTexture = Content.Load<Texture2D>("covenantLand");
+
+            bossShipTexture = Content.Load<Texture2D>("covenant_ship_boss");
+            // TODO: use this.Content to load your game content here
+        }
 
 		
 
@@ -215,7 +220,14 @@ namespace _1_5_summative__HALO_
                     i--;
 
 				}
-			}
+                if (bossShiprect.Contains(bulletPositions.FirstOrDefault()))
+                {
+                    bossShipHealth--;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    i--;
+                }
+            }
             
 
 
@@ -232,19 +244,19 @@ namespace _1_5_summative__HALO_
 				}
 				if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    peilcanrect.X -= 5;
+                    peilcanrect.X -= 3;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    peilcanrect.X += 5;
+                    peilcanrect.X += 3;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
-                    peilcanrect.Y -= 5;
+                    peilcanrect.Y -= 3;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    peilcanrect.Y += 5;
+                    peilcanrect.Y += 3;
                 }
                 
                 cityrect.X -= 2;
@@ -385,9 +397,29 @@ namespace _1_5_summative__HALO_
                  brothersInArms.Play();
                  haloflyingtheme.Stop();
 				}
+                if (timer >= 220)
+                {
+                    bansheerect.X -= 0;
+                    bansheerect2.X -= 0;
+                    phantomrect.X -= 0;
+                    bansheerect.X = 800;
+                    bansheerect2.X = 900;
+                    phantomrect.X = 1200;
+                    
+                }
+                if (timer >= 225)
+                {
+                    bossShiprect.X -= 3;
+                    bossShiprect.X = 900;
+                }
+                if (bossShiprect.X <= 450)
+                {
+                    bossShiprect.X -= 0;
+                }
 
-				
-				if (phantomHealth == 0)
+
+
+                if (phantomHealth == 0)
                 {                     
                     phantomrect.X = new Random().Next(1000, 1500);
                     phantomrect.Y = new Random().Next(0, 450);
@@ -449,17 +481,20 @@ namespace _1_5_summative__HALO_
 
                 _spriteBatch.Draw(phantomTexture, phantomrect, Color.White);
 
+                _spriteBatch.Draw(bossShipTexture,bossShiprect , Color.White);
 
                 foreach (Vector2 position in bulletPositions)
                 {
                     _spriteBatch.Draw(bulletTexture, position, Color.White);
                 }
 
+               
+                _spriteBatch.Draw(bossShipTexture, bossShiprect, Color.White);
+                
 
 
 
-
-				_spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+                _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
 
                 if (peilcanrect.Intersects(bansheerect))
                 {
