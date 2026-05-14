@@ -161,13 +161,16 @@ namespace _1_5_summative__HALO_
             if (buttonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
             {
                 screen = Screen.Playing;
-                haloTheme.Stop();
+               
 				if (haloTheme.State == SoundState.Stopped)
 				{
 					haloTheme.Play();
 				}
 			}
-            
+            if (screen == Screen.MainMenu)
+            {
+                haloTheme.Play();
+            }
             
             if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
             {
@@ -221,7 +224,8 @@ namespace _1_5_summative__HALO_
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 haloflyingtheme.Play();
-                peilcanSound.Play();
+				haloTheme.Stop();
+				peilcanSound.Play();
                 if (haloflyingtheme.State == SoundState.Stopped) 
                 {
                     brothersInArms.Play();
@@ -471,12 +475,7 @@ namespace _1_5_summative__HALO_
 					_spriteBatch.Draw(explosionTexture, bansheerect2, Color.White); 
 
 				}
-				if (peilcanrect.Intersects(build1rect))
-				{
-
-					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
-					
-				}
+				
                 if (bulletrect.Intersects(bansheerect))
                 {
                     
