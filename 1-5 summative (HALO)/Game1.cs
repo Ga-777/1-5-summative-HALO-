@@ -25,7 +25,7 @@ namespace _1_5_summative__HALO_
         private SpriteBatch _spriteBatch;
         private float bulletTimer = 0;
         private float bulletTime = 1;
-        bool bulletActive = false;
+        bool bulletActive = false, shipControls = false;
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();  
@@ -39,7 +39,7 @@ namespace _1_5_summative__HALO_
         int lifes = 3, phantomHealth = 3, scarabHealth = 50, bossShipHealth = 50;
         List<Vector2> bulletPositions = new List<Vector2>();
         List<Vector2> bulletVelocities = new List<Vector2>();
-
+        int num = 1;
 
 
 		public Game1()
@@ -94,7 +94,7 @@ namespace _1_5_summative__HALO_
          
             scarabrect = new Rectangle(850, 700, 400, 250);
 
-            bossShiprect = new Rectangle(4050, 200, 700, 250);
+            bossShiprect = new Rectangle(950, 200, 700, 250);
 
             base.Initialize();
 
@@ -264,8 +264,9 @@ namespace _1_5_summative__HALO_
                 build1rect.X -= 1;
                 covenantshiprect.X -= 1;
                 phantomrect.X -= 3;
-               
-                
+                bossShiprect.X -= 0;
+
+
                 unscshiprect.X -= 1;
                 if (build1rect.X <= -300)
                 {
@@ -409,13 +410,33 @@ namespace _1_5_summative__HALO_
                 }
                 if (timer >= 225)
                 {
-                    bossShiprect.X -= 3;
-                    bossShiprect.X = 900;
+                    bossShiprect.X -= 1;
+                    
+                    if (bossShiprect.X <= 500)
+                    {
+                        
+                        bossShiprect.X = 500;
+                        bossShiprect.X -= 0;
+                        bossShiprect.Y -= 2;
+                        if (bossShiprect.Y <= 100)
+                        {
+                            bossShiprect.Y = 100;
+                            bossShiprect.Y += 2;
+                        }
+
+
+
+
+
+
+
+                    }
+                   
+
+
+
                 }
-                if (bossShiprect.X <= 450)
-                {
-                    bossShiprect.X -= 0;
-                }
+                
 
 
 
