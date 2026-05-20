@@ -18,23 +18,24 @@ namespace _1_5_summative__HALO_
         Playing,
         GameOver
     }
-    
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private float bulletTimer = 0;
         private float bulletTime = 1;
-        bool bulletActive = false, shipControls = false;
+        bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanLeftDownShow = false, peilcanLeftUpShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false;
         Rectangle window;
         MouseState mouse;
-        Random generator = new Random();  
+        Random generator = new Random();
         //
         Screen screen = Screen.MainMenu;
-        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture, buttonTexture, scarabTexture, bossShipTexture;
+        Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture, unscShipTexture, logoTexture, bulletTexture, explosionTexture, phantomTexture, buttonTexture, scarabTexture, bossShipTexture;
+        Texture2D peilcan_up_right, peilcan_up_left, peilcan_down_right, peilcan_down_left, peilcan_Left;
         Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect, scarabrect, bossShiprect;
         Rectangle peilcanHitbox, bansheeHitbox, build1Hitbox;
-		float timer = 0, bulletSpeed = 10f, interval = 0.2f;
+        float timer = 0, bulletSpeed = 10f, interval = 0.2f;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms;
         int lifes = 3, phantomHealth = 3, scarabHealth = 50, bossShipHealth = 50;
         List<Vector2> bulletPositions = new List<Vector2>();
@@ -42,7 +43,7 @@ namespace _1_5_summative__HALO_
         int num = 1;
 
 
-		public Game1()
+        public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -84,14 +85,14 @@ namespace _1_5_summative__HALO_
             buttonrect = new Rectangle(300, 400, 200, 50);
 
 
-			phantomrect = new Rectangle(1200, 300, 140, 100);
+            phantomrect = new Rectangle(1200, 300, 140, 100);
 
-            
+
 
             explosionrect = new Rectangle(0, 0, 100, 100);
 
             build1Hitbox = new Rectangle(build1rect.X, build1rect.Y, build1rect.Width, build1rect.Height);
-         
+
             scarabrect = new Rectangle(850, 700, 400, 250);
 
             bossShiprect = new Rectangle(950, 200, 700, 250);
@@ -103,7 +104,7 @@ namespace _1_5_summative__HALO_
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-                cityTexture = Content.Load<Texture2D>("cityforeandbackground");
+            cityTexture = Content.Load<Texture2D>("cityforeandbackground");
 
             peilcanTexture = Content.Load<Texture2D>("peilcan2");
 
@@ -115,12 +116,12 @@ namespace _1_5_summative__HALO_
 
             skyTexture = Content.Load<Texture2D>("sky");
 
-                build1Texture = Content.Load<Texture2D>("building1");
+            build1Texture = Content.Load<Texture2D>("building1");
 
             unscShipTexture = Content.Load<Texture2D>("UNSC_ship");
 
             logoTexture = Content.Load<Texture2D>("halo_logo");
-            
+
             haloTheme = Content.Load<SoundEffect>("halo_theme").CreateInstance();
 
             SoundEffect haloThemeSoundEffect = Content.Load<SoundEffect>("halo_theme");
@@ -129,7 +130,7 @@ namespace _1_5_summative__HALO_
 
             SoundEffectInstance haloFlyingThemeSoundEffectInstance = Content.Load<SoundEffect>("halo_fly").CreateInstance();
 
-            peilcanSound = Content.Load<SoundEffect>("peilcansound").CreateInstance(); 
+            peilcanSound = Content.Load<SoundEffect>("peilcansound").CreateInstance();
 
             bulletTexture = Content.Load<Texture2D>("bullet117 (1)");
 
@@ -144,39 +145,49 @@ namespace _1_5_summative__HALO_
 
             buttonTexture = Content.Load<Texture2D>("capbutton");
 
-			phantomTexture = Content.Load<Texture2D>("covenant2");
+            phantomTexture = Content.Load<Texture2D>("covenant2");
 
             scarabTexture = Content.Load<Texture2D>("covenantLand");
 
             bossShipTexture = Content.Load<Texture2D>("covenant_ship_boss");
+
+            peilcan_down_left = Content.Load<Texture2D>("peil-left-down");
+
+            peilcan_down_right = Content.Load<Texture2D>("peil-down-right");
+
+            peilcan_up_left = Content.Load<Texture2D>("peil-left-up");
+
+            peilcan_up_right = Content.Load<Texture2D>("peil-up-right");
+
+            peilcan_Left = Content.Load<Texture2D>("peil-left");
             // TODO: use this.Content to load your game content here
         }
 
-		
 
-		protected override void Update(GameTime gameTime)
+
+        protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
+
             mouse = Mouse.GetState();
             bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             KeyboardState keyboardState = Keyboard.GetState();
-            
+
             if (buttonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
             {
                 screen = Screen.Playing;
-               
-				if (haloTheme.State == SoundState.Stopped)
-				{
-					haloTheme.Play();
-				}
-			}
+
+                if (haloTheme.State == SoundState.Stopped)
+                {
+                    haloTheme.Play();
+                }
+            }
             if (screen == Screen.MainMenu)
             {
                 haloTheme.Play();
             }
-            
+
             if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
             {
                 bulletPositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - bulletrect.Height / 2));
@@ -185,8 +196,8 @@ namespace _1_5_summative__HALO_
 
                 bulletfire.Play();
 
-				bulletTimer = 0;
-			}
+                bulletTimer = 0;
+            }
             for (int i = 0; i < bulletPositions.Count; i++)
             {
                 bulletPositions[i] += bulletVelocities[i];
@@ -196,30 +207,30 @@ namespace _1_5_summative__HALO_
                     bulletVelocities.RemoveAt(i);
                     i--;
                 }
-				if (bansheerect.Contains(bulletPositions.LastOrDefault()))
-				{
-					bansheerect.X = 800;
-					bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-					bulletPositions.RemoveAt(i);
-					bulletVelocities.RemoveAt(i);
-					i--;
-				}
-				if (bansheerect2.Contains(bulletPositions.LastOrDefault()))
-				{
-					bansheerect2.X = 800;
-					bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-					bulletPositions.RemoveAt(i);
-					bulletVelocities.RemoveAt(i);
-					i--;
-				}
-				if (phantomrect.Contains(bulletPositions.FirstOrDefault()))
-				{
+                if (bansheerect.Contains(bulletPositions.LastOrDefault()))
+                {
+                    bansheerect.X = 800;
+                    bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    i--;
+                }
+                if (bansheerect2.Contains(bulletPositions.LastOrDefault()))
+                {
+                    bansheerect2.X = 800;
+                    bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    i--;
+                }
+                if (phantomrect.Contains(bulletPositions.FirstOrDefault()))
+                {
                     phantomHealth--;
                     bulletPositions.RemoveAt(i);
                     bulletVelocities.RemoveAt(i);
                     i--;
 
-				}
+                }
                 if (bossShiprect.Contains(bulletPositions.FirstOrDefault()))
                 {
                     bossShipHealth--;
@@ -228,21 +239,21 @@ namespace _1_5_summative__HALO_
                     i--;
                 }
             }
-            
 
 
-			
+
+
             if (screen == Screen.Playing)
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 haloflyingtheme.Play();
-				haloTheme.Stop();
-				peilcanSound.Play();
-                if (haloflyingtheme.State == SoundState.Stopped) 
+                haloTheme.Stop();
+                peilcanSound.Play();
+                if (haloflyingtheme.State == SoundState.Stopped)
                 {
                     brothersInArms.Play();
-				}
-				if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     peilcanrect.X -= 3;
                 }
@@ -258,7 +269,7 @@ namespace _1_5_summative__HALO_
                 {
                     peilcanrect.Y += 3;
                 }
-                
+
                 cityrect.X -= 2;
                 cityrect2.X -= 2;
                 build1rect.X -= 1;
@@ -278,20 +289,20 @@ namespace _1_5_summative__HALO_
                 }
                 if (phantomrect.X <= -250)
                 {
-					phantomrect.X = new Random().Next(1000, 1500);
-					phantomrect.Y = new Random().Next(0, 200);
-				}
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 200);
+                }
                 if (phantomrect.Y >= 800)
                 {
-					phantomrect.X = new Random().Next(1000, 1500);
-					phantomrect.Y = new Random().Next(0, 200);
-				}
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 200);
+                }
                 if (phantomrect.Y <= -800)
                 {
-					phantomrect.X = new Random().Next(1000, 1500);
-					phantomrect.Y = new Random().Next(0, 200);
-				}
-				if (cityrect.X <= -1000)
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 200);
+                }
+                if (cityrect.X <= -1000)
                 {
                     cityrect.X = 1000;
                 }
@@ -302,9 +313,9 @@ namespace _1_5_summative__HALO_
                 if (bansheerect.X <= -150)
                 {
                     bansheerect.X = 850;
-                    bansheerect.Y = new Random().Next(0, 450); 
-				}
-                
+                    bansheerect.Y = new Random().Next(0, 450);
+                }
+
                 if (peilcanrect.Intersects(bansheerect))
                 {
                     lifes--;
@@ -320,7 +331,7 @@ namespace _1_5_summative__HALO_
                     peilcanrect.Y = 50;
                     phantomrect.X = new Random().Next(1000, 1500);
                     phantomrect.Y = new Random().Next(0, 450);
-                    
+
                 }
                 if (unscshiprect.X <= -250)
                 {
@@ -363,15 +374,15 @@ namespace _1_5_summative__HALO_
                 if (timer >= 0)
                 {
                     bansheerect.X -= 3;
-                    
+
 
                 }
                 if (timer >= 30)
                 {
-                    
+
                     bansheerect.X -= 4;
                     bansheerect2.X -= 4;
-                    
+
 
 
                 }
@@ -379,7 +390,7 @@ namespace _1_5_summative__HALO_
                 {
                     bansheerect.X -= 5;
                     bansheerect2.X -= 5;
-                    
+
                 }
                 if (timer >= 130)
                 {
@@ -389,15 +400,15 @@ namespace _1_5_summative__HALO_
                 }
                 if (timer >= 140)
                 {
-					radio1.Stop();
+                    radio1.Stop();
 
-				}
-				if (timer >= 160)
+                }
+                if (timer >= 160)
                 {
-                 
-                 brothersInArms.Play();
-                 haloflyingtheme.Stop();
-				}
+
+                    brothersInArms.Play();
+                    haloflyingtheme.Stop();
+                }
                 if (timer >= 220)
                 {
                     bansheerect.X -= 0;
@@ -406,15 +417,15 @@ namespace _1_5_summative__HALO_
                     bansheerect.X = 800;
                     bansheerect2.X = 900;
                     phantomrect.X = 1200;
-                    
+
                 }
                 if (timer >= 225)
                 {
                     bossShiprect.X -= 1;
-                    
+
                     if (bossShiprect.X <= 500)
                     {
-                        
+
                         bossShiprect.X = 500;
                         bossShiprect.X -= 0;
                         bossShiprect.Y -= 2;
@@ -431,21 +442,21 @@ namespace _1_5_summative__HALO_
 
 
                     }
-                   
+
 
 
 
                 }
-                
+
 
 
 
                 if (phantomHealth == 0)
-                {                     
+                {
                     phantomrect.X = new Random().Next(1000, 1500);
                     phantomrect.Y = new Random().Next(0, 450);
                     phantomHealth = 3;
-				}
+                }
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     bulletActive = true;
@@ -454,26 +465,27 @@ namespace _1_5_summative__HALO_
                 {
                     bulletActive = false;
                 }
-				if (screen == Screen.GameOver)
+                if (screen == Screen.GameOver)
                 {
-                    
-                }
-				
 
-			}
+                }
+
+
+            }
 
             // TODO: Add your update logic here
 
             base.Update(gameTime);
 
-			// TODO: Add your update logic here
+            // TODO: Add your update logic here
 
 
-		}
+        }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            
             _spriteBatch.Begin();
             if (screen == Screen.MainMenu)
             {
@@ -481,7 +493,7 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(logoTexture, logorect, Color.White);
                 _spriteBatch.Draw(buttonTexture, buttonrect, Color.White);
 
-			}
+            }
             if (screen == Screen.Playing)
             {
                 _spriteBatch.Draw(skyTexture, window, Color.White);
@@ -502,53 +514,134 @@ namespace _1_5_summative__HALO_
 
                 _spriteBatch.Draw(phantomTexture, phantomrect, Color.White);
 
-                _spriteBatch.Draw(bossShipTexture,bossShiprect , Color.White);
+                _spriteBatch.Draw(bossShipTexture, bossShiprect, Color.White);
 
                 foreach (Vector2 position in bulletPositions)
                 {
                     _spriteBatch.Draw(bulletTexture, position, Color.White);
                 }
 
-               
-                _spriteBatch.Draw(bossShipTexture, bossShiprect, Color.White);
+                if (peilcanRightShow == true)
+                {
+                    _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+                }
+
+
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    peilcanLeftShow = true;
+                    
+                    
+                    peilcanLeftShow = true;
+                    if (peilcanLeftShow == true)
+                    {
+                        _spriteBatch.Draw(peilcan_Left, peilcanrect, Color.White);
+                    }
+                    
+                    peilcanRightShow = false;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    peilcanRightShow = true;
+                    peilcanLeftUpShow = false;
+                    peilcanLeftDownShow = false;
+                    peilcanRightUpShow = false;
+                    peilcanRightDownShow = false;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) && Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    peilcanLeftUpShow = false;
+                    peilcanLeftDownShow = false;
+                    peilcanRightDownShow = false;
+                    peilcanRightShow = false;
+                    peilcanLeftShow = false;
+                    peilcanRightUpShow = true;
+                    if (peilcanRightUpShow == true)
+                    {
+                        _spriteBatch.Draw(peilcan_up_right, peilcanrect, Color.White);
+                    }
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) && Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    peilcanLeftUpShow = false;
+                    peilcanLeftDownShow = false;
+                    peilcanRightUpShow = false;
+                    peilcanRightShow = false;
+                    peilcanLeftShow = false;
+                    peilcanRightDownShow = true;
+                    if (peilcanRightDownShow == true)
+                    {
+                        _spriteBatch.Draw(peilcan_down_right, peilcanrect, Color.White);
+                    }
+                }
                 
+                
+                if (Keyboard.GetState().IsKeyUp(Keys.Up) && Keyboard.GetState().IsKeyUp(Keys.Down) && Keyboard.GetState().IsKeyUp(Keys.Left))
+                {
+                    peilcanRightShow = true;
+                    peilcanLeftShow = false;
+                    peilcanLeftUpShow = false;
+                    peilcanLeftDownShow = false;
+                    peilcanRightUpShow = false;
+                    peilcanRightDownShow = false;
+
+                }
+               
 
 
 
-                _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+
+
+
+
+
+
+
+
+
+
+
+
 
                 if (peilcanrect.Intersects(bansheerect))
                 {
-                    
-					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
+
+                    _spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
                     _spriteBatch.Draw(explosionTexture, bansheerect, Color.White);
-					
-				}
-				if (peilcanrect.Intersects(bansheerect2))
-				{
 
-					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
-					_spriteBatch.Draw(explosionTexture, bansheerect2, Color.White); 
+                }
+                if (peilcanrect.Intersects(bansheerect2))
+                {
 
-				}
-				
+                    _spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
+                    _spriteBatch.Draw(explosionTexture, bansheerect2, Color.White);
+
+                }
+
                 if (bulletrect.Intersects(bansheerect))
                 {
-                    
+
                     _spriteBatch.Draw(explosionTexture, bansheerect, Color.White);
                 }
                 if (bulletrect.Intersects(bansheerect2))
                 {
-                    
+
                     _spriteBatch.Draw(explosionTexture, bansheerect2, Color.White);
                 }
-            }
-            
-            _spriteBatch.End();
 
+
+
+
+
+
+            }
+            _spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+            
         }
     }
 }
+
