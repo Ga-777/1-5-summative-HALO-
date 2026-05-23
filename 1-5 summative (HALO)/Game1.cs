@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using private_1_5_summative_HALO;
+
 
 namespace _1_5_summative__HALO_
 {
@@ -18,7 +18,7 @@ namespace _1_5_summative__HALO_
         Playing,
         GameOver
     }
-    
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -29,7 +29,7 @@ namespace _1_5_summative__HALO_
 		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false;
         Rectangle window;
         MouseState mouse;
-        Random generator = new Random();  
+        Random generator = new Random();
         //
         Screen screen = Screen.MainMenu;
         Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture, buttonTexture, bossShipTexture;
@@ -91,7 +91,7 @@ namespace _1_5_summative__HALO_
             buttonrect = new Rectangle(300, 400, 200, 50);
 
 
-			phantomrect = new Rectangle(1200, 300, 140, 100);
+            phantomrect = new Rectangle(1200, 300, 140, 100);
 
 			plasmaShotrect = new Rectangle(0, 0, 2, 1);
 
@@ -102,14 +102,14 @@ namespace _1_5_summative__HALO_
 
 			bossShiprect = new Rectangle(950, 200, 700, 250);
 
-			base.Initialize();
+            base.Initialize();
 
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-                cityTexture = Content.Load<Texture2D>("cityforeandbackground");
+            cityTexture = Content.Load<Texture2D>("cityforeandbackground");
 
             peilcanTexture = Content.Load<Texture2D>("peilcan2");
 
@@ -121,12 +121,12 @@ namespace _1_5_summative__HALO_
 
             skyTexture = Content.Load<Texture2D>("sky");
 
-                build1Texture = Content.Load<Texture2D>("building1");
+            build1Texture = Content.Load<Texture2D>("building1");
 
             unscShipTexture = Content.Load<Texture2D>("UNSC_ship");
 
             logoTexture = Content.Load<Texture2D>("halo_logo");
-            
+
             haloTheme = Content.Load<SoundEffect>("halo_theme").CreateInstance();
 
             SoundEffect haloThemeSoundEffect = Content.Load<SoundEffect>("halo_theme");
@@ -135,7 +135,7 @@ namespace _1_5_summative__HALO_
 
             SoundEffectInstance haloFlyingThemeSoundEffectInstance = Content.Load<SoundEffect>("halo_fly").CreateInstance();
 
-            peilcanSound = Content.Load<SoundEffect>("peilcansound").CreateInstance(); 
+            peilcanSound = Content.Load<SoundEffect>("peilcansound").CreateInstance();
 
             bulletTexture = Content.Load<Texture2D>("bullet117 (1)");
 
@@ -149,7 +149,7 @@ namespace _1_5_summative__HALO_
 
             buttonTexture = Content.Load<Texture2D>("capbutton");
 
-			phantomTexture = Content.Load<Texture2D>("covenant2");
+            phantomTexture = Content.Load<Texture2D>("covenant2");
 
 			bossShipTexture = Content.Load<Texture2D>("covenant_ship_boss");
 
@@ -308,19 +308,19 @@ namespace _1_5_summative__HALO_
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    peilcanrect.X -= 5;
+                    peilcanrect.X -= 3;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    peilcanrect.X += 5;
+                    peilcanrect.X += 3;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
-                    peilcanrect.Y -= 5;
+                    peilcanrect.Y -= 3;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    peilcanrect.Y += 5;
+                    peilcanrect.Y += 3;
                 }
 
                 cityrect.X -= 2;
@@ -581,6 +581,7 @@ namespace _1_5_summative__HALO_
 		protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            
             _spriteBatch.Begin();
             if (screen == Screen.MainMenu)
             {
@@ -588,7 +589,7 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(logoTexture, logorect, Color.White);
                 _spriteBatch.Draw(buttonTexture, buttonrect, Color.White);
 
-			}
+            }
             if (screen == Screen.Playing)
             {
                 _spriteBatch.Draw(skyTexture, window, Color.White);
@@ -609,6 +610,7 @@ namespace _1_5_summative__HALO_
 
                 _spriteBatch.Draw(phantomTexture, phantomrect, Color.White);
 
+                _spriteBatch.Draw(bossShipTexture, bossShiprect, Color.White);
 
 				
 
@@ -692,36 +694,42 @@ namespace _1_5_summative__HALO_
 
                 if (peilcanrect.Intersects(bansheerect))
                 {
-                    
-					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
+
+                    _spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
                     _spriteBatch.Draw(explosionTexture, bansheerect, Color.White);
-					
-				}
-				if (peilcanrect.Intersects(bansheerect2))
-				{
 
-					_spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
-					_spriteBatch.Draw(explosionTexture, bansheerect2, Color.White); 
+                }
+                if (peilcanrect.Intersects(bansheerect2))
+                {
 
-				}
-				
+                    _spriteBatch.Draw(explosionTexture, peilcanrect, Color.White);
+                    _spriteBatch.Draw(explosionTexture, bansheerect2, Color.White);
+
+                }
+
                 if (bulletrect.Intersects(bansheerect))
                 {
-                    
+
                     _spriteBatch.Draw(explosionTexture, bansheerect, Color.White);
                 }
                 if (bulletrect.Intersects(bansheerect2))
                 {
-                    
+
                     _spriteBatch.Draw(explosionTexture, bansheerect2, Color.White);
                 }
-            }
-            
-            _spriteBatch.End();
 
+
+
+
+
+
+            }
+            _spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+            
         }
     }
 }
+
