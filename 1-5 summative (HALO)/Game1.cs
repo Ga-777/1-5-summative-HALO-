@@ -14,7 +14,7 @@ namespace _1_5_summative__HALO_
     enum Screen
     {
         MainMenu,
-        PreScreen,
+        CutScreen1,
         Playing,
         GameOver
     }
@@ -26,14 +26,14 @@ namespace _1_5_summative__HALO_
         private float bulletTimer = 0;
         private float bulletTime = 1;
 		float centerY = 300f;
-		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false;
+		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false;
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();
         //
         Screen screen = Screen.MainMenu;
         Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture, buttonTexture, bossShipTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect, bossShiprect;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, peilcanrect2, peilcanrect3,  bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect, bossShiprect;
 		Texture2D peilcan_up_right, peilcan_down_right, peilcan_Left;
         Texture2D plasmaShot;
         Rectangle plasmaShotrect;
@@ -72,9 +72,13 @@ namespace _1_5_summative__HALO_
 
             cityrect4 = new Rectangle(1000, 0, 500, 250);
 
-            peilcanrect = new Rectangle(200, 50, 70, 50);
+            peilcanrect = new Rectangle(200, 600, 70, 50);
 
-            covenantshiprect = new Rectangle(500, 0, 250, 200);
+			peilcanrect2 = new Rectangle(50, 600, 70, 50);
+
+			peilcanrect3 = new Rectangle(0, 600, 70, 50);
+
+			covenantshiprect = new Rectangle(500, 0, 250, 200);
 
             ringrect = new Rectangle(0, 0, 800, 500);
 
@@ -178,17 +182,18 @@ namespace _1_5_summative__HALO_
 
             if (buttonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
             {
-                screen = Screen.Playing;
+                screen = Screen.CutScreen1;
 
-                if (haloTheme.State == SoundState.Stopped)
-                {
-                    haloTheme.Play();
-                }
+                
             }
             if (screen == Screen.MainMenu)
             {
                 haloTheme.Play();
-            }
+				if (haloTheme.State == SoundState.Stopped)
+				{
+					haloTheme.Play();
+				}
+			}
 
             if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
             {
@@ -290,6 +295,55 @@ namespace _1_5_summative__HALO_
                     }
                 }
             }
+            if (screen == Screen.CutScreen1)
+            {
+				cityrect.X -= 2;
+				cityrect2.X -= 2;
+				if (cityrect.X <= -1000)
+				{
+					cityrect.X = 1000;
+				}
+				if (cityrect2.X <= -1000)
+				{
+					cityrect2.X = 1000;
+				}
+                peilcanrect.X += 1;
+                peilcanrect2.X += 1;
+				peilcanrect3.X += 1;
+                
+                peilcanrect.Y -= 3;
+				peilcanrect2.Y -= 1;
+				peilcanrect3.Y -= 2;
+				if ( peilcanrect.Y <= 300)
+				{
+					peilcanrect.Y = 300;
+                    peilcanrect.X = 290;
+				}
+                if (peilcanrect2.Y <= 250)
+				{
+					peilcanrect2.Y = 250;
+					peilcanrect2.X = 400;
+				}
+                if (peilcanrect3.Y <= 200)
+                {
+
+                   peilcanrect3.Y = 200;
+					peilcanrect3.X = 200;
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+
+			}
 
 
 
@@ -584,6 +638,34 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(buttonTexture, buttonrect, Color.White);
 
             }
+            if (screen == Screen.CutScreen1)
+            {
+                _spriteBatch.Draw(skyTexture, window, Color.White);
+
+                _spriteBatch.Draw(cityTexture, cityrect, Color.White);
+
+                _spriteBatch.Draw(cityTexture, cityrect2, Color.White);
+                if (cutScene1 == false)
+                {
+                    _spriteBatch.Draw(peilcan_up_right, peilcanrect, Color.White);
+                }
+
+                if (peilcanrect.Y <= 300)
+                {
+                    _spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+                    cutScene1 = true;
+                }
+                if (cutScene2 == false)
+                { 
+                _spriteBatch.Draw(peilcan_up_right, peilcanrect2, Color.White);
+                }
+                if (peilcanrect2.Y <= 250)
+                {
+					_spriteBatch.Draw(peilcanTexture, peilcanrect2, Color.White);
+                    cutScene2 = true;
+				}
+                _spriteBatch.Draw(peilcanTexture, peilcanrect3, Color.White);
+			}
             if (screen == Screen.Playing)
             {
                 _spriteBatch.Draw(skyTexture, window, Color.White);
