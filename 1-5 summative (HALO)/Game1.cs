@@ -173,7 +173,8 @@ namespace _1_5_summative__HALO_
             mouse = Mouse.GetState();
             bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             plasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            KeyboardState keyboardState = Keyboard.GetState();
+            
+			KeyboardState keyboardState = Keyboard.GetState();
 
             if (buttonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
             {
@@ -467,16 +468,14 @@ namespace _1_5_summative__HALO_
                     bansheerect2.X -= 0;
                     phantomrect.X -= 0;
                     bansheerect.X = 800;
-                    bansheerect2.X = 900;
+                    bansheerect2.X = 800;
                     phantomrect.X = 1200;
 
                 }
-                if (timer >= 225)
+                if (timer >= 225 && bossFight == false)
                 {
 
-                    if (bossFight == false)
-                    {
-
+                  
                         bossShiprect.X -= 1;
                         if (bossShiprect.X <= 500)
                         {
@@ -491,14 +490,9 @@ namespace _1_5_summative__HALO_
                                 bossFight = true;
                             }
                         }
-                    }
+                    
                 }
-                if (timer >= 15 && bossFight == true)
-				{
-					bansheerect.X -= 2;
-					bansheerect2.X -= 2;
-					phantomrect.X -= 0;
-				}
+                
 
 				if (bossFight == true)
                 {
