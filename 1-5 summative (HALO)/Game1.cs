@@ -26,7 +26,7 @@ namespace _1_5_summative__HALO_
         private float bulletTimer = 0;
         private float bulletTime = 1;
 		float centerY = 300f;
-		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false;
+		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false, bansheeActive = true, cutSceneEvent = false, peilcanActive;
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();
@@ -307,31 +307,73 @@ namespace _1_5_summative__HALO_
 				{
 					cityrect2.X = 1000;
 				}
-                peilcanrect.X += 1;
-                peilcanrect2.X += 1;
-				peilcanrect3.X += 1;
-                
-                peilcanrect.Y -= 3;
-				peilcanrect2.Y -= 1;
-				peilcanrect3.Y -= 2;
-				if ( peilcanrect.Y <= 300)
-				{
-					peilcanrect.Y = 300;
-                    peilcanrect.X = 290;
-				}
-                if (peilcanrect2.Y <= 250)
-				{
-					peilcanrect2.Y = 250;
-					peilcanrect2.X = 400;
-				}
-                if (peilcanrect3.Y <= 200)
+
+                if (peilcanActive == false)
                 {
+                    peilcanrect.X += 1;
+                    peilcanrect2.X += 1;
+                    peilcanrect3.X += 1;
 
-                   peilcanrect3.Y = 200;
-					peilcanrect3.X = 200;
+                    peilcanrect.Y -= 3;
+                    peilcanrect2.Y -= 1;
+                    peilcanrect3.Y -= 2;
+					if (peilcanrect.Y <= 300)
+					{
+						peilcanrect.Y = 300;
+						peilcanrect.X = 290;
+					}
+					if (peilcanrect2.Y <= 250)
+					{
+						peilcanrect2.Y = 250;
+						peilcanrect2.X = 400;
+					}
+					if (peilcanrect3.Y <= 200)
+					{
+
+						peilcanrect3.Y = 200;
+						peilcanrect3.X = 200;
+					}
 				}
+				
+                if (cutScene1 == true && cutScene2 == true && cutScene3 == true)
+				{
+					timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+					if (timer >= 2)
+					{
+                        if (bansheeActive == true)
+                        {
 
+                            bansheerect.X -= 3;
+                            bansheerect.Y = 250;
 
+                            bansheerect2.X -= 5;
+                            bansheerect2.Y = 200;
+                        }
+					}
+				}
+                 if (timer >= 4)
+                 { 
+                    
+                    bansheeActive = false;
+					cutSceneEvent = true;
+                    peilcanActive = true;
+
+                    peilcanrect2.X -= 2;
+                    peilcanrect3.X -= 2;
+                    bansheerect.X -= 2;
+					bansheerect2.X -= 2;
+
+                    peilcanrect.Y -= 2;
+                    if (peilcanrect.Y <= 250)
+					{
+						peilcanrect.Y = 250;
+                        peilcanrect.X += 5;
+					}
+                    if (peilcanrect.X <= 800 && timer >= 6)
+                    {
+						screen = Screen.Playing;
+					}
+				}
 
 
 
@@ -356,8 +398,8 @@ namespace _1_5_summative__HALO_
                 haloflyingtheme.Play();
                 haloTheme.Stop();
                 peilcanSound.Play();
-
-                if (haloflyingtheme.State == SoundState.Stopped)
+                
+				if (haloflyingtheme.State == SoundState.Stopped)
                 {
                     brothersInArms.Play();
                 }
@@ -615,7 +657,7 @@ namespace _1_5_summative__HALO_
 
                     base.Update(gameTime);
 
-                    // TODO: Add your update logic here
+                   
                 
 
 
@@ -656,15 +698,39 @@ namespace _1_5_summative__HALO_
                     cutScene1 = true;
                 }
                 if (cutScene2 == false)
-                { 
-                _spriteBatch.Draw(peilcan_up_right, peilcanrect2, Color.White);
+                {
+                    _spriteBatch.Draw(peilcan_up_right, peilcanrect2, Color.White);
                 }
                 if (peilcanrect2.Y <= 250)
                 {
-					_spriteBatch.Draw(peilcanTexture, peilcanrect2, Color.White);
+                    _spriteBatch.Draw(peilcanTexture, peilcanrect2, Color.White);
                     cutScene2 = true;
+                }
+                if (cutScene3 == false)
+                {
+                    _spriteBatch.Draw(peilcan_up_right, peilcanrect3, Color.White);
+                }
+                if (peilcanrect3.Y <= 200)
+                { 
+                    _spriteBatch.Draw(peilcanTexture, peilcanrect3, Color.White);
+                    cutScene3 = true;
+                }
+
+
+
+                _spriteBatch.Draw(bansheeTexture, bansheerect, Color.White);
+                _spriteBatch.Draw(bansheeTexture, bansheerect2, Color.White);
+
+                if (cutSceneEvent == true)
+				{
+					_spriteBatch.Draw(explosionTexture, peilcanrect3, Color.White);
+					_spriteBatch.Draw(explosionTexture, bansheerect, Color.White);
+
+					_spriteBatch.Draw(explosionTexture, peilcanrect2, Color.White);
+					_spriteBatch.Draw(explosionTexture, bansheerect2, Color.White);
 				}
-                _spriteBatch.Draw(peilcanTexture, peilcanrect3, Color.White);
+
+
 			}
             if (screen == Screen.Playing)
             {
