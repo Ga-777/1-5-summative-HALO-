@@ -40,7 +40,7 @@ namespace _1_5_summative__HALO_
 		
 		float timer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms;
-        int lifes = 3, phantomHealth = 3, bossShipHealth = 50;
+        int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
         List<Vector2> bulletPositions = new List<Vector2>();
         List<Vector2> bulletVelocities = new List<Vector2>();
 
@@ -461,7 +461,7 @@ namespace _1_5_summative__HALO_
                     brothersInArms.Play();
                     haloflyingtheme.Stop();
                 }
-                if (timer >= 0)
+                if (timer >= 220)
                 {
                     bansheerect.X -= 0;
                     bansheerect2.X -= 0;
@@ -471,7 +471,7 @@ namespace _1_5_summative__HALO_
                     phantomrect.X = 1200;
 
                 }
-                if (timer >= 2)
+                if (timer >= 225)
                 {
 
                     if (bossFight == false)
@@ -493,26 +493,31 @@ namespace _1_5_summative__HALO_
                         }
                     }
                 }
-                
+                if (timer >= 15 && bossFight == true)
+				{
+					bansheerect.X -= 2;
+					bansheerect2.X -= 2;
+					phantomrect.X -= 0;
+				}
+
 				if (bossFight == true)
                 {
                     bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
                     plasmaTime = 2f;
-					if (bossShipHealth <= 40)
+					if (bossShipHealth <= 25)
 					{
 						bossShiprect.X -= 0;
 						bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-						bansheerect.X -= 10;
-					}
-					else if (bossShipHealth <= 30)
-					{
-						bossShiprect.X -= 0;
-						bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-						bansheerect.X -= 2;
-						bansheerect2.X -= 2;
-						plasmaTime = 1.5f;
+						
 					}
 					else if (bossShipHealth <= 20)
+					{
+						bossShiprect.X -= 0;
+						bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
+						
+						plasmaTime = 1.5f;
+					}
+					else if (bossShipHealth <= 15)
 					{
 						bossShiprect.X -= 0;
 						bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
@@ -522,8 +527,7 @@ namespace _1_5_summative__HALO_
 					{
 						bossShiprect.X -= 0;
 						bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-						bansheerect.X -= 3;
-						bansheerect2.X -= 3;
+						
 						plasmaTime = 0.5f;
 					}
 				}
