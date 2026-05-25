@@ -33,12 +33,12 @@ namespace _1_5_summative__HALO_
         //
         Screen screen = Screen.MainMenu;
         Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture, buttonTexture, bossShipTexture;
-        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, peilcanrect2, peilcanrect3,  bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect, bossShiprect;
+        Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, peilcanrect2, peilcanrect3,  bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect, bossShiprect, deathScreenrect;
 		Texture2D peilcan_up_right, peilcan_down_right, peilcan_Left;
         Texture2D plasmaShot;
         Rectangle plasmaShotrect;
-		
-		float timer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f;
+		Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
+        float timer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms;
         int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
         List<Vector2> bulletPositions = new List<Vector2>();
@@ -104,8 +104,15 @@ namespace _1_5_summative__HALO_
 			explosionrect = new Rectangle(0, 0, 100, 100);
 
 
-			bossShiprect = new Rectangle(950, 200, 700, 250);
+            bossShiprect = new Rectangle(950, 200, 700, 250);
 
+            deathScreenrect = new Rectangle(300, 200, 200, 250);
+
+            playerLife1rect = new Rectangle(10, 10, 20, 20);
+
+            playerLife2rect = new Rectangle(40, 10, 20, 20);
+
+            playerLife3rect = new Rectangle(70, 10, 20, 20);
             base.Initialize();
 
         }
@@ -346,7 +353,7 @@ namespace _1_5_summative__HALO_
                             bansheerect.X -= 3;
                             bansheerect.Y = 250;
 
-                            bansheerect2.X -= 5;
+                            bansheerect2.X -= 6;
                             bansheerect2.Y = 200;
                         }
 					}
@@ -358,10 +365,10 @@ namespace _1_5_summative__HALO_
 					cutSceneEvent = true;
                     peilcanActive = true;
 
-                    peilcanrect2.X -= 2;
-                    peilcanrect3.X -= 2;
-                    bansheerect.X -= 2;
-					bansheerect2.X -= 2;
+                    peilcanrect2.X -= 4;
+                    peilcanrect3.X -= 4;
+                    bansheerect.X -= 4;
+					bansheerect2.X -= 4;
 
                     peilcanrect.Y -= 2;
                     if (peilcanrect.Y <= 250)
@@ -369,11 +376,17 @@ namespace _1_5_summative__HALO_
 						peilcanrect.Y = 250;
                         peilcanrect.X += 5;
 					}
-                    if (peilcanrect.X <= 800 && timer >= 6)
+                    if (peilcanrect.X >= 800)
                     {
-						screen = Screen.Playing;
-					}
-				}
+                        
+                        peilcanrect.X = -10;
+
+                        if (timer >= 7)
+                        {
+                            screen = Screen.Playing;
+                        }
+                    }
+				 }
 
 
 
@@ -398,8 +411,8 @@ namespace _1_5_summative__HALO_
                 haloflyingtheme.Play();
                 haloTheme.Stop();
                 peilcanSound.Play();
-                
-				if (haloflyingtheme.State == SoundState.Stopped)
+
+                if (haloflyingtheme.State == SoundState.Stopped)
                 {
                     brothersInArms.Play();
                 }
@@ -526,6 +539,8 @@ namespace _1_5_summative__HALO_
 
 
                 }
+                
+
                 if (timer >= 30)
                 {
 
@@ -641,7 +656,7 @@ namespace _1_5_summative__HALO_
             }
                 if (screen == Screen.GameOver)
                 {
-
+                  
                 }
             if (bossShipHealth == 0)
             {
@@ -670,7 +685,7 @@ namespace _1_5_summative__HALO_
 
 		protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             
             _spriteBatch.Begin();
             if (screen == Screen.MainMenu)
@@ -679,6 +694,11 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(logoTexture, logorect, Color.White);
                 _spriteBatch.Draw(buttonTexture, buttonrect, Color.White);
 
+            }
+            if (screen == Screen.GameOver)
+            {
+                _spriteBatch.Draw(skyTexture, window, Color.Black);
+                _spriteBatch.Draw(explosionTexture, deathScreenrect, Color.White);
             }
             if (screen == Screen.CutScreen1)
             {
@@ -860,7 +880,21 @@ namespace _1_5_summative__HALO_
                     _spriteBatch.Draw(explosionTexture, bansheerect2, Color.White);
                 }
 
-
+                if (lifes == 3)
+                {
+                    _spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
+                    _spriteBatch.Draw(peilcanTexture, playerLife2rect, Color.White);
+                    _spriteBatch.Draw(peilcanTexture, playerLife3rect, Color.White);
+                }
+                else if (lifes == 2)
+                {
+                    _spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
+                    _spriteBatch.Draw(peilcanTexture, playerLife2rect, Color.White);
+                }
+                else if (lifes == 1)
+                {
+                    _spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
+                }
 
 
 
