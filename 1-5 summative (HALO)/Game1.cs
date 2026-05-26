@@ -171,7 +171,7 @@ namespace _1_5_summative__HALO_
 
 			bossShipTexture = Content.Load<Texture2D>("covenant_ship_boss");
 
-			peilcan_down_right = Content.Load<Texture2D>("peil-down-right");
+			peilcan_down_right = Content.Load<Texture2D>("peil-down-right (1)");
 
 			plasmaShot = Content.Load<Texture2D>("plasmashot (1)");
 
