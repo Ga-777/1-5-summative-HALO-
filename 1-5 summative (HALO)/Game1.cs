@@ -719,7 +719,7 @@ namespace _1_5_summative__HALO_
                         phantomrect.X = 1200;
                         weaponsOn = false;
 
-                }
+                    }
                     if (timer >= 225 && bossFight == false)
                     {
                       weaponsOn = false;
