@@ -27,7 +27,7 @@ namespace _1_5_summative__HALO_
         private float bulletTimer = 0;
         private float bulletTime = 1;
 		float centerY = 300f;
-		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false, bansheeActive = true, cutSceneEvent = false, peilcanActive, blowMeAwayActive = false, energyShieldOff = false, weaponsOn = true;
+		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false, bansheeActive = true, cutSceneEvent = false, peilcanActive, blowMeAwayActive = false, energyShieldOff = false, weaponsOn = true, coreExposed = false;
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();
@@ -38,13 +38,16 @@ namespace _1_5_summative__HALO_
 		Texture2D peilcan_up_right, peilcan_down_right, peilcan_Left;
         Texture2D plasmaShot;
         Rectangle plasmaShotrect;
+        SpriteFont font;
         Texture2D energyShieldTexture1, energyShieldTexture2, energyShieldTexture3, energyShieldTexture4;
         Rectangle energyShield1rect, energyShield2rect, energyShield3rect, energyShield4rect;
+        Rectangle core1rect, core2rect, core3rect;
+        Texture2D coreTexture, core2Texture, core3Texture;
         Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
         float timer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway;
         int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
-        int energyShieldHealth = 8;
+        int energyShieldHealth = 8, coreHealth = 3;
         List<Vector2> bulletPositions = new List<Vector2>();
         List<Vector2> bulletVelocities = new List<Vector2>();
 
@@ -125,13 +128,19 @@ namespace _1_5_summative__HALO_
 
             playerLife3rect = new Rectangle(70, 10, 20, 20);
 
-            energyShield1rect = new Rectangle(0, 0, 20, 20);
+            energyShield1rect = new Rectangle(-10, -10, 20, 20);
 
-            energyShield2rect = new Rectangle(0, 0, 20, 20);
+            energyShield2rect = new Rectangle(-10, -10, 20, 20);
 
-            energyShield3rect = new Rectangle(0, 0, 20, 20);
+            energyShield3rect = new Rectangle(-10, -10, 20, 20);
 
-            energyShield4rect = new Rectangle(0, 0, 20, 20);
+            energyShield4rect = new Rectangle(-10, -10, 20, 20);
+
+            core1rect = new Rectangle(0, 0, 20, 20);
+
+            core2rect = new Rectangle(0, 0, 20, 20);
+
+            core3rect = new Rectangle(0, 0, 20, 20);
             base.Initialize();
 
         }
@@ -202,6 +211,14 @@ namespace _1_5_summative__HALO_
             energyShieldTexture3 = Content.Load<Texture2D>("energy_shield3");
 
             energyShieldTexture4 = Content.Load<Texture2D>("energy_shield4");
+
+            font = Content.Load<SpriteFont>("Jersey_15");
+
+            coreTexture = Content.Load<Texture2D>("core1");
+
+            core2Texture = Content.Load<Texture2D>("core2");
+
+            core3Texture = Content.Load<Texture2D>("core3");
             // TODO: use this.Content to load your game content here
         }
 
@@ -228,6 +245,7 @@ namespace _1_5_summative__HALO_
             }
             if (screen == Screen.MainMenu)
             {
+                weaponsOn = false;
                 if (blowMeAwayActive == false)
                 {
                     haloTheme.Play();
@@ -241,6 +259,12 @@ namespace _1_5_summative__HALO_
                     blowMeAwayActive = true;
                 }
             }
+            if (screen == Screen.intro)
+            {
+
+                
+            }
+
 
             if (weaponsOn == true)
             {
@@ -414,6 +438,7 @@ namespace _1_5_summative__HALO_
 
                 if (screen == Screen.CutScreen1)
                 {
+                    weaponsOn = false;
                     cityrect.X -= 2;
                     cityrect2.X -= 2;
                     if (cityrect.X <= -1000)
@@ -645,6 +670,7 @@ namespace _1_5_summative__HALO_
                     }
                     if (timer >= 0)
                     {
+                        weaponsOn = true;
                         bansheerect.X -= 3;
 
 
@@ -683,7 +709,7 @@ namespace _1_5_summative__HALO_
                         brothersInArms.Play();
                         haloflyingtheme.Stop();
                     }
-                    if (timer >= 0)
+                    if (timer >= 220)
                     {
                         bansheerect.X -= 0;
                         bansheerect2.X -= 0;
@@ -691,9 +717,10 @@ namespace _1_5_summative__HALO_
                         bansheerect.X = 800;
                         bansheerect2.X = 800;
                         phantomrect.X = 1200;
+                        weaponsOn = false;
 
-                    }
-                    if (timer >= 0 && bossFight == false)
+                }
+                    if (timer >= 225 && bossFight == false)
                     {
                       weaponsOn = false;
 
@@ -719,6 +746,7 @@ namespace _1_5_summative__HALO_
                     if (bossFight == true)
                     {
                         energyShield1rect = new Rectangle(bossShiprect.X + -100, bossShiprect.Y , 100, 300);
+                        
                         if (shieldTimer >= 20f && energyShieldOff == true)
                         {
 
@@ -726,7 +754,7 @@ namespace _1_5_summative__HALO_
                           energyShieldOff = false;
                           shieldTimer = 0;
                         }
-                    bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
+                        bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
                         plasmaTime = 2f;
                         if (bossShipHealth <= 25)
                         {
@@ -754,7 +782,22 @@ namespace _1_5_summative__HALO_
 
                             plasmaTime = 0.5f;
                         }
+                        if (energyShieldOff == true)
+                        {
+                            if (coreHealth == 3)
+                            {
+                                core1rect = new Rectangle(bossShiprect.X - 50, bossShiprect.Y, 50, 50);
+                            }
+                            else if (coreHealth == 2)
+                            {
+                                core2rect = new Rectangle(bossShiprect.X - 50, bossShiprect.Y, 50, 50);
+                            }
+                            else if (coreHealth == 1)
+                            {
+                                core3rect = new Rectangle(bossShiprect.X - 50, bossShiprect.Y, 50, 50);
+                            }
                     }
+                }
 
 
 
@@ -817,6 +860,10 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(buttonTexture, buttonrect, Color.White);
 
             }
+            //if (screen == Screen.intro)
+            //{
+                //_spriteBatch.DrawString(font, "In the year 2552, humanity is at war with an alien alliance known as the Covenant. The Covenant is a theocratic military alliance of multiple alien species that have united under a common religious belief in the Great Journey, which they believe will lead them to salvation. The Covenant has been waging a genocidal campaign against humanity for decades, and the United Earth Government (UEG) has been struggling to defend itself against the superior technology and firepower of the Covenant.", new Vector2(10, 10) , Color.White);
+            //}
             if (screen == Screen.GameOver)
             {
                 _spriteBatch.Draw(skyTexture, window, Color.Black);
@@ -923,8 +970,25 @@ namespace _1_5_summative__HALO_
                         
                     }
                 }
+                
+                if (energyShieldOff == true)
+                {
+                    if (coreHealth == 3)
+                    {
+                        _spriteBatch.Draw(coreTexture, core1rect, Color.White);
+                    }
+                    else if (coreHealth == 2)
+                    {
+                        _spriteBatch.Draw(core2Texture, core2rect, Color.White);
+                    }
+                    else if (coreHealth == 1)
+                    {
+                        _spriteBatch.Draw(core3Texture, core3rect, Color.White);
+                    }
+                }
+                    
 
-				foreach (Vector2 position in plasmaPositions)
+                foreach (Vector2 position in plasmaPositions)
 				{
 					_spriteBatch.Draw(plasmaShot, position, Color.White);
 				}

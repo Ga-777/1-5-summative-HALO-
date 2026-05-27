@@ -103,6 +103,42 @@
 /processorParam:TextureFormat=Color
 /build:cityforeandbackground.png
 
+#begin core1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:core1.png
+
+#begin core2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:core2.png
+
+#begin core3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:core3.png
+
 #begin covenant_ship_boss.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -234,6 +270,16 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:halo_theme.wav
+
+#begin Jersey_15.zip
+/copy:Jersey_15.zip
+
+#begin maintext.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:maintext.spritefont
 
 #begin missile.png
 /importer:TextureImporter
