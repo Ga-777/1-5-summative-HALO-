@@ -14,6 +14,7 @@ namespace _1_5_summative__HALO_
     enum Screen
     {
         MainMenu,
+        intro,
         CutScreen1,
         Level1,
         GameOver
@@ -26,7 +27,7 @@ namespace _1_5_summative__HALO_
         private float bulletTimer = 0;
         private float bulletTime = 1;
 		float centerY = 300f;
-		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false, bansheeActive = true, cutSceneEvent = false, peilcanActive, blowMeAwayActive = false, energyShieldOff = false;
+		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false, bansheeActive = true, cutSceneEvent = false, peilcanActive, blowMeAwayActive = false, energyShieldOff = false, weaponsOn = true;
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();
@@ -57,6 +58,8 @@ namespace _1_5_summative__HALO_
         
         private float missileTimer = 0;
         private float missileTime = 5f;
+
+        private float shieldTimer = 0;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -213,6 +216,7 @@ namespace _1_5_summative__HALO_
             bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             plasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             missileTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            shieldTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             KeyboardState keyboardState = Keyboard.GetState();
             
@@ -238,140 +242,144 @@ namespace _1_5_summative__HALO_
                 }
             }
 
-            if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
+            if (weaponsOn == true)
             {
-                bulletPositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - bulletrect.Height / 2));
+                if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
+                {
+                    bulletPositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - bulletrect.Height / 2));
 
-                bulletVelocities.Add(new Vector2(bulletSpeed, 0));
+                    bulletVelocities.Add(new Vector2(bulletSpeed, 0));
 
-                bulletfire.Play();
+                    bulletfire.Play();
 
-                bulletTimer = 0;
-            }
-            for (int i = 0; i < bulletPositions.Count; i++)
-            {
+                    bulletTimer = 0;
+                }
+                for (int i = 0; i < bulletPositions.Count; i++)
+                {
 
 
-                bulletPositions[i] += bulletVelocities[i];
-                if (peilcanLeftShow == true)
-                {
-                    bulletVelocities[i] = new Vector2(-bulletSpeed, 0);
+                    bulletPositions[i] += bulletVelocities[i];
+                    if (peilcanLeftShow == true)
+                    {
+                        bulletVelocities[i] = new Vector2(-bulletSpeed, 0);
 
-                }
-                if (bulletPositions[i].X > 800)
-                {
-                    bulletPositions.RemoveAt(i);
-                    bulletVelocities.RemoveAt(i);
-                    i--;
-                }
-                else if (bulletPositions[i].X < 10)
-                {
-                    bulletPositions.RemoveAt(i);
-                    bulletVelocities.RemoveAt(i);
-                    i--;
-                }
-                if (bansheerect.Contains(bulletPositions.LastOrDefault()))
-                {
-                    bansheerect.X = 800;
-                    bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                    bulletPositions.RemoveAt(i);
-                    bulletVelocities.RemoveAt(i);
-                    i--;
-                }
-                if (bansheerect2.Contains(bulletPositions.LastOrDefault()))
-                {
-                    bansheerect2.X = 800;
-                    bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                    bulletPositions.RemoveAt(i);
-                    bulletVelocities.RemoveAt(i);
-                    i--;
-                }
-                if (phantomrect.Contains(bulletPositions.FirstOrDefault()))
-                {
-                    phantomHealth--;
-                    bulletPositions.RemoveAt(i);
-                    bulletVelocities.RemoveAt(i);
-                    i--;
+                    }
+                    if (bulletPositions[i].X > 800)
+                    {
+                        bulletPositions.RemoveAt(i);
+                        bulletVelocities.RemoveAt(i);
+                        i--;
+                    }
+                    else if (bulletPositions[i].X < 10)
+                    {
+                        bulletPositions.RemoveAt(i);
+                        bulletVelocities.RemoveAt(i);
+                        i--;
+                    }
+                    if (bansheerect.Contains(bulletPositions.LastOrDefault()))
+                    {
+                        bansheerect.X = 800;
+                        bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                        bulletPositions.RemoveAt(i);
+                        bulletVelocities.RemoveAt(i);
+                        i--;
+                    }
+                    if (bansheerect2.Contains(bulletPositions.LastOrDefault()))
+                    {
+                        bansheerect2.X = 800;
+                        bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                        bulletPositions.RemoveAt(i);
+                        bulletVelocities.RemoveAt(i);
+                        i--;
+                    }
+                    if (phantomrect.Contains(bulletPositions.FirstOrDefault()))
+                    {
+                        phantomHealth--;
+                        bulletPositions.RemoveAt(i);
+                        bulletVelocities.RemoveAt(i);
+                        i--;
 
+                    }
+                    if (bossShiprect.Contains(bulletPositions.FirstOrDefault()))
+                    {
+                        bossShipHealth--;
+                        bulletPositions.RemoveAt(i);
+                        bulletVelocities.RemoveAt(i);
+                        i--;
+                    }
+                    if (energyShield1rect.Contains(bulletPositions.FirstOrDefault()) && energyShieldOff == false)
+                    {
+                        energyShieldHealth--;
+                        bulletPositions.RemoveAt(i);
+                        bulletVelocities.RemoveAt(i);
+                        i--;
+                    }
                 }
-                if (bossShiprect.Contains(bulletPositions.FirstOrDefault()))
-                {
-                    bossShipHealth--;
-                    bulletPositions.RemoveAt(i);
-                    bulletVelocities.RemoveAt(i);
-                    i--;
-                }
-                if (energyShield1rect.Contains(bulletPositions.FirstOrDefault()) && energyShieldOff == false)
-                {
-                    energyShieldHealth--;
-                    bulletPositions.RemoveAt(i);
-                    bulletVelocities.RemoveAt(i);
-                    i--;
-                }
-            }
 
-            if (keyboardState.IsKeyDown(Keys.M) && missileTimer >= missileTime)
-            {
+                if (keyboardState.IsKeyDown(Keys.M) && missileTimer >= missileTime)
+                {
 
-                missilePositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - missilerect.Height / 2));
-                missileVelocities.Add(new Vector2(missileSpeed, 0));
-                missileTimer = 0;
-            }
-            for (int k = 0; k <missilePositions.Count; k++)
-            {
-                missilePositions[k] += missileVelocities[k];
-                if (missilePositions[k].X > 800)
-                {
-                    missilePositions.RemoveAt(k);
-                    missileVelocities.RemoveAt(k);
-                    k--;
-                }   
-                if (bansheerect.Contains(missilePositions.LastOrDefault()))
-                {
-                    bansheerect.X = 800;
-                    bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                    missilePositions.RemoveAt(k);
-                    missileVelocities.RemoveAt( k);
-                    k--;
+                    missilePositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - missilerect.Height / 2));
+                    missileVelocities.Add(new Vector2(missileSpeed, 0));
+                    missileTimer = 0;
                 }
-                if (bansheerect2.Contains(missilePositions.LastOrDefault()))
+                for (int k = 0; k < missilePositions.Count; k++)
                 {
-                    bansheerect2.X = 800;
-                    bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                    missilePositions.RemoveAt(k);
-                    missileVelocities.RemoveAt(k);
-                    k--;
-                }
-                if (phantomrect.Contains(missilePositions.FirstOrDefault()))
-                {
-                    phantomHealth -= 3;
-                    missilePositions.RemoveAt(k);
-                    missileVelocities.RemoveAt(k);
-                    k--;
-                }
-                if (bossShiprect.Contains(missilePositions.FirstOrDefault()))
-                {
-                    bossShipHealth -= 5;
-                    missilePositions.RemoveAt(k);
-                    missileVelocities.RemoveAt(k);
-                    k--;
-                }
-                if (energyShield1rect.Contains(missilePositions.FirstOrDefault()) && energyShieldOff == false)
+                    missilePositions[k] += missileVelocities[k];
+                    if (missilePositions[k].X > 800)
+                    {
+                        missilePositions.RemoveAt(k);
+                        missileVelocities.RemoveAt(k);
+                        k--;
+                    }
+                    if (bansheerect.Contains(missilePositions.LastOrDefault()))
+                    {
+                        bansheerect.X = 800;
+                        bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                        missilePositions.RemoveAt(k);
+                        missileVelocities.RemoveAt(k);
+                        k--;
+                    }
+                    if (bansheerect2.Contains(missilePositions.LastOrDefault()))
+                    {
+                        bansheerect2.X = 800;
+                        bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                        missilePositions.RemoveAt(k);
+                        missileVelocities.RemoveAt(k);
+                        k--;
+                    }
+                    if (phantomrect.Contains(missilePositions.FirstOrDefault()))
+                    {
+                        phantomHealth -= 3;
+                        missilePositions.RemoveAt(k);
+                        missileVelocities.RemoveAt(k);
+                        k--;
+                    }
+                    if (bossShiprect.Contains(missilePositions.FirstOrDefault()))
+                    {
+                        bossShipHealth -= 5;
+                        missilePositions.RemoveAt(k);
+                        missileVelocities.RemoveAt(k);
+                        k--;
+                    }
+                    if (energyShield1rect.Contains(missilePositions.FirstOrDefault()) && energyShieldOff == false)
                     {
                         energyShieldHealth -= 2;
                         missilePositions.RemoveAt(k);
                         missileVelocities.RemoveAt(k);
                         k--;
+                    }
+
                 }
-
             }
+                
 
 
 
 
 
-            if (bossFight == true)
-            {
+                    if (bossFight == true)
+            
 
                 if (plasmaTimer >= plasmaTime)
                 {
@@ -402,7 +410,7 @@ namespace _1_5_summative__HALO_
                         j--;
                     }
                 }
-            }
+        
 
                 if (screen == Screen.CutScreen1)
                 {
@@ -483,7 +491,7 @@ namespace _1_5_summative__HALO_
 
                             peilcanrect.X = -10;
 
-                            if (timer >= 7)
+                            if (timer >= 6)
                             {
                                 screen = Screen.Level1;
                             }
@@ -687,12 +695,13 @@ namespace _1_5_summative__HALO_
                     }
                     if (timer >= 0 && bossFight == false)
                     {
+                      weaponsOn = false;
 
 
-                        bossShiprect.X -= 1;
+                      bossShiprect.X -= 1;
                         if (bossShiprect.X <= 500)
                         {
-
+                            weaponsOn = true;
                             bossShiprect.X = 500;
                             bossShiprect.X -= 0;
                             bossShiprect.Y -= 2;
@@ -710,7 +719,14 @@ namespace _1_5_summative__HALO_
                     if (bossFight == true)
                     {
                         energyShield1rect = new Rectangle(bossShiprect.X + -100, bossShiprect.Y , 100, 300);
-                        bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
+                        if (shieldTimer >= 20f && energyShieldOff == true)
+                        {
+
+                          energyShieldHealth = 8;
+                          energyShieldOff = false;
+                          shieldTimer = 0;
+                        }
+                    bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
                         plasmaTime = 2f;
                         if (bossShipHealth <= 25)
                         {
@@ -901,6 +917,10 @@ namespace _1_5_summative__HALO_
                     else if (energyShieldHealth <= 0)
                     {
                         energyShieldOff = true;
+                    }
+                    else if (shieldTimer >= 5f)
+                    {
+                        
                     }
                 }
 
