@@ -212,7 +212,7 @@ namespace _1_5_summative__HALO_
 
             energyShieldTexture4 = Content.Load<Texture2D>("energy_shield4");
 
-            font = Content.Load<SpriteFont>("Jersey_15");
+            font = Content.Load<SpriteFont>("maintext");
 
             coreTexture = Content.Load<Texture2D>("core1");
 
@@ -266,8 +266,8 @@ namespace _1_5_summative__HALO_
             }
 
 
-            if (weaponsOn == true)
-            {
+            
+            
                 if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
                 {
                     bulletPositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - bulletrect.Height / 2));
@@ -278,132 +278,127 @@ namespace _1_5_summative__HALO_
 
                     bulletTimer = 0;
                 }
-                for (int i = 0; i < bulletPositions.Count; i++)
-                {
+				for (int i = bulletPositions.Count - 1; i >= 0; i--)
+				{
+					// update position first
+					bulletPositions[i] += bulletVelocities[i];
+					var pos = bulletPositions[i];
 
+					if (peilcanLeftShow)
+						bulletVelocities[i] = new Vector2(-bulletSpeed, 0);
 
-                    bulletPositions[i] += bulletVelocities[i];
-                    if (peilcanLeftShow == true)
-                    {
-                        bulletVelocities[i] = new Vector2(-bulletSpeed, 0);
+					if (pos.X > 800 || pos.X < 10)
+					{
+						bulletPositions.RemoveAt(i);
+						bulletVelocities.RemoveAt(i);
+						continue;
+					}
 
-                    }
-                    if (bulletPositions[i].X > 800)
-                    {
-                        bulletPositions.RemoveAt(i);
-                        bulletVelocities.RemoveAt(i);
-                        i--;
-                    }
-                    else if (bulletPositions[i].X < 10)
-                    {
-                        bulletPositions.RemoveAt(i);
-                        bulletVelocities.RemoveAt(i);
-                        i--;
-                    }
-                    if (bansheerect.Contains(bulletPositions.LastOrDefault()))
-                    {
-                        bansheerect.X = 800;
-                        bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                        bulletPositions.RemoveAt(i);
-                        bulletVelocities.RemoveAt(i);
-                        i--;
-                    }
-                    if (bansheerect2.Contains(bulletPositions.LastOrDefault()))
-                    {
-                        bansheerect2.X = 800;
-                        bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                        bulletPositions.RemoveAt(i);
-                        bulletVelocities.RemoveAt(i);
-                        i--;
-                    }
-                    if (phantomrect.Contains(bulletPositions.FirstOrDefault()))
-                    {
-                        phantomHealth--;
-                        bulletPositions.RemoveAt(i);
-                        bulletVelocities.RemoveAt(i);
-                        i--;
+					if (bansheerect.Contains(pos))
+					{
+						bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+						bulletPositions.RemoveAt(i);
+						bulletVelocities.RemoveAt(i);
+						continue;
+					}
 
-                    }
-                    if (bossShiprect.Contains(bulletPositions.FirstOrDefault()))
-                    {
-                        bossShipHealth--;
-                        bulletPositions.RemoveAt(i);
-                        bulletVelocities.RemoveAt(i);
-                        i--;
-                    }
-                    if (energyShield1rect.Contains(bulletPositions.FirstOrDefault()) && energyShieldOff == false)
-                    {
-                        energyShieldHealth--;
-                        bulletPositions.RemoveAt(i);
-                        bulletVelocities.RemoveAt(i);
-                        i--;
-                    }
-                }
+					if (bansheerect2.Contains(pos))
+					{
+						bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+						bulletPositions.RemoveAt(i);
+						bulletVelocities.RemoveAt(i);
+						continue;
+					}
 
-                if (keyboardState.IsKeyDown(Keys.M) && missileTimer >= missileTime)
+					if (phantomrect.Contains(pos))
+					{
+						phantomHealth--;
+						bulletPositions.RemoveAt(i);
+						bulletVelocities.RemoveAt(i);
+						continue;
+					}
+
+					if (bossShiprect.Contains(pos))
+					{
+						bossShipHealth--;
+						bulletPositions.RemoveAt(i);
+						bulletVelocities.RemoveAt(i);
+						continue;
+					}
+
+					if (!energyShieldOff && energyShield1rect.Contains(pos))
+					{
+						energyShieldHealth--;
+						bulletPositions.RemoveAt(i);
+						bulletVelocities.RemoveAt(i);
+						continue;
+					}
+				}
+
+				if (keyboardState.IsKeyDown(Keys.M) && missileTimer >= missileTime)
                 {
 
                     missilePositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - missilerect.Height / 2));
                     missileVelocities.Add(new Vector2(missileSpeed, 0));
                     missileTimer = 0;
                 }
-                for (int k = 0; k < missilePositions.Count; k++)
+                for (int k = missilePositions.Count - 1; k >= 0; k--)
                 {
                     missilePositions[k] += missileVelocities[k];
+                    var pos = missilePositions[k];
                     if (missilePositions[k].X > 800)
                     {
                         missilePositions.RemoveAt(k);
                         missileVelocities.RemoveAt(k);
-                        k--;
+                        continue;
                     }
-                    if (bansheerect.Contains(missilePositions.LastOrDefault()))
+                    if (bansheerect.Contains(pos))
                     {
-                        bansheerect.X = 800;
                         bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                         missilePositions.RemoveAt(k);
                         missileVelocities.RemoveAt(k);
-                        k--;
+                        continue;
                     }
-                    if (bansheerect2.Contains(missilePositions.LastOrDefault()))
+                    if (bansheerect2.Contains(pos))
                     {
-                        bansheerect2.X = 800;
                         bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                         missilePositions.RemoveAt(k);
                         missileVelocities.RemoveAt(k);
-                        k--;
+                        continue;
                     }
-                    if (phantomrect.Contains(missilePositions.FirstOrDefault()))
+                    if (phantomrect.Contains(pos))
                     {
-                        phantomHealth -= 3;
+                        phantomHealth -= 2;
                         missilePositions.RemoveAt(k);
                         missileVelocities.RemoveAt(k);
-                        k--;
+                        continue;
                     }
-                    if (bossShiprect.Contains(missilePositions.FirstOrDefault()))
+                    if (bossShiprect.Contains(pos))
                     {
                         bossShipHealth -= 5;
                         missilePositions.RemoveAt(k);
                         missileVelocities.RemoveAt(k);
-                        k--;
+                        continue;
+
                     }
-                    if (energyShield1rect.Contains(missilePositions.FirstOrDefault()) && energyShieldOff == false)
-                    {
-                        energyShieldHealth -= 2;
-                        missilePositions.RemoveAt(k);
-                        missileVelocities.RemoveAt(k);
-                        k--;
-                    }
-
-                }
-            }
-                
-
-
-
-
-
-                    if (bossFight == true)
+                    if (!energyShieldOff && energyShield1rect.Contains(pos))
+				    {
+					   energyShieldHealth -= 2;
+					   missilePositions.RemoveAt(k);
+					   missileVelocities.RemoveAt(k);
+					   continue;
+				    }
+			    }
             
+
+
+
+
+
+
+            if (bossFight == true)
+            {
+
 
                 if (plasmaTimer >= plasmaTime)
                 {
@@ -415,25 +410,28 @@ namespace _1_5_summative__HALO_
 
                     plasmaTimer = 0;
                 }
-                for (int j = 0; j < plasmaPositions.Count; j++)
+                for (int j = plasmaPositions.Count - 1; j >= 0; j--)
                 {
                     plasmaPositions[j] += plasmaVelocities[j];
+                    var pos = plasmaPositions[j];
                     if (plasmaPositions[j].X < 0)
                     {
                         plasmaPositions.RemoveAt(j);
                         plasmaVelocities.RemoveAt(j);
-                        j--;
+                        continue;
                     }
-                    if (peilcanrect.Contains(plasmaPositions.FirstOrDefault()))
+                    if (peilcanrect.Contains(pos))
                     {
                         lifes--;
                         peilcanrect.X = 200;
                         peilcanrect.Y = 50;
                         plasmaPositions.RemoveAt(j);
                         plasmaVelocities.RemoveAt(j);
-                        j--;
+                        continue;
                     }
+
                 }
+            }
         
 
                 if (screen == Screen.CutScreen1)

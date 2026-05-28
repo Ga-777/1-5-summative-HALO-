@@ -271,8 +271,8 @@
 /processorParam:Quality=Best
 /build:halo_theme.wav
 
-#begin Jersey_15.zip
-/copy:Jersey_15.zip
+#begin Jersey15-Regular.ttf
+/copy:Jersey15-Regular.ttf
 
 #begin maintext.spritefont
 /importer:FontDescriptionImporter
