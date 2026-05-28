@@ -17,7 +17,8 @@ namespace _1_5_summative__HALO_
         intro,
         CutScreen1,
         Level1,
-        GameOver
+		Level2,
+		GameOver
     }
 
     public class Game1 : Game
@@ -39,13 +40,15 @@ namespace _1_5_summative__HALO_
         Texture2D plasmaShot;
         Rectangle plasmaShotrect;
         SpriteFont font;
-        Texture2D energyShieldTexture1, energyShieldTexture2, energyShieldTexture3, energyShieldTexture4;
+        Texture2D ringSkyTexture, ring2Texture, ringTreesTexture;
+        Rectangle ringTreesrect, ringSkyrect, ring2rect, ringTreesrect2;
+		Texture2D energyShieldTexture1, energyShieldTexture2, energyShieldTexture3, energyShieldTexture4;
         Rectangle energyShield1rect, energyShield2rect, energyShield3rect, energyShield4rect;
         Rectangle core1rect, core2rect, core3rect;
         Texture2D coreTexture, core2Texture, core3Texture;
         Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
         float timer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f;
-        SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway;
+        SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway, moonOverMombasa;
         int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
         int energyShieldHealth = 8, coreHealth = 3;
         List<Vector2> bulletPositions = new List<Vector2>();
@@ -141,7 +144,15 @@ namespace _1_5_summative__HALO_
             core2rect = new Rectangle(0, 0, 20, 20);
 
             core3rect = new Rectangle(0, 0, 20, 20);
-            base.Initialize();
+
+            ring2rect = new Rectangle(0, 0, 800, 500);
+
+            ringTreesrect = new Rectangle(0, 0, 800, 500);
+
+            ringTreesrect2 = new Rectangle(0, 0, 800, 500);
+
+			ringSkyrect = new Rectangle(0, 0, 800, 500);
+			base.Initialize();
 
         }
 
@@ -219,8 +230,16 @@ namespace _1_5_summative__HALO_
             core2Texture = Content.Load<Texture2D>("core2");
 
             core3Texture = Content.Load<Texture2D>("core3");
-            // TODO: use this.Content to load your game content here
-        }
+
+            moonOverMombasa = Content.Load<SoundEffect>("2-06 Moon Over Mombasa").CreateInstance();
+
+            ring2Texture = Content.Load<Texture2D>("ring2");
+
+            ringSkyTexture = Content.Load<Texture2D>("ring_sky");
+
+			ringTreesTexture = Content.Load<Texture2D>("trees");
+			// TODO: use this.Content to load your game content here
+		}
 
 
 
@@ -233,12 +252,17 @@ namespace _1_5_summative__HALO_
             bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             plasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             missileTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            shieldTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
 
             KeyboardState keyboardState = Keyboard.GetState();
-            
+
             if (buttonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
             {
+
+                haloTheme.Stop();
+                blowMeAway.Stop();
+
+
                 screen = Screen.CutScreen1;
 
 
@@ -250,146 +274,180 @@ namespace _1_5_summative__HALO_
                 {
                     haloTheme.Play();
                 }
-                
-                
+
+
                 if (Keyboard.GetState().IsKeyDown(Keys.B))
                 {
                     blowMeAway.Play();
                     haloTheme.Stop();
                     blowMeAwayActive = true;
                 }
+                if (Keyboard.GetState().IsKeyDown(Keys.D2))
+				{
+					screen = Screen.Level2;
+				}
             }
+
             if (screen == Screen.intro)
             {
 
-                
+
             }
 
 
-            
-            
-                if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
+
+
+            if (keyboardState.IsKeyDown(Keys.Space) && bulletTimer >= bulletTime)
+            {
+                bulletPositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - bulletrect.Height / 2));
+
+                bulletVelocities.Add(new Vector2(bulletSpeed, 0));
+
+                bulletfire.Play();
+
+                bulletTimer = 0;
+            }
+            for (int i = bulletPositions.Count - 1; i >= 0; i--)
+            {
+                // update position first
+                bulletPositions[i] += bulletVelocities[i];
+                var pos = bulletPositions[i];
+
+                if (peilcanLeftShow)
+                    bulletVelocities[i] = new Vector2(-bulletSpeed, 0);
+
+                if (pos.X > 800 || pos.X < 10)
                 {
-                    bulletPositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - bulletrect.Height / 2));
-
-                    bulletVelocities.Add(new Vector2(bulletSpeed, 0));
-
-                    bulletfire.Play();
-
-                    bulletTimer = 0;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
                 }
-				for (int i = bulletPositions.Count - 1; i >= 0; i--)
-				{
-					// update position first
-					bulletPositions[i] += bulletVelocities[i];
-					var pos = bulletPositions[i];
 
-					if (peilcanLeftShow)
-						bulletVelocities[i] = new Vector2(-bulletSpeed, 0);
-
-					if (pos.X > 800 || pos.X < 10)
-					{
-						bulletPositions.RemoveAt(i);
-						bulletVelocities.RemoveAt(i);
-						continue;
-					}
-
-					if (bansheerect.Contains(pos))
-					{
-						bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-						bulletPositions.RemoveAt(i);
-						bulletVelocities.RemoveAt(i);
-						continue;
-					}
-
-					if (bansheerect2.Contains(pos))
-					{
-						bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-						bulletPositions.RemoveAt(i);
-						bulletVelocities.RemoveAt(i);
-						continue;
-					}
-
-					if (phantomrect.Contains(pos))
-					{
-						phantomHealth--;
-						bulletPositions.RemoveAt(i);
-						bulletVelocities.RemoveAt(i);
-						continue;
-					}
-
-					if (bossShiprect.Contains(pos))
-					{
-						bossShipHealth--;
-						bulletPositions.RemoveAt(i);
-						bulletVelocities.RemoveAt(i);
-						continue;
-					}
-
-					if (!energyShieldOff && energyShield1rect.Contains(pos))
-					{
-						energyShieldHealth--;
-						bulletPositions.RemoveAt(i);
-						bulletVelocities.RemoveAt(i);
-						continue;
-					}
-				}
-
-				if (keyboardState.IsKeyDown(Keys.M) && missileTimer >= missileTime)
+                if (bansheerect.Contains(pos))
                 {
-
-                    missilePositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - missilerect.Height / 2));
-                    missileVelocities.Add(new Vector2(missileSpeed, 0));
-                    missileTimer = 0;
+                    bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
                 }
-                for (int k = missilePositions.Count - 1; k >= 0; k--)
-                {
-                    missilePositions[k] += missileVelocities[k];
-                    var pos = missilePositions[k];
-                    if (missilePositions[k].X > 800)
-                    {
-                        missilePositions.RemoveAt(k);
-                        missileVelocities.RemoveAt(k);
-                        continue;
-                    }
-                    if (bansheerect.Contains(pos))
-                    {
-                        bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                        missilePositions.RemoveAt(k);
-                        missileVelocities.RemoveAt(k);
-                        continue;
-                    }
-                    if (bansheerect2.Contains(pos))
-                    {
-                        bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
-                        missilePositions.RemoveAt(k);
-                        missileVelocities.RemoveAt(k);
-                        continue;
-                    }
-                    if (phantomrect.Contains(pos))
-                    {
-                        phantomHealth -= 2;
-                        missilePositions.RemoveAt(k);
-                        missileVelocities.RemoveAt(k);
-                        continue;
-                    }
-                    if (bossShiprect.Contains(pos))
-                    {
-                        bossShipHealth -= 5;
-                        missilePositions.RemoveAt(k);
-                        missileVelocities.RemoveAt(k);
-                        continue;
 
-                    }
-                    if (!energyShieldOff && energyShield1rect.Contains(pos))
-				    {
-					   energyShieldHealth -= 2;
-					   missilePositions.RemoveAt(k);
-					   missileVelocities.RemoveAt(k);
-					   continue;
-				    }
-			    }
-            
+                if (bansheerect2.Contains(pos))
+                {
+                    bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
+                }
+
+                if (phantomrect.Contains(pos))
+                {
+                    phantomHealth--;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
+                }
+
+
+
+                if (!energyShieldOff && energyShield1rect.Contains(pos))
+                {
+                    energyShieldHealth--;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
+                }
+                if (core1rect.Contains(pos))
+                {
+                    coreHealth--;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
+                }
+                if (core2rect.Contains(pos))
+                {
+                    coreHealth--;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
+                }
+                if (core3rect.Contains(pos))
+                {
+                    coreHealth--;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            if (keyboardState.IsKeyDown(Keys.M) && missileTimer >= missileTime)
+            {
+
+                missilePositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - missilerect.Height / 2));
+                missileVelocities.Add(new Vector2(missileSpeed, 0));
+                missileTimer = 0;
+            }
+            for (int k = missilePositions.Count - 1; k >= 0; k--)
+            {
+                missilePositions[k] += missileVelocities[k];
+                var pos = missilePositions[k];
+                if (missilePositions[k].X > 800)
+                {
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (bansheerect.Contains(pos))
+                {
+                    bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (bansheerect2.Contains(pos))
+                {
+                    bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (phantomrect.Contains(pos))
+                {
+                    phantomHealth -= 2;
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+
+                if (!energyShieldOff && energyShield1rect.Contains(pos))
+                {
+                    energyShieldHealth -= 2;
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (core1rect.Contains(pos))
+                {
+                    coreHealth--;
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (core2rect.Contains(pos))
+                {
+                    coreHealth--;
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (core3rect.Contains(pos))
+                {
+                    coreHealth--;
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+            }
+
 
 
 
@@ -432,388 +490,403 @@ namespace _1_5_summative__HALO_
 
                 }
             }
-        
 
-                if (screen == Screen.CutScreen1)
+
+            if (screen == Screen.CutScreen1)
+            {
+                weaponsOn = false;
+                moonOverMombasa.Play();
+                cityrect.X -= 2;
+                cityrect2.X -= 2;
+                if (cityrect.X <= -1000)
                 {
-                    weaponsOn = false;
-                    cityrect.X -= 2;
-                    cityrect2.X -= 2;
-                    if (cityrect.X <= -1000)
-                    {
-                        cityrect.X = 1000;
-                    }
-                    if (cityrect2.X <= -1000)
-                    {
-                        cityrect2.X = 1000;
-                    }
-
-                    if (peilcanActive == false)
-                    {
-                        peilcanrect.X += 1;
-                        peilcanrect2.X += 1;
-                        peilcanrect3.X += 1;
-
-                        peilcanrect.Y -= 3;
-                        peilcanrect2.Y -= 1;
-                        peilcanrect3.Y -= 2;
-                        if (peilcanrect.Y <= 300)
-                        {
-                            peilcanrect.Y = 300;
-                            peilcanrect.X = 290;
-                        }
-                        if (peilcanrect2.Y <= 250)
-                        {
-                            peilcanrect2.Y = 250;
-                            peilcanrect2.X = 400;
-                        }
-                        if (peilcanrect3.Y <= 200)
-                        {
-
-                            peilcanrect3.Y = 200;
-                            peilcanrect3.X = 200;
-                        }
-                    }
-
-                    if (cutScene1 == true && cutScene2 == true && cutScene3 == true)
-                    {
-                        timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        if (timer >= 2)
-                        {
-                            if (bansheeActive == true)
-                            {
-
-                                bansheerect.X -= 3;
-                                bansheerect.Y = 250;
-
-                                bansheerect2.X -= 6;
-                                bansheerect2.Y = 200;
-                            }
-                        }
-                    }
-                    if (timer >= 4)
-                    {
-
-                        bansheeActive = false;
-                        cutSceneEvent = true;
-                        peilcanActive = true;
-
-                        peilcanrect2.X -= 4;
-                        peilcanrect3.X -= 4;
-                        bansheerect.X -= 4;
-                        bansheerect2.X -= 4;
-
-                        peilcanrect.Y -= 2;
-                        if (peilcanrect.Y <= 250)
-                        {
-                            peilcanrect.Y = 250;
-                            peilcanrect.X += 5;
-                        }
-                        if (peilcanrect.X >= 800)
-                        {
-
-                            peilcanrect.X = -10;
-
-                            if (timer >= 6)
-                            {
-                                screen = Screen.Level1;
-                            }
-                        }
-                    }
-
-
-
-
-
-
-
-
-
-
-
+                    cityrect.X = 1000;
+                }
+                if (cityrect2.X <= -1000)
+                {
+                    cityrect2.X = 1000;
                 }
 
+                if (peilcanActive == false)
+                {
+                    peilcanrect.X += 1;
+                    peilcanrect2.X += 1;
+                    peilcanrect3.X += 1;
 
+                    peilcanrect.Y -= 3;
+                    peilcanrect2.Y -= 1;
+                    peilcanrect3.Y -= 2;
+                    if (peilcanrect.Y <= 300)
+                    {
+                        peilcanrect.Y = 300;
+                        peilcanrect.X = 290;
+                    }
+                    if (peilcanrect2.Y <= 250)
+                    {
+                        peilcanrect2.Y = 250;
+                        peilcanrect2.X = 400;
+                    }
+                    if (peilcanrect3.Y <= 200)
+                    {
 
+                        peilcanrect3.Y = 200;
+                        peilcanrect3.X = 200;
+                    }
+                }
 
-
-                if (screen == Screen.Level1)
+                if (cutScene1 == true && cutScene2 == true && cutScene3 == true)
                 {
 
                     timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (timer >= 2)
+                    {
+                        if (bansheeActive == true)
+                        {
+
+                            bansheerect.X -= 3;
+                            bansheerect.Y = 250;
+
+                            bansheerect2.X -= 6;
+                            bansheerect2.Y = 200;
+                        }
+                    }
+                }
+                if (timer >= 4)
+                {
+
+                    bansheeActive = false;
+                    cutSceneEvent = true;
+                    peilcanActive = true;
+
+                    peilcanrect2.X -= 4;
+                    peilcanrect3.X -= 4;
+                    bansheerect.X -= 4;
+                    bansheerect2.X -= 4;
+
+                    peilcanrect.Y -= 2;
+                    if (peilcanrect.Y <= 250)
+                    {
+                        peilcanrect.Y = 250;
+                        peilcanrect.X += 5;
+                    }
+                    if (peilcanrect.X >= 800)
+                    {
+
+                        peilcanrect.X = -10;
+
+                        if (timer >= 6)
+                        {
+                            moonOverMombasa.Stop();
+                            screen = Screen.Level1;
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+            if (screen == Screen.Level1)
+            {
+
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                moonOverMombasa.Play();
+                haloTheme.Stop();
+                peilcanSound.Play();
+
+                if (moonOverMombasa.State == SoundState.Stopped)
+                {
+                    brothersInArms.Play();
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    peilcanrect.X -= 3;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    peilcanrect.X += 3;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    peilcanrect.Y -= 3;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    peilcanrect.Y += 3;
+                }
+
+                cityrect.X -= 2;
+                cityrect2.X -= 2;
+                build1rect.X -= 1;
+                covenantshiprect.X -= 1;
+                phantomrect.X -= 3;
+                bossShiprect.X -= 0;
+
+                unscshiprect.X -= 1;
+                if (build1rect.X <= -300)
+                {
+                    build1rect.X = generator.Next(1100, 3000);
+                }
+                if (covenantshiprect.X <= -750)
+                {
+                    covenantshiprect.X = 800;
+                }
+                if (phantomrect.X <= -250)
+                {
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 200);
+                }
+                if (phantomrect.Y >= 800)
+                {
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 200);
+                }
+                if (phantomrect.Y <= -800)
+                {
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 200);
+                }
+                if (cityrect.X <= -1000)
+                {
+                    cityrect.X = 1000;
+                }
+                if (cityrect2.X <= -1000)
+                {
+                    cityrect2.X = 1000;
+                }
+                if (bansheerect.X <= -150)
+                {
+                    bansheerect.X = 850;
+                    bansheerect.Y = new Random().Next(0, 450);
+                }
+
+                if (peilcanrect.Intersects(bansheerect))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    bansheerect.X = 850;
+                    bansheerect.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(phantomrect))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 450);
+
+                }
+                if (unscshiprect.X <= -250)
+                {
+                    unscshiprect.X = new Random().Next(1000, 3000);
+                    unscshiprect.Y = new Random().Next(0, 200);
+                }
+                if (peilcanrect.X <= -100)
+                {
+                    peilcanrect.X = 900;
+                }
+                else if (peilcanrect.X >= 900)
+                {
+                    peilcanrect.X = -100;
+                }
+                if (peilcanrect.Y <= -100)
+                {
+                    peilcanrect.Y = 600;
+                }
+                else if (peilcanrect.Y >= 600)
+                {
+                    peilcanrect.Y = -100;
+                }
+                if (lifes <= 0)
+                {
+                    screen = Screen.GameOver;
+                }
+                if (bansheerect2.X <= -150)
+                {
+                    bansheerect2.X = 850;
+                    bansheerect2.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(bansheerect2))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    bansheerect2.X = 850;
+                    bansheerect2.Y = new Random().Next(0, 450);
+                }
+                if (timer >= 0)
+                {
+                    weaponsOn = true;
+                    bansheerect.X -= 3;
+
+
+                }
+
+
+                if (timer >= 30)
+                {
+
+                    bansheerect.X -= 4;
+                    bansheerect2.X -= 4;
+
+
+
+                }
+                if (timer >= 60)
+                {
+                    bansheerect.X -= 5;
+                    bansheerect2.X -= 5;
+
+                }
+                if (timer >= 130)
+                {
+                    bansheerect.X -= 6;
+                    bansheerect2.X -= 6;
+                    radio1.Play();
+                }
+                if (timer >= 140)
+                {
+                    radio1.Stop();
+
+                }
+                if (timer >= 160)
+                {
+
+                    brothersInArms.Play();
+                    haloflyingtheme.Stop();
+                }
+                if (timer >= 0)
+                {
+                    bansheerect.X -= 0;
+                    bansheerect2.X -= 0;
+                    phantomrect.X -= 0;
+                    bansheerect.X = 800;
+                    bansheerect2.X = 800;
+                    phantomrect.X = 1200;
+                    weaponsOn = false;
                     haloflyingtheme.Play();
-                    haloTheme.Stop();
-                    peilcanSound.Play();
+                    brothersInArms.Stop();
+                    moonOverMombasa.Stop();
 
-                    if (haloflyingtheme.State == SoundState.Stopped)
-                    {
-                        brothersInArms.Play();
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                    {
-                        peilcanrect.X -= 3;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                    {
-                        peilcanrect.X += 3;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                    {
-                        peilcanrect.Y -= 3;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                    {
-                        peilcanrect.Y += 3;
-                    }
+                }
+                if (timer >= 2 && bossFight == false)
+                {
+                    weaponsOn = false;
 
-                    cityrect.X -= 2;
-                    cityrect2.X -= 2;
-                    build1rect.X -= 1;
-                    covenantshiprect.X -= 1;
-                    phantomrect.X -= 3;
-                    bossShiprect.X -= 0;
 
-                    unscshiprect.X -= 1;
-                    if (build1rect.X <= -300)
-                    {
-                        build1rect.X = generator.Next(1100, 3000);
-                    }
-                    if (covenantshiprect.X <= -750)
-                    {
-                        covenantshiprect.X = 800;
-                    }
-                    if (phantomrect.X <= -250)
-                    {
-                        phantomrect.X = new Random().Next(1000, 1500);
-                        phantomrect.Y = new Random().Next(0, 200);
-                    }
-                    if (phantomrect.Y >= 800)
-                    {
-                        phantomrect.X = new Random().Next(1000, 1500);
-                        phantomrect.Y = new Random().Next(0, 200);
-                    }
-                    if (phantomrect.Y <= -800)
-                    {
-                        phantomrect.X = new Random().Next(1000, 1500);
-                        phantomrect.Y = new Random().Next(0, 200);
-                    }
-                    if (cityrect.X <= -1000)
-                    {
-                        cityrect.X = 1000;
-                    }
-                    if (cityrect2.X <= -1000)
-                    {
-                        cityrect2.X = 1000;
-                    }
-                    if (bansheerect.X <= -150)
-                    {
-                        bansheerect.X = 850;
-                        bansheerect.Y = new Random().Next(0, 450);
-                    }
-
-                    if (peilcanrect.Intersects(bansheerect))
-                    {
-                        lifes--;
-                        peilcanrect.X = 200;
-                        peilcanrect.Y = 50;
-                        bansheerect.X = 850;
-                        bansheerect.Y = new Random().Next(0, 450);
-                    }
-                    if (peilcanrect.Intersects(phantomrect))
-                    {
-                        lifes--;
-                        peilcanrect.X = 200;
-                        peilcanrect.Y = 50;
-                        phantomrect.X = new Random().Next(1000, 1500);
-                        phantomrect.Y = new Random().Next(0, 450);
-
-                    }
-                    if (unscshiprect.X <= -250)
-                    {
-                        unscshiprect.X = new Random().Next(1000, 3000);
-                        unscshiprect.Y = new Random().Next(0, 200);
-                    }
-                    if (peilcanrect.X <= -100)
-                    {
-                        peilcanrect.X = 900;
-                    }
-                    else if (peilcanrect.X >= 900)
-                    {
-                        peilcanrect.X = -100;
-                    }
-                    if (peilcanrect.Y <= -100)
-                    {
-                        peilcanrect.Y = 600;
-                    }
-                    else if (peilcanrect.Y >= 600)
-                    {
-                        peilcanrect.Y = -100;
-                    }
-                    if (lifes <= 0)
-                    {
-                        screen = Screen.GameOver;
-                    }
-                    if (bansheerect2.X <= -150)
-                    {
-                        bansheerect2.X = 850;
-                        bansheerect2.Y = new Random().Next(0, 450);
-                    }
-                    if (peilcanrect.Intersects(bansheerect2))
-                    {
-                        lifes--;
-                        peilcanrect.X = 200;
-                        peilcanrect.Y = 50;
-                        bansheerect2.X = 850;
-                        bansheerect2.Y = new Random().Next(0, 450);
-                    }
-                    if (timer >= 0)
+                    bossShiprect.X -= 1;
+                    if (bossShiprect.X <= 500)
                     {
                         weaponsOn = true;
-                        bansheerect.X -= 3;
-
-
-                    }
-
-
-                    if (timer >= 30)
-                    {
-
-                        bansheerect.X -= 4;
-                        bansheerect2.X -= 4;
-
-
-
-                    }
-                    if (timer >= 60)
-                    {
-                        bansheerect.X -= 5;
-                        bansheerect2.X -= 5;
-
-                    }
-                    if (timer >= 130)
-                    {
-                        bansheerect.X -= 6;
-                        bansheerect2.X -= 6;
-                        radio1.Play();
-                    }
-                    if (timer >= 140)
-                    {
-                        radio1.Stop();
-
-                    }
-                    if (timer >= 160)
-                    {
-
-                        brothersInArms.Play();
-                        haloflyingtheme.Stop();
-                    }
-                    if (timer >= 220)
-                    {
-                        bansheerect.X -= 0;
-                        bansheerect2.X -= 0;
-                        phantomrect.X -= 0;
-                        bansheerect.X = 800;
-                        bansheerect2.X = 800;
-                        phantomrect.X = 1200;
-                        weaponsOn = false;
-
-                    }
-                    if (timer >= 225 && bossFight == false)
-                    {
-                      weaponsOn = false;
-
-
-                      bossShiprect.X -= 1;
-                        if (bossShiprect.X <= 500)
+                        bossShiprect.X = 500;
+                        bossShiprect.X -= 0;
+                        bossShiprect.Y -= 2;
+                        if (bossShiprect.Y <= 100)
                         {
-                            weaponsOn = true;
-                            bossShiprect.X = 500;
-                            bossShiprect.X -= 0;
-                            bossShiprect.Y -= 2;
-                            if (bossShiprect.Y <= 100)
-                            {
-                                bossShiprect.Y = 100;
-                                bossShiprect.Y += 2;
-                                bossFight = true;
-                            }
+                            bossShiprect.Y = 100;
+                            bossShiprect.Y += 2;
+                            bossFight = true;
+                        }
+                    }
+
+                }
+
+
+                if (bossFight == true)
+                {
+                    energyShield1rect = new Rectangle(bossShiprect.X + -100, bossShiprect.Y, 100, 300);
+                    if (energyShieldOff == true)
+                    {
+                        shieldTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+
+                    if (shieldTimer >= 10f && energyShieldOff == true)
+                    {
+
+                        energyShieldHealth = 8;
+                        energyShieldOff = false;
+                        shieldTimer = 0;
+                    }
+                    bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
+                    plasmaTime = 2f;
+
+                    if (bossShipHealth <= 25)
+                    {
+                        bossShiprect.X -= 0;
+                        bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
+
+                        plasmaTime = 1.5f;
+                    }
+                    else if (bossShipHealth <= 15)
+                    {
+                        bossShiprect.X -= 0;
+                        bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
+                        plasmaTime = 1f;
+                    }
+                    else if (bossShipHealth <= 10)
+                    {
+                        bossShiprect.X -= 0;
+                        bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
+
+                        plasmaTime = 0.5f;
+                    }
+                    if (energyShieldOff == true)
+                    {
+                        if (coreHealth == 3)
+                        {
+                            core1rect = new Rectangle(bossShiprect.X + 50, bossShiprect.Y + 150, 50, 50);
+                        }
+                        else if (coreHealth == 2)
+                        {
+                            core2rect = new Rectangle(bossShiprect.X + 50, bossShiprect.Y + 150, 50, 50);
+                        }
+                        else if (coreHealth == 1)
+                        {
+                            core3rect = new Rectangle(bossShiprect.X + 50, bossShiprect.Y + 150, 50, 50);
+                        }
+                        else if (coreHealth == 0)
+                        {
+                            coreHealth = 3;
+                            energyShieldOff = false;
+                            bossShipHealth -= 10;
                         }
 
-                    }
 
 
-                    if (bossFight == true)
-                    {
-                        energyShield1rect = new Rectangle(bossShiprect.X + -100, bossShiprect.Y , 100, 300);
-                        
-                        if (shieldTimer >= 20f && energyShieldOff == true)
-                        {
-
-                          energyShieldHealth = 8;
-                          energyShieldOff = false;
-                          shieldTimer = 0;
-                        }
-                        bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
-                        plasmaTime = 2f;
-                        if (bossShipHealth <= 25)
-                        {
-                            bossShiprect.X -= 0;
-                            bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-
-                        }
-                        else if (bossShipHealth <= 20)
-                        {
-                            bossShiprect.X -= 0;
-                            bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-
-                            plasmaTime = 1.5f;
-                        }
-                        else if (bossShipHealth <= 15)
-                        {
-                            bossShiprect.X -= 0;
-                            bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-                            plasmaTime = 1f;
-                        }
-                        else if (bossShipHealth <= 10)
-                        {
-                            bossShiprect.X -= 0;
-                            bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-
-                            plasmaTime = 0.5f;
-                        }
-                        if (energyShieldOff == true)
-                        {
-                            if (coreHealth == 3)
-                            {
-                                core1rect = new Rectangle(bossShiprect.X - 50, bossShiprect.Y, 50, 50);
-                            }
-                            else if (coreHealth == 2)
-                            {
-                                core2rect = new Rectangle(bossShiprect.X - 50, bossShiprect.Y, 50, 50);
-                            }
-                            else if (coreHealth == 1)
-                            {
-                                core3rect = new Rectangle(bossShiprect.X - 50, bossShiprect.Y, 50, 50);
-                            }
                     }
                 }
 
 
 
-                    if (phantomHealth == 0)
-                    {
-                        phantomrect.X = new Random().Next(1000, 1500);
-                        phantomrect.Y = new Random().Next(0, 450);
-                        phantomHealth = 3;
-                    }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                    {
-                        bulletActive = true;
-                    }
-                    if (Keyboard.GetState().IsKeyUp(Keys.Space))
-                    {
-                        bulletActive = false;
-                    }
+
+                if (phantomHealth == 0)
+                {
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 450);
+                    phantomHealth = 3;
                 }
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    bulletActive = true;
+                }
+                if (Keyboard.GetState().IsKeyUp(Keys.Space))
+                {
+                    bulletActive = false;
+                }
+
                 if (screen == Screen.GameOver)
                 {
 
@@ -823,17 +896,28 @@ namespace _1_5_summative__HALO_
                     bossShiprect.X += 1;
                     bossShiprect.Y += 3;
                 }
+            }
+
+            if (screen == Screen.Level2)
+            {
+
+            }
 
 
 
 
+                    // TODO: Add your update logic here
 
-                // TODO: Add your update logic here
+                    base.Update(gameTime);
 
-                base.Update(gameTime);
 
+                
+                
             
         }
+
+
+
 
                    
                 
@@ -858,10 +942,10 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(buttonTexture, buttonrect, Color.White);
 
             }
-            //if (screen == Screen.intro)
-            //{
-                //_spriteBatch.DrawString(font, "In the year 2552, humanity is at war with an alien alliance known as the Covenant. The Covenant is a theocratic military alliance of multiple alien species that have united under a common religious belief in the Great Journey, which they believe will lead them to salvation. The Covenant has been waging a genocidal campaign against humanity for decades, and the United Earth Government (UEG) has been struggling to defend itself against the superior technology and firepower of the Covenant.", new Vector2(10, 10) , Color.White);
-            //}
+            if (screen == Screen.intro)
+            {
+                _spriteBatch.DrawString(font, "In the year 2552, humanity is at war with an alien alliance known as the Covenant. The Covenant is a theocratic military alliance of multiple alien species that have united under a common religious belief in the Great Journey, which they believe will lead them to salvation. The Covenant has been waging a genocidal campaign against humanity for decades, and the United Earth Government (UEG) has been struggling to defend itself against the superior technology and firepower of the Covenant.", new Vector2(10, 10) , Color.White);
+            }
             if (screen == Screen.GameOver)
             {
                 _spriteBatch.Draw(skyTexture, window, Color.Black);
@@ -1114,7 +1198,11 @@ namespace _1_5_summative__HALO_
 
 
             }
-            _spriteBatch.End();
+            if (screen == Screen.Level2)
+			{
+
+			}
+			_spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
