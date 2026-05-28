@@ -233,7 +233,7 @@ namespace _1_5_summative__HALO_
 
             moonOverMombasa = Content.Load<SoundEffect>("2-06 Moon Over Mombasa").CreateInstance();
 
-            ring2Texture = Content.Load<Texture2D>("ring2");
+            ring2Texture = Content.Load<Texture2D>("ring");
 
             ringSkyTexture = Content.Load<Texture2D>("ring_sky");
 
@@ -900,7 +900,7 @@ namespace _1_5_summative__HALO_
 
             if (screen == Screen.Level2)
             {
-
+               
             }
 
 
@@ -1051,6 +1051,10 @@ namespace _1_5_summative__HALO_
                     {
                         
                     }
+                }
+                if (screen == Screen.Level2)
+                {
+                  _spriteBatch.Draw(ringSkyTexture, ringSkyrect, Color.White);
                 }
                 
                 if (energyShieldOff == true)
