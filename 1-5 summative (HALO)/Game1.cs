@@ -233,7 +233,7 @@ namespace _1_5_summative__HALO_
 
             moonOverMombasa = Content.Load<SoundEffect>("2-06 Moon Over Mombasa").CreateInstance();
 
-            ring2Texture = Content.Load<Texture2D>("ring");
+            ring2Texture = Content.Load<Texture2D>("download (22) (1)");
 
             ringSkyTexture = Content.Load<Texture2D>("ring_sky");
 
@@ -900,8 +900,23 @@ namespace _1_5_summative__HALO_
 
             if (screen == Screen.Level2)
             {
-               
-            }
+				if (Keyboard.GetState().IsKeyDown(Keys.Left))
+				{
+					peilcanrect.X -= 3;
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Right))
+				{
+					peilcanrect.X += 3;
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Up))
+				{
+					peilcanrect.Y -= 3;
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Down))
+				{
+					peilcanrect.Y += 3;
+				}
+			}
 
 
 
@@ -1052,10 +1067,7 @@ namespace _1_5_summative__HALO_
                         
                     }
                 }
-                if (screen == Screen.Level2)
-                {
-                  _spriteBatch.Draw(ringSkyTexture, ringSkyrect, Color.White);
-                }
+            
                 
                 if (energyShieldOff == true)
                 {
@@ -1204,7 +1216,64 @@ namespace _1_5_summative__HALO_
             }
             if (screen == Screen.Level2)
 			{
+              
+              _spriteBatch.Draw(ringSkyTexture, ringSkyrect, Color.White);
+              _spriteBatch.Draw(ring2Texture, ring2rect, Color.White);
+				if (Keyboard.GetState().IsKeyDown(Keys.Left))
+				{
+					peilcanLeftShow = true;
 
+
+					peilcanLeftShow = true;
+					if (peilcanLeftShow == true)
+					{
+						_spriteBatch.Draw(peilcan_Left, peilcanrect, Color.White);
+					}
+
+					peilcanRightShow = false;
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Right))
+				{
+					peilcanRightShow = true;
+
+					peilcanRightUpShow = false;
+					peilcanRightDownShow = false;
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Up))
+				{
+
+					peilcanRightDownShow = false;
+					peilcanRightShow = false;
+					peilcanLeftShow = false;
+					peilcanRightUpShow = true;
+					if (peilcanRightUpShow == true)
+					{
+						_spriteBatch.Draw(peilcan_up_right, peilcanrect, Color.White);
+					}
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Down))
+				{
+
+					peilcanRightUpShow = false;
+					peilcanRightShow = false;
+					peilcanLeftShow = false;
+					peilcanRightDownShow = true;
+					if (peilcanRightDownShow == true)
+					{
+						_spriteBatch.Draw(peilcan_down_right, peilcanrect, Color.White);
+					}
+				}
+
+
+				if (Keyboard.GetState().IsKeyUp(Keys.Up) && Keyboard.GetState().IsKeyUp(Keys.Down) && Keyboard.GetState().IsKeyUp(Keys.Left))
+				{
+					peilcanRightShow = true;
+					peilcanLeftShow = false;
+
+					peilcanRightUpShow = false;
+					peilcanRightDownShow = false;
+
+				}
 			}
 			_spriteBatch.End();
             // TODO: Add your drawing code here
