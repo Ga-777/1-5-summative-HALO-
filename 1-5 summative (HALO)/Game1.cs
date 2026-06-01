@@ -145,7 +145,7 @@ namespace _1_5_summative__HALO_
 
             core3rect = new Rectangle(0, 0, 20, 20);
 
-            ring2rect = new Rectangle(0, 0, 800, 500);
+            ring2rect = new Rectangle(-200, -100, 1200, 600);
 
             ringTreesrect = new Rectangle(0, 0, 800, 500);
 
