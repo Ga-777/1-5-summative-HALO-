@@ -25,6 +25,18 @@
 /processorParam:Quality=Best
 /build:03. Martin O'Donnell - Brothers in Arms.wav
 
+#begin 1-14 Behold a Pale Horse.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:1-14 Behold a Pale Horse.wav
+
+#begin 2-05 Charity's Irony.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:2-05 Charity's Irony.wav
+
 #begin 2-06 Moon Over Mombasa.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -253,6 +265,18 @@
 /processorParam:TextureFormat=Color
 /build:energy_shield4.png
 
+#begin Enforcer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Enforcer.png
+
 #begin explosion.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -300,6 +324,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:halobackground.png
+
+#begin high.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:high.png
 
 #begin Jersey15-Regular.ttf
 /copy:Jersey15-Regular.ttf
@@ -466,6 +502,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ring.png
+
+#begin sentinel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sentinel.png
 
 #begin sky.png
 /importer:TextureImporter
