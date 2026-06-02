@@ -47,6 +47,8 @@ namespace _1_5_summative__HALO_
         Rectangle core1rect, core2rect, core3rect;
         Texture2D coreTexture, core2Texture, core3Texture;
         Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
+        Texture2D mountinTexture;
+        Rectangle mountinrect1, mountinrect2;
         float timer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway, moonOverMombasa;
         int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
@@ -152,6 +154,10 @@ namespace _1_5_summative__HALO_
             ringTreesrect2 = new Rectangle(0, 0, 800, 500);
 
 			ringSkyrect = new Rectangle(0, 0, 800, 500);
+
+            mountinrect1 = new Rectangle(0, 0, 100, 100);
+
+            mountinrect2 = new Rectangle(100, 100, 100, 100);
 			base.Initialize();
 
         }
@@ -238,6 +244,8 @@ namespace _1_5_summative__HALO_
             ringSkyTexture = Content.Load<Texture2D>("ring_sky");
 
 			ringTreesTexture = Content.Load<Texture2D>("trees");
+
+            mountinTexture = Content.Load<Texture2D>("halobackground");
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -768,7 +776,7 @@ namespace _1_5_summative__HALO_
                     brothersInArms.Play();
                     haloflyingtheme.Stop();
                 }
-                if (timer >= 0)
+                if (timer >= 220)
                 {
                     bansheerect.X -= 0;
                     bansheerect2.X -= 0;
@@ -782,7 +790,7 @@ namespace _1_5_summative__HALO_
                     moonOverMombasa.Stop();
 
                 }
-                if (timer >= 2 && bossFight == false)
+                if (timer >= 225 && bossFight == false)
                 {
                     weaponsOn = false;
 
@@ -900,6 +908,7 @@ namespace _1_5_summative__HALO_
 
             if (screen == Screen.Level2)
             {
+                peilcanrect.X = 10;
 				if (Keyboard.GetState().IsKeyDown(Keys.Left))
 				{
 					peilcanrect.X -= 3;
@@ -1219,6 +1228,11 @@ namespace _1_5_summative__HALO_
               
               _spriteBatch.Draw(ringSkyTexture, ringSkyrect, Color.White);
               _spriteBatch.Draw(ring2Texture, ring2rect, Color.White);
+				if (peilcanRightShow == true)
+				{
+					_spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+				}
+				
 				if (Keyboard.GetState().IsKeyDown(Keys.Left))
 				{
 					peilcanLeftShow = true;
