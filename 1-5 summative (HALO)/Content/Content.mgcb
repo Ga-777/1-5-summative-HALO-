@@ -121,6 +121,18 @@
 /processorParam:TextureFormat=Color
 /build:cityforeandbackground.png
 
+#begin controller.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:controller.png
+
 #begin core1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -288,6 +300,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:explosion.png
+
+#begin guardian.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:guardian.png
 
 #begin halo_fly.wav
 /importer:WavImporter

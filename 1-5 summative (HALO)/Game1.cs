@@ -49,11 +49,12 @@ namespace _1_5_summative__HALO_
         Texture2D coreTexture, core2Texture, core3Texture;
         Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
 		// level 2 textures and rectangles
-		Texture2D mountinTexture,ring2Texture, ringTreesTexture, sentinelTexture, enforcerTexture;
-        Rectangle mountinrect1, mountinrect2, sentinelrect1, sentinelrect2, enforcerrect1;
+		Texture2D mountinTexture,ring2Texture, ringTreesTexture, sentinelTexture, enforcerTexture, controllerTexture;
+        Rectangle mountinrect1, mountinrect2, sentinelrect1, sentinelrect2,sentinelrect3, enforcerrect1, controllerrect;
         int enforcerHealth = 5;
-		// level 3 textures and rectangles
-		Texture2D highCharityTexture;
+        Rectangle controllerPositions; 
+        // level 3 textures and rectangles
+        Texture2D highCharityTexture;
         Rectangle highCharityRect;
         SoundEffectInstance Charitys_IronyTheme;
 
@@ -178,12 +179,18 @@ namespace _1_5_summative__HALO_
 
 			sentinelrect2 = new Rectangle(1200, 300, 50, 50);
 
-			enforcerrect1 = new Rectangle(1500, 300, 80, 80);
+            sentinelrect3 = new Rectangle(1300, 300, 50, 50);
+
+            enforcerrect1 = new Rectangle(1500, 300, 80, 80);
 
             highCharityRect = new Rectangle(0, 0, 800, 500);
 
+            controllerrect = new Rectangle(900, 300, 50, 50);
 
-			base.Initialize();
+            
+
+
+            base.Initialize();
 
         }
 
@@ -281,8 +288,10 @@ namespace _1_5_summative__HALO_
 			highCharityTexture = Content.Load<Texture2D>("high");
 
 			Charitys_IronyTheme = Content.Load<SoundEffect>("2-05 Charity's Irony").CreateInstance();
-			// TODO: use this.Content to load your game content here
-		}
+
+            controllerTexture = Content.Load<Texture2D>("controller");
+            // TODO: use this.Content to load your game content here
+        }
 
 
 
@@ -877,24 +886,24 @@ namespace _1_5_summative__HALO_
                     bansheerect2.X -= 5;
 
                 }
-                if (timer >= 130)
+                if (timer >= 110)
                 {
                     bansheerect.X -= 6;
                     bansheerect2.X -= 6;
                     radio1.Play();
                 }
-                if (timer >= 140)
+                if (timer >= 120)
                 {
                     radio1.Stop();
 
                 }
-                if (timer >= 160)
+                if (timer >= 125)
                 {
 
                     brothersInArms.Play();
                     haloflyingtheme.Stop();
                 }
-                if (timer >= 220)
+                if (timer >= 145)
                 {
                     bansheerect.X -= 0;
                     bansheerect2.X -= 0;
@@ -908,7 +917,7 @@ namespace _1_5_summative__HALO_
                     moonOverMombasa.Stop();
 
                 }
-                if (timer >= 225 && bossFight == false)
+                if (timer >= 150 && bossFight == false)
                 {
                     weaponsOn = false;
 
@@ -969,6 +978,7 @@ namespace _1_5_summative__HALO_
 
                         plasmaTime = 0.5f;
                     }
+                    
                     if (energyShieldOff == true)
                     {
                         if (coreHealth == 3)
@@ -1021,7 +1031,17 @@ namespace _1_5_summative__HALO_
                 {
                     bossShiprect.X += 1;
                     bossShiprect.Y += 3;
-					screen = Screen.Level2;
+					if (bossShiprect.Y >= 600)
+                    {   
+                        bossShiprect.X = 1200;
+                        bossShiprect.Y = 300;
+                        levelTwoTimer = 0;
+                        screen = Screen.Level2;
+                    }
+
+
+                    
+                        
 				}
             }
 
@@ -1073,7 +1093,12 @@ namespace _1_5_summative__HALO_
                     sentinelrect2.X = 850;
                     sentinelrect2.Y = new Random().Next(0, 450);
                 }
-				if (peilcanrect.Intersects(sentinelrect1))
+                if (sentinelrect3.X <= -50)
+                {
+                    sentinelrect3.X = 850;
+                    sentinelrect3.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(sentinelrect1))
 				{
 					lifes--;
 					peilcanrect.X = 200;
@@ -1118,12 +1143,22 @@ namespace _1_5_summative__HALO_
                     sentinelrect1.Y += (int)(float)(Math.Sin(levelTwoTimer) * 2);
                     sentinelrect2.Y += (int)(float)(Math.Sin(levelTwoTimer) * 3);
                 }
-                if (levelTwoTimer >= 15)
+                if (levelTwoTimer >= 20)
                 {
                   enforcerrect1.X -= 2;
 				  plasmaTimer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 				}
+                if (levelTwoTimer >= 30)
+                {
+                    sentinelrect3.X -= 5;
+                    sentinelrect3.Y += (int)(float)(Math.Sin(levelTwoTimer) * 4);
+                }
+                if (levelTwoTimer >= 40)
+                { 
+                    controllerrect.X -= 2;
+
+                }
 
             }
             if (screen == Screen.Level3)
@@ -1402,6 +1437,7 @@ namespace _1_5_summative__HALO_
 					peilcanRightDownShow = false;
 
 				}
+               
 
 
 
@@ -1479,7 +1515,8 @@ namespace _1_5_summative__HALO_
 			  _spriteBatch.Draw(sentinelTexture, sentinelrect1, Color.White);
               _spriteBatch.Draw(sentinelTexture, sentinelrect2, Color.White);
               _spriteBatch.Draw(enforcerTexture, enforcerrect1, Color.White);
-				if (Keyboard.GetState().IsKeyDown(Keys.Left))
+              _spriteBatch.Draw(controllerTexture, controllerrect, Color.White);
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
 				{
 					peilcanLeftShow = true;
 
@@ -1553,7 +1590,15 @@ namespace _1_5_summative__HALO_
             if (screen == Screen.Level3)
 			{
               _spriteBatch.Draw(highCharityTexture, highCharityRect, Color.White);
-				if (peilcanRightShow == true)
+                foreach (Vector2 position in bulletPositions)
+                {
+                    _spriteBatch.Draw(bulletTexture, position, Color.White);
+                }
+                foreach (Vector2 position in missilePositions)
+                {
+                    _spriteBatch.Draw(missileTexture, position, Color.White);
+                }
+                if (peilcanRightShow == true)
 				{
 					_spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
 				}
