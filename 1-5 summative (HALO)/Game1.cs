@@ -314,6 +314,7 @@ namespace _1_5_summative__HALO_
             Installation_05Texture = Content.Load<Texture2D>("Installation 05");
 
             highCharityloadingTexture = Content.Load<Texture2D>("High Charity");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -1260,6 +1261,26 @@ namespace _1_5_summative__HALO_
 					peilcanrect.Y += 3;
 				}
 			}
+            if (screen == Screen.GameOver)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    screen = Screen.MainMenu;
+                    lifes = 3;
+                    bossShipHealth = 50;
+                    energyShieldHealth = 8;
+                    phantomHealth = 3;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 400;
+                    timer = 0;
+                    levelTwoTimer = 0;
+                    moonOverMombasa.Stop();
+                    peilcanSound.Stop();
+                    haloflyingtheme.Stop();
+                    haloTheme.Stop();
+                    
+                }
+            }
 
 
 
@@ -1315,6 +1336,7 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(skyTexture, window, Color.Black);
                 _spriteBatch.Draw(explosionTexture, deathScreenrect, Color.White);
                 _spriteBatch.DrawString(font, "Game Over", new Vector2(350, 200), Color.White);
+                _spriteBatch.DrawString(font, "Press Enter to Return to Main Menu", new Vector2(250, 300), Color.White);
             }
             if (screen == Screen.CutScreen1)
             {
