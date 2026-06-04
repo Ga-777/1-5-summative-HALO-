@@ -16,9 +16,12 @@ namespace _1_5_summative__HALO_
         MainMenu,
         intro,
         CutScreen1,
+        Level1Intro,
         Level1,
-		Level2,
-		Level3,
+        Level2Intro,
+        Level2,
+        level3Intro,
+        Level3,
 		GameOver
     }
 
@@ -35,6 +38,13 @@ namespace _1_5_summative__HALO_
         Random generator = new Random();
         //
         Screen screen = Screen.MainMenu;
+        // level 1 textures and rectangles
+        Texture2D new_mombasaIntroTexture;
+        Rectangle newMombasaIntroRect;
+        Random Random = new Random();
+        int randomText = 1;
+        private float textTimer = 0;
+        private float textTime = 2;
         Texture2D cityTexture, peilcanTexture, covenant_shipTexture, ringTexture, bansheeTexture, skyTexture, build1Texture,unscShipTexture, logoTexture, bulletTexture, explosionTexture,phantomTexture, buttonTexture, bossShipTexture, missileTexture;
         Rectangle cityrect, cityrect2, cityrect3, cityrect4, peilcanrect, covenantshiprect, ringrect, peilcanrect2, peilcanrect3,  bansheerect, bansheerect2, build1rect, unscshiprect, logorect, bulletrect, explosionrect, phantomrect, buttonrect, bossShiprect, deathScreenrect, missilerect;
 		Texture2D peilcan_up_right, peilcan_down_right, peilcan_Left;
@@ -52,8 +62,11 @@ namespace _1_5_summative__HALO_
 		Texture2D mountinTexture,ring2Texture, ringTreesTexture, sentinelTexture, enforcerTexture, controllerTexture;
         Rectangle mountinrect1, mountinrect2, sentinelrect1, sentinelrect2,sentinelrect3, enforcerrect1, controllerrect;
         int enforcerHealth = 5;
-        Rectangle controllerPositions; 
+        Texture2D Installation_05Texture;
+        Rectangle Installation_05rect;
+        Rectangle controllerPositions;
         // level 3 textures and rectangles
+        Texture2D highCharityloadingTexture;
         Texture2D highCharityTexture;
         Rectangle highCharityRect;
         SoundEffectInstance Charitys_IronyTheme;
@@ -187,7 +200,11 @@ namespace _1_5_summative__HALO_
 
             controllerrect = new Rectangle(900, 300, 50, 50);
 
-            
+            newMombasaIntroRect = new Rectangle(0, 0, 800, 500);
+
+            Installation_05rect = new Rectangle(0, 0, 800, 500);
+
+
 
 
             base.Initialize();
@@ -290,6 +307,13 @@ namespace _1_5_summative__HALO_
 			Charitys_IronyTheme = Content.Load<SoundEffect>("2-05 Charity's Irony").CreateInstance();
 
             controllerTexture = Content.Load<Texture2D>("controller");
+
+            // intros
+            new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
+
+            Installation_05Texture = Content.Load<Texture2D>("Installation 05");
+
+            highCharityloadingTexture = Content.Load<Texture2D>("High Charity");
             // TODO: use this.Content to load your game content here
         }
 
@@ -316,7 +340,7 @@ namespace _1_5_summative__HALO_
                 blowMeAway.Stop();
 
 
-                screen = Screen.CutScreen1;
+                screen = Screen.Level1Intro;
 
 
             }
@@ -337,11 +361,11 @@ namespace _1_5_summative__HALO_
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.D2))
                 {
-                    screen = Screen.Level2;
+                    screen = Screen.Level2Intro;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.D3))
 				{
-					screen = Screen.Level3;
+					screen = Screen.level3Intro;
 				}
 			}
 
@@ -349,6 +373,54 @@ namespace _1_5_summative__HALO_
             {
 
 
+            }
+            if (screen == Screen.Level1Intro)
+            {
+                
+                
+                textTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (textTimer >= textTime)
+                {
+                    textTimer = 0;
+                    randomText = Random.Next(1, 3);
+                }
+                
+                
+
+
+
+
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    screen = Screen.CutScreen1;
+                }
+            }
+            if (screen == Screen.Level2Intro)
+            {
+                textTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (textTimer >= textTime)
+                {
+                    textTimer = 0;
+                    randomText = Random.Next(1, 3);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    screen = Screen.Level2;
+                }
+            }
+            if (screen == Screen.level3Intro)
+            {
+                textTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (textTimer >= textTime)
+                {
+                    textTimer = 0;
+                    randomText = Random.Next(1, 3);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    screen = Screen.Level3;
+                }
             }
 
 
@@ -912,7 +984,7 @@ namespace _1_5_summative__HALO_
                     bansheerect2.X = 800;
                     phantomrect.X = 1200;
                     weaponsOn = false;
-                    haloflyingtheme.Play();
+                    
                     brothersInArms.Stop();
                     moonOverMombasa.Stop();
 
@@ -942,6 +1014,7 @@ namespace _1_5_summative__HALO_
 
                 if (bossFight == true)
                 {
+                    haloflyingtheme.Play();
                     energyShield1rect = new Rectangle(bossShiprect.X + -100, bossShiprect.Y, 100, 300);
                     if (energyShieldOff == true)
                     {
@@ -1036,7 +1109,9 @@ namespace _1_5_summative__HALO_
                         bossShiprect.X = 1200;
                         bossShiprect.Y = 300;
                         levelTwoTimer = 0;
-                        screen = Screen.Level2;
+                        haloflyingtheme.Stop();
+
+                        screen = Screen.Level2Intro;
                     }
 
 
@@ -1239,6 +1314,7 @@ namespace _1_5_summative__HALO_
             {
                 _spriteBatch.Draw(skyTexture, window, Color.Black);
                 _spriteBatch.Draw(explosionTexture, deathScreenrect, Color.White);
+                _spriteBatch.DrawString(font, "Game Over", new Vector2(350, 200), Color.White);
             }
             if (screen == Screen.CutScreen1)
             {
@@ -1292,6 +1368,40 @@ namespace _1_5_summative__HALO_
 
 
 			}
+            if (screen == Screen.Level1Intro)
+            {
+                _spriteBatch.Draw(new_mombasaIntroTexture, window, Color.White);
+                if (randomText == 1)
+                {
+                    _spriteBatch.DrawString(font, "The city of Mombasa is under attack by the Covenant.", new Vector2(100, 400), Color.White);
+                }
+                else if (randomText == 2)
+                {
+                    _spriteBatch.DrawString(font, "The UNSC has sent in the Pelicans to evacuate civilians.", new Vector2(100, 400), Color.White);
+                }
+                else if (randomText == 3)
+                {
+                    _spriteBatch.DrawString(font, "You are the pilot of the Pelican, and your mission is to evacuate as many civilians as possible while fighting off the Covenant forces.", new Vector2(20, 400), Color.White);
+                }
+               
+
+            }
+            if (screen == Screen.Level2Intro)
+            {
+                _spriteBatch.Draw(Installation_05Texture, window, Color.White);
+                if (randomText == 1)
+                {
+                    _spriteBatch.DrawString(font, "1", new Vector2(100, 400), Color.White);
+                }
+                else if (randomText == 2)
+                {
+                    _spriteBatch.DrawString(font, "2", new Vector2(100, 400), Color.White);
+                }
+                else if (randomText == 3)
+                {
+                    _spriteBatch.DrawString(font, "3", new Vector2(20, 400), Color.White);
+                }
+            }
             if (screen == Screen.Level1)
             {
                 _spriteBatch.Draw(skyTexture, window, Color.White);
@@ -1587,6 +1697,25 @@ namespace _1_5_summative__HALO_
 					_spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
 				}
 			}
+            if (screen == Screen.level3Intro)
+            {   _spriteBatch.Draw(highCharityloadingTexture, window, Color.White);
+                if (randomText == 1)
+                {
+                    _spriteBatch.DrawString(font, "1", new Vector2(100, 400), Color.White);
+                }
+                else if (randomText == 2)
+                {
+                    _spriteBatch.DrawString(font, "2", new Vector2(100, 400), Color.White);
+                }
+                else if (randomText == 3)
+                {
+                    _spriteBatch.DrawString(font, "3", new Vector2(20, 400), Color.White);
+                }
+            }
+
+
+
+
             if (screen == Screen.Level3)
 			{
               _spriteBatch.Draw(highCharityTexture, highCharityRect, Color.White);
@@ -1675,7 +1804,8 @@ namespace _1_5_summative__HALO_
 					_spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
 				}
 			}
-			_spriteBatch.End();
+           
+            _spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);

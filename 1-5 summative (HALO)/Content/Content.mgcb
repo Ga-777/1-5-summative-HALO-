@@ -349,6 +349,18 @@
 /processorParam:TextureFormat=Color
 /build:halobackground.png
 
+#begin High Charity.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:High Charity.png
+
 #begin high.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -360,6 +372,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:high.png
+
+#begin Installation 05.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Installation 05.png
 
 #begin Jersey15-Regular.ttf
 /copy:Jersey15-Regular.ttf
@@ -394,6 +418,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:missile2.png
+
+#begin New Mombasa.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:New Mombasa.png
 
 #begin peil-down-right (1).png
 /importer:TextureImporter
