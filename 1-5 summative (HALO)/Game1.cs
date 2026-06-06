@@ -66,12 +66,12 @@ namespace _1_5_summative__HALO_
         Rectangle Installation_05rect;
         Rectangle controllerPositions;
         // level 3 textures and rectangles
-        Texture2D highCharityloadingTexture;
+        Texture2D highCharityloadingTexture, covenantCityleftTexture, covenantCityrightTexture;
         Texture2D highCharityTexture;
-        Rectangle highCharityRect;
+        Rectangle highCharityRect, covenantcityleftrect, covenantcityrightrect, bansheerect3, bansheerect4, bansheerect5;
         SoundEffectInstance Charitys_IronyTheme;
 
-        float timer = 0,levelTwoTimer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f;
+        float timer = 0,levelTwoTimer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f, levelThreeTimer = 0;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway, moonOverMombasa;
         SoundEffectInstance beholdAPaleHorseTheme;
         int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
@@ -138,7 +138,13 @@ namespace _1_5_summative__HALO_
 
             bansheerect2 = new Rectangle(900, 0, 60, 40);
 
-            logorect = new Rectangle(200, 100, 400, 300);
+			bansheerect5 = new Rectangle(900, 0, 60, 40);
+
+			bansheerect4 = new Rectangle(900, 0, 60, 40);
+
+            bansheerect3 = new Rectangle(900, 0, 60, 40);
+
+			logorect = new Rectangle(200, 100, 400, 300);
 
             buttonrect = new Rectangle(300, 400, 200, 50);
 
@@ -204,10 +210,13 @@ namespace _1_5_summative__HALO_
 
             Installation_05rect = new Rectangle(0, 0, 800, 500);
 
+            covenantcityleftrect = new Rectangle(0, 300, 1000, 300);
+
+            covenantcityrightrect = new Rectangle(1000, 300, 1000, 300);
 
 
 
-            base.Initialize();
+			base.Initialize();
 
         }
 
@@ -308,8 +317,12 @@ namespace _1_5_summative__HALO_
 
             controllerTexture = Content.Load<Texture2D>("controller");
 
-            // intros
-            new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
+			covenantCityleftTexture = Content.Load<Texture2D>("covenant_cityleft");
+
+			covenantCityrightTexture = Content.Load<Texture2D>("covenant_cityRight");
+
+			// intros
+			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
 
             Installation_05Texture = Content.Load<Texture2D>("Installation 05");
 
@@ -328,7 +341,7 @@ namespace _1_5_summative__HALO_
             mouse = Mouse.GetState();
             bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             plasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
+
             missileTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
@@ -365,10 +378,10 @@ namespace _1_5_summative__HALO_
                     screen = Screen.Level2Intro;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.D3))
-				{
-					screen = Screen.level3Intro;
-				}
-			}
+                {
+                    screen = Screen.level3Intro;
+                }
+            }
 
             if (screen == Screen.intro)
             {
@@ -377,16 +390,16 @@ namespace _1_5_summative__HALO_
             }
             if (screen == Screen.Level1Intro)
             {
-                
-                
+
+
                 textTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (textTimer >= textTime)
                 {
                     textTimer = 0;
                     randomText = Random.Next(1, 3);
                 }
-                
-                
+
+
 
 
 
@@ -476,17 +489,17 @@ namespace _1_5_summative__HALO_
                     bulletVelocities.RemoveAt(i);
                     continue;
                 }
-				if (enforcerrect1.Contains(pos) && screen == Screen.Level2)
-				{
-					enforcerHealth--;
-					bulletPositions.RemoveAt(i);
-					bulletVelocities.RemoveAt(i);
-					continue;
-				}
+                if (enforcerrect1.Contains(pos) && screen == Screen.Level2)
+                {
+                    enforcerHealth--;
+                    bulletPositions.RemoveAt(i);
+                    bulletVelocities.RemoveAt(i);
+                    continue;
+                }
 
 
 
-				if (!energyShieldOff && energyShield1rect.Contains(pos))
+                if (!energyShieldOff && energyShield1rect.Contains(pos))
                 {
                     energyShieldHealth--;
                     bulletPositions.RemoveAt(i);
@@ -528,9 +541,30 @@ namespace _1_5_summative__HALO_
                     bulletVelocities.RemoveAt(i);
                     continue;
                 }
+				if (bansheerect3.Contains(pos))
+				{
+					bansheerect3 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+					bulletPositions.RemoveAt(i);
+					bulletVelocities.RemoveAt(i);
+					continue;
+				}
+				if (bansheerect4.Contains(pos))
+				{
+					bansheerect4 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+					bulletPositions.RemoveAt(i);
+					bulletVelocities.RemoveAt(i);
+					continue;
+				}
+				if (bansheerect5.Contains(pos))
+				{
+					bansheerect5 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+					bulletPositions.RemoveAt(i);
+					bulletVelocities.RemoveAt(i);
+					continue;
+				}
 
 
-            }
+			}
 
             if (keyboardState.IsKeyDown(Keys.M) && missileTimer >= missileTime)
             {
@@ -600,22 +634,43 @@ namespace _1_5_summative__HALO_
                     continue;
                 }
                 if (sentinelrect1.Contains(pos) && screen == Screen.Level2)
-				{
-					sentinelrect1 = new Rectangle(900, new Random().Next(0, 450), 50, 50);
-					missilePositions.RemoveAt(k);
-					missileVelocities.RemoveAt(k);
-					continue;
-				}
+                {
+                    sentinelrect1 = new Rectangle(900, new Random().Next(0, 450), 50, 50);
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
                 if (sentinelrect2.Contains(pos) && screen == Screen.Level2)
                 {
-					sentinelrect1 = new Rectangle(900, new Random().Next(0, 450), 50, 50);
+                    sentinelrect1 = new Rectangle(900, new Random().Next(0, 450), 50, 50);
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (enforcerrect1.Contains(pos) && screen == Screen.Level2)
+                {
+                    enforcerHealth -= 2;
+                    missilePositions.RemoveAt(k);
+                    missileVelocities.RemoveAt(k);
+                    continue;
+                }
+                if (bansheerect3.Contains(pos))
+				{
+					bansheerect3 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
 					continue;
 				}
-                if (enforcerrect1.Contains(pos) && screen == Screen.Level2)
+				if (bansheerect4.Contains(pos))
 				{
-					enforcerHealth -= 2;
+					bansheerect4 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
+					missilePositions.RemoveAt(k);
+					missileVelocities.RemoveAt(k);
+					continue;
+				}
+				if (bansheerect5.Contains(pos))
+				{
+					bansheerect5 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
 					continue;
@@ -666,43 +721,43 @@ namespace _1_5_summative__HALO_
             }
             if (screen == Screen.Level2)
             {
-				
-				if (plasmaTimer2 >= plasmaTime2)
+
+                if (plasmaTimer2 >= plasmaTime2)
                 {
                     plasmaPositions2.Add(enforcerrect1.Location.ToVector2() + new Vector2(enforcerrect1.Width, enforcerrect1.Height / 2 - plasmaShot.Height / 2));
 
                     plasmaVelocities2.Add(new Vector2(plasmaSpeed, 0));
 
-					plasmaTimer2 = 0;
-				}
+                    plasmaTimer2 = 0;
+                }
                 for (int j = plasmaPositions2.Count - 1; j >= 0; j--)
-				{
-						plasmaPositions2[j] += plasmaVelocities2[j];
-						var pos = plasmaPositions2[j];
-						if (plasmaPositions2[j].X < 0)
-						{
-							plasmaPositions2.RemoveAt(j);
-							plasmaVelocities2.RemoveAt(j);
-							continue;
-						}
-						if (peilcanrect.Contains(pos))
-						{
-							lifes--;
-							peilcanrect.X = 200;
-							peilcanrect.Y = 50;
-							plasmaPositions2.RemoveAt(j);
-							plasmaVelocities2.RemoveAt(j);
-							continue;
-						}
-				}
-				
+                {
+                    plasmaPositions2[j] += plasmaVelocities2[j];
+                    var pos = plasmaPositions2[j];
+                    if (plasmaPositions2[j].X < 0)
+                    {
+                        plasmaPositions2.RemoveAt(j);
+                        plasmaVelocities2.RemoveAt(j);
+                        continue;
+                    }
+                    if (peilcanrect.Contains(pos))
+                    {
+                        lifes--;
+                        peilcanrect.X = 200;
+                        peilcanrect.Y = 50;
+                        plasmaPositions2.RemoveAt(j);
+                        plasmaVelocities2.RemoveAt(j);
+                        continue;
+                    }
+                }
+
             }
 
 
-			if (screen == Screen.CutScreen1)
-			{
+            if (screen == Screen.CutScreen1)
+            {
 
-						weaponsOn = false;
+                weaponsOn = false;
                 moonOverMombasa.Play();
                 cityrect.X -= 2;
                 cityrect2.X -= 2;
@@ -974,7 +1029,7 @@ namespace _1_5_summative__HALO_
                 {
 
                     brothersInArms.Play();
-                    haloflyingtheme.Stop();
+
                 }
                 if (timer >= 145)
                 {
@@ -985,7 +1040,7 @@ namespace _1_5_summative__HALO_
                     bansheerect2.X = 800;
                     phantomrect.X = 1200;
                     weaponsOn = false;
-                    
+
                     brothersInArms.Stop();
                     moonOverMombasa.Stop();
 
@@ -1032,19 +1087,14 @@ namespace _1_5_summative__HALO_
                     bossShiprect.Y += (int)(float)(Math.Sin(timer) * 2);
                     plasmaTime = 2f;
 
-                    if (bossShipHealth <= 25)
+                    if (bossShipHealth <= 20)
                     {
                         bossShiprect.X -= 0;
                         bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
 
                         plasmaTime = 1.5f;
                     }
-                    else if (bossShipHealth <= 15)
-                    {
-                        bossShiprect.X -= 0;
-                        bossShiprect.Y += (int)(float)(Math.Sin(timer) * 3);
-                        plasmaTime = 1f;
-                    }
+
                     else if (bossShipHealth <= 10)
                     {
                         bossShiprect.X -= 0;
@@ -1052,7 +1102,7 @@ namespace _1_5_summative__HALO_
 
                         plasmaTime = 0.5f;
                     }
-                    
+
                     if (energyShieldOff == true)
                     {
                         if (coreHealth == 3)
@@ -1105,8 +1155,8 @@ namespace _1_5_summative__HALO_
                 {
                     bossShiprect.X += 1;
                     bossShiprect.Y += 3;
-					if (bossShiprect.Y >= 600)
-                    {   
+                    if (bossShiprect.Y >= 600)
+                    {
                         bossShiprect.X = 1200;
                         bossShiprect.Y = 300;
                         levelTwoTimer = 0;
@@ -1116,9 +1166,9 @@ namespace _1_5_summative__HALO_
                     }
 
 
-                    
-                        
-				}
+
+
+                }
             }
 
             if (screen == Screen.Level2)
@@ -1133,7 +1183,7 @@ namespace _1_5_summative__HALO_
                 mountinrect2.X -= 1;
                 sentinelrect1.X -= 3;
                 sentinelrect2.X -= 3;
-                
+
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
@@ -1175,38 +1225,38 @@ namespace _1_5_summative__HALO_
                     sentinelrect3.Y = new Random().Next(0, 450);
                 }
                 if (peilcanrect.Intersects(sentinelrect1))
-				{
-					lifes--;
-					peilcanrect.X = 200;
-					peilcanrect.Y = 50;
-					sentinelrect1.X = 850;
-					sentinelrect1.Y = new Random().Next(0, 450);
-				}
-				if (peilcanrect.Intersects(sentinelrect2))
-				{
-					lifes--;
-					peilcanrect.X = 200;
-					peilcanrect.Y = 50;
-					sentinelrect2.X = 850;
-					sentinelrect2.Y = new Random().Next(0, 450);
-				}
-				if (peilcanrect.X <= -100)
-				{
-					peilcanrect.X = 900;
-				}
-				else if (peilcanrect.X >= 900)
-				{
-					peilcanrect.X = -100;
-				}
-				if (enforcerrect1.X <= -100)
-				{
-					enforcerrect1.X = 900;
-					enforcerrect1.Y = new Random().Next(0, 450);
-				}
-				
-					
-				
-				if (levelTwoTimer >= 0)
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    sentinelrect1.X = 850;
+                    sentinelrect1.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(sentinelrect2))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    sentinelrect2.X = 850;
+                    sentinelrect2.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.X <= -100)
+                {
+                    peilcanrect.X = 900;
+                }
+                else if (peilcanrect.X >= 900)
+                {
+                    peilcanrect.X = -100;
+                }
+                if (enforcerrect1.X <= -100)
+                {
+                    enforcerrect1.X = 900;
+                    enforcerrect1.Y = new Random().Next(0, 450);
+                }
+
+
+
+                if (levelTwoTimer >= 0)
                 {
                     weaponsOn = true;
                     sentinelrect1.X -= 3;
@@ -1221,17 +1271,17 @@ namespace _1_5_summative__HALO_
                 }
                 if (levelTwoTimer >= 20)
                 {
-                  enforcerrect1.X -= 2;
-				  plasmaTimer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    enforcerrect1.X -= 2;
+                    plasmaTimer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-				}
+                }
                 if (levelTwoTimer >= 30)
                 {
                     sentinelrect3.X -= 5;
                     sentinelrect3.Y += (int)(float)(Math.Sin(levelTwoTimer) * 4);
                 }
                 if (levelTwoTimer >= 40)
-                { 
+                {
                     controllerrect.X -= 2;
 
                 }
@@ -1239,48 +1289,137 @@ namespace _1_5_summative__HALO_
             }
             if (screen == Screen.Level3)
             {
+                levelThreeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Charitys_IronyTheme.Play();
                 haloTheme.Stop();
                 haloflyingtheme.Stop();
                 blowMeAway.Stop();
 
-				if (Keyboard.GetState().IsKeyDown(Keys.Left))
-				{
-					peilcanrect.X -= 3;
-				}
-				if (Keyboard.GetState().IsKeyDown(Keys.Right))
-				{
-					peilcanrect.X += 3;
-				}
-				if (Keyboard.GetState().IsKeyDown(Keys.Up))
-				{
-					peilcanrect.Y -= 3;
-				}
-				if (Keyboard.GetState().IsKeyDown(Keys.Down))
-				{
-					peilcanrect.Y += 3;
-				}
-			}
-            if (screen == Screen.GameOver)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                bansheerect3.X -= 3;
+                covenantcityleftrect.X -= 1;
+                covenantcityrightrect.X -= 1;
+                if (covenantcityleftrect.X <= -1000)
                 {
-                    screen = Screen.MainMenu;
-                    lifes = 3;
-                    bossShipHealth = 50;
-                    energyShieldHealth = 8;
-                    phantomHealth = 3;
-                    peilcanrect.X = 200;
-                    peilcanrect.Y = 400;
-                    timer = 0;
-                    levelTwoTimer = 0;
-                    moonOverMombasa.Stop();
-                    peilcanSound.Stop();
-                    haloflyingtheme.Stop();
-                    haloTheme.Stop();
-                    
+                    covenantcityleftrect.X = 1000;
                 }
+                if (covenantcityrightrect.X <= -1000)
+                {
+                    covenantcityrightrect.X = 1000;
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    peilcanrect.X -= 3;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    peilcanrect.X += 3;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    peilcanrect.Y -= 3;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    peilcanrect.Y += 3;
+                }
+                if (bansheerect3.X <= -50)
+                {
+                    bansheerect3.X = 850;
+                    bansheerect3.Y = new Random().Next(0, 450);
+                }
+                if (bansheerect4.X <= -50)
+                {
+                    bansheerect4.X = 850;
+                    bansheerect4.Y = new Random().Next(0, 450);
+                }
+                if (bansheerect5.X <= -50)
+                {
+                    bansheerect5.X = 850;
+                    bansheerect5.Y = new Random().Next(0, 450);
+                }
+				if (peilcanrect.Intersects(bansheerect5))
+				{
+					lifes--;
+					peilcanrect.X = 200;
+					peilcanrect.Y = 50;
+					bansheerect5.X = 850;
+					bansheerect5.Y = new Random().Next(0, 450);
+				}
+				if (peilcanrect.Intersects(bansheerect4))
+				{
+					lifes--;
+					peilcanrect.X = 200;
+					peilcanrect.Y = 50;
+					bansheerect4.X = 850;
+					bansheerect4.Y = new Random().Next(0, 450);
+				}
+				if (peilcanrect.Intersects(bansheerect3))
+                {
+                        lifes--;
+                        peilcanrect.X = 200;
+                        peilcanrect.Y = 50;
+                        bansheerect3.X = 850;
+                        bansheerect3.Y = new Random().Next(0, 450);
+                }
+                if (levelThreeTimer >= 0)
+                {
+                        weaponsOn = true;
+                        bansheerect3.X -= 3;
+                }
+                if (levelThreeTimer >= 10)
+                {
+                        bansheerect3.X -= 4;
+                        bansheerect4.X -= 4;
+                }
+                if (levelThreeTimer >= 20)
+                {
+                        bansheerect3.X -= 5;
+                        bansheerect4.X -= 5;
+                        bansheerect5.X -= 5;
+                }
+                
             }
+                if (screen == Screen.GameOver)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                    {
+                        screen = Screen.MainMenu;
+                        lifes = 3;
+                        cutScene1 = false;
+                        cutScene2 = false;
+                        cutScene3 = false;
+                        bansheeActive = true;
+                        peilcanActive = false;
+                        cutSceneEvent = false;
+
+                        bossShipHealth = 50;
+                        energyShieldHealth = 8;
+                        phantomHealth = 3;
+                        peilcanrect.X = 200;
+                        peilcanrect.Y = 600;
+
+                        peilcanrect2.X = 50;
+                        peilcanrect2.Y = 600;
+
+                        peilcanrect3.X = 0;
+                        peilcanrect3.Y = 600;
+
+                        bansheerect.X = 850;
+                        bansheerect.Y = new Random().Next(0, 450);
+                        bansheerect2.X = 850;
+                        bansheerect2.Y = new Random().Next(0, 450);
+                        phantomrect.X = new Random().Next(1000, 1500);
+                        phantomrect.Y = new Random().Next(0, 450);
+                        timer = 0;
+                        levelTwoTimer = 0;
+                        moonOverMombasa.Stop();
+                        peilcanSound.Stop();
+                        haloflyingtheme.Stop();
+                        haloTheme.Stop();
+
+                    }
+                }
 
 
 
@@ -1289,9 +1428,10 @@ namespace _1_5_summative__HALO_
 
 
 
-            // TODO: Add your update logic here
+                // TODO: Add your update logic here
 
-            base.Update(gameTime);
+                base.Update(gameTime);
+            
         }
         
 
@@ -1741,7 +1881,12 @@ namespace _1_5_summative__HALO_
             if (screen == Screen.Level3)
 			{
               _spriteBatch.Draw(highCharityTexture, highCharityRect, Color.White);
-                foreach (Vector2 position in bulletPositions)
+              _spriteBatch.Draw(covenantCityleftTexture, covenantcityleftrect, Color.White);
+              _spriteBatch.Draw(covenantCityrightTexture, covenantcityrightrect, Color.White);
+              _spriteBatch.Draw(bansheeTexture, bansheerect3, Color.White);
+              _spriteBatch.Draw(bansheeTexture, bansheerect4, Color.White);
+			  _spriteBatch.Draw(bansheeTexture, bansheerect5, Color.White);
+				foreach (Vector2 position in bulletPositions)
                 {
                     _spriteBatch.Draw(bulletTexture, position, Color.White);
                 }
@@ -1810,6 +1955,7 @@ namespace _1_5_summative__HALO_
 					peilcanRightDownShow = false;
 
 				}
+                
 				if (lifes == 3)
 				{
 					_spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
