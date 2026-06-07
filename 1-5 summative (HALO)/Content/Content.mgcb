@@ -43,6 +43,12 @@
 /processorParam:Quality=Best
 /build:1-14 Behold a Pale Horse.wav
 
+#begin 13. Martin O'Donnell - Devils... Monsters...wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:13. Martin O'Donnell - Devils... Monsters...wav
+
 #begin 2-05 Charity's Irony.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -360,6 +366,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:flood spore.png
+
+#begin floodbomber.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:floodbomber.png
+
+#begin floodedPhantom.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:floodedPhantom.png
 
 #begin guardian.png
 /importer:TextureImporter

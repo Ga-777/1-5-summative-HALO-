@@ -67,11 +67,13 @@ namespace _1_5_summative__HALO_
         Rectangle controllerPositions;
         // level 3 textures and rectangles
         Texture2D highCharityloadingTexture, covenantCityleftTexture, covenantCityrightTexture;
-        Texture2D highCharityTexture;
+        Texture2D highCharityTexture, highCharity2Texture, highCharity3Texture, highCharity4Texture;
         Rectangle highCharityRect, covenantcityleftrect, covenantcityrightrect, bansheerect3, bansheerect4, bansheerect5;
-        SoundEffectInstance Charitys_IronyTheme;
+        SoundEffectInstance Charitys_IronyTheme,floodTheme;
+        Texture2D floodbomberTexture, floodedphantomTexture;
+        Rectangle floodedphantomrect, floodbomberrect;
 
-        float timer = 0,levelTwoTimer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f, levelThreeTimer = 0;
+		float timer = 0,levelTwoTimer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f, levelThreeTimer = 0;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway, moonOverMombasa;
         SoundEffectInstance beholdAPaleHorseTheme;
         int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
@@ -214,7 +216,9 @@ namespace _1_5_summative__HALO_
 
             covenantcityrightrect = new Rectangle(1000, 300, 1000, 300);
 
+			floodbomberrect = new Rectangle(900, 300, 40, 50);
 
+			floodedphantomrect = new Rectangle(1200, 300, 150, 100);
 
 			base.Initialize();
 
@@ -320,6 +324,18 @@ namespace _1_5_summative__HALO_
 			covenantCityleftTexture = Content.Load<Texture2D>("covenant_cityleft");
 
 			covenantCityrightTexture = Content.Load<Texture2D>("covenant_cityRight");
+
+			highCharity2Texture = Content.Load<Texture2D>("high2");
+
+			highCharity3Texture = Content.Load<Texture2D>("high3");
+
+			highCharity4Texture = Content.Load<Texture2D>("high4");
+
+			floodTheme = Content.Load<SoundEffect>("13. Martin O'Donnell - Devils... Monsters..").CreateInstance();
+
+			floodbomberTexture = Content.Load<Texture2D>("floodbomber");
+
+			floodedphantomTexture = Content.Load<Texture2D>("floodedPhantom");
 
 			// intros
 			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
@@ -1378,8 +1394,40 @@ namespace _1_5_summative__HALO_
                         bansheerect4.X -= 5;
                         bansheerect5.X -= 5;
                 }
-                
-            }
+                if (levelThreeTimer >= 130)
+				{
+					bansheerect3.X -= 0;
+                    bansheerect4.X -= 0;
+                    bansheerect5.X -= 0;
+                    bansheerect3.X = 800;
+					bansheerect4.X = 800;
+					bansheerect5.X = 800;
+					Charitys_IronyTheme.Stop();
+				}
+                if (levelThreeTimer >= 135)
+				{
+					floodTheme.Play();
+                    floodbomberrect.X -= 3;
+                    floodbomberrect.Y += (int)(float)(Math.Sin(levelThreeTimer) * 2);
+
+				}
+                if (levelThreeTimer >= 145)
+                {
+					floodbomberrect.X -= 5;
+                    floodedphantomrect.X -= 2;
+				}
+                if (floodbomberrect.X < -10) 
+                {
+                   floodbomberrect.X = 900;
+					floodbomberrect.Y = new Random().Next(0, 450);
+				}
+                if (floodedphantomrect.X < -10)
+				{
+					floodedphantomrect.X = 900;
+					floodedphantomrect.Y = new Random().Next(0, 450);
+				}
+
+			}
                 if (screen == Screen.GameOver)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
@@ -1880,12 +1928,31 @@ namespace _1_5_summative__HALO_
 
             if (screen == Screen.Level3)
 			{
-              _spriteBatch.Draw(highCharityTexture, highCharityRect, Color.White);
-              _spriteBatch.Draw(covenantCityleftTexture, covenantcityleftrect, Color.White);
+                if (levelThreeTimer >= 0)
+                {
+                    _spriteBatch.Draw(highCharityTexture, highCharityRect, Color.White);
+                }
+                if (levelThreeTimer >= 125)
+                {
+                    _spriteBatch.Draw(highCharity2Texture, highCharityRect, Color.White);
+                }
+                if (levelThreeTimer >= 130)
+                { 
+                   _spriteBatch.Draw(highCharity3Texture, highCharityRect, Color.White);
+				}
+				if (levelThreeTimer >= 135)
+				{
+					_spriteBatch.Draw(highCharity4Texture, highCharityRect, Color.White);
+				}
+
+
+			  _spriteBatch.Draw(covenantCityleftTexture, covenantcityleftrect, Color.White);
               _spriteBatch.Draw(covenantCityrightTexture, covenantcityrightrect, Color.White);
               _spriteBatch.Draw(bansheeTexture, bansheerect3, Color.White);
               _spriteBatch.Draw(bansheeTexture, bansheerect4, Color.White);
 			  _spriteBatch.Draw(bansheeTexture, bansheerect5, Color.White);
+              _spriteBatch.Draw(floodbomberTexture, floodbomberrect, Color.White);
+			  _spriteBatch.Draw(floodedphantomTexture, floodedphantomrect, Color.White);
 				foreach (Vector2 position in bulletPositions)
                 {
                     _spriteBatch.Draw(bulletTexture, position, Color.White);
