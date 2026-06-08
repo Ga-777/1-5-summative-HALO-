@@ -32,7 +32,7 @@ namespace _1_5_summative__HALO_
         private float bulletTimer = 0;
         private float bulletTime = 1;
 		float centerY = 300f;
-		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false, bansheeActive = true, cutSceneEvent = false, peilcanActive, blowMeAwayActive = false, energyShieldOff = false, weaponsOn = true, coreExposed = false;
+		bool bulletActive = false, peilcanRightShow = true, peilcanLeftShow = false, peilcanRightUpShow = false, peilcanRightDownShow = false, bossFight = false, cutScene1 = false, cutScene2 = false, cutScene3 = false, bansheeActive = true, cutSceneEvent = false, peilcanActive, blowMeAwayActive = false, energyShieldOff = false, weaponsOn = true, coreExposed = false, floodSporeActive = false;
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();
@@ -70,9 +70,10 @@ namespace _1_5_summative__HALO_
         Texture2D highCharityTexture, highCharity2Texture, highCharity3Texture, highCharity4Texture;
         Rectangle highCharityRect, covenantcityleftrect, covenantcityrightrect, bansheerect3, bansheerect4, bansheerect5;
         SoundEffectInstance Charitys_IronyTheme,floodTheme;
-        Texture2D floodbomberTexture, floodedphantomTexture;
-        Rectangle floodedphantomrect, floodbomberrect;
-
+        Texture2D floodbomberTexture, floodedphantomTexture, floodsporeTexture;
+        Rectangle floodedphantomrect, floodbomberrect, floodsporerect;
+        List<Rectangle> floodSpore;
+        Vector2 floodFallSpeed;
 		float timer = 0,levelTwoTimer = 0, bulletSpeed = 10f, interval = 0.2f, plasmaSpeed = -15f, missileSpeed = 10f, levelThreeTimer = 0;
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway, moonOverMombasa;
         SoundEffectInstance beholdAPaleHorseTheme;
@@ -220,6 +221,17 @@ namespace _1_5_summative__HALO_
 
 			floodedphantomrect = new Rectangle(1200, 300, 150, 100);
 
+			floodSpore = new List<Rectangle>();
+
+			floodFallSpeed = new Vector2(0, 1);
+			for (int i = 0; i < 100; i++)
+			{
+				int x = generator.Next(0, 800);
+                int y = generator.Next(0, 600);
+				
+				floodSpore.Add(new Rectangle(x, y, 5, 5));
+			}
+
 			base.Initialize();
 
         }
@@ -336,6 +348,8 @@ namespace _1_5_summative__HALO_
 			floodbomberTexture = Content.Load<Texture2D>("floodbomber");
 
 			floodedphantomTexture = Content.Load<Texture2D>("floodedPhantom");
+
+			floodsporeTexture = Content.Load<Texture2D>("flood spore");
 
 			// intros
 			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
@@ -1163,10 +1177,7 @@ namespace _1_5_summative__HALO_
                     bulletActive = false;
                 }
 
-                if (screen == Screen.GameOver)
-                {
-
-                }
+                
                 if (bossShipHealth == 0)
                 {
                     bossShiprect.X += 1;
@@ -1354,78 +1365,94 @@ namespace _1_5_summative__HALO_
                     bansheerect5.X = 850;
                     bansheerect5.Y = new Random().Next(0, 450);
                 }
-				if (peilcanrect.Intersects(bansheerect5))
-				{
-					lifes--;
-					peilcanrect.X = 200;
-					peilcanrect.Y = 50;
-					bansheerect5.X = 850;
-					bansheerect5.Y = new Random().Next(0, 450);
-				}
-				if (peilcanrect.Intersects(bansheerect4))
-				{
-					lifes--;
-					peilcanrect.X = 200;
-					peilcanrect.Y = 50;
-					bansheerect4.X = 850;
-					bansheerect4.Y = new Random().Next(0, 450);
-				}
-				if (peilcanrect.Intersects(bansheerect3))
+                if (peilcanrect.Intersects(bansheerect5))
                 {
-                        lifes--;
-                        peilcanrect.X = 200;
-                        peilcanrect.Y = 50;
-                        bansheerect3.X = 850;
-                        bansheerect3.Y = new Random().Next(0, 450);
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    bansheerect5.X = 850;
+                    bansheerect5.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(bansheerect4))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    bansheerect4.X = 850;
+                    bansheerect4.Y = new Random().Next(0, 450);
+                }
+                if (peilcanrect.Intersects(bansheerect3))
+                {
+                    lifes--;
+                    peilcanrect.X = 200;
+                    peilcanrect.Y = 50;
+                    bansheerect3.X = 850;
+                    bansheerect3.Y = new Random().Next(0, 450);
                 }
                 if (levelThreeTimer >= 0)
                 {
-                        weaponsOn = true;
-                        bansheerect3.X -= 3;
+                    weaponsOn = true;
+                    bansheerect3.X -= 3;
                 }
                 if (levelThreeTimer >= 10)
                 {
-                        bansheerect3.X -= 4;
-                        bansheerect4.X -= 4;
+                    bansheerect3.X -= 4;
+                    bansheerect4.X -= 4;
                 }
                 if (levelThreeTimer >= 20)
                 {
-                        bansheerect3.X -= 5;
-                        bansheerect4.X -= 5;
-                        bansheerect5.X -= 5;
+                    bansheerect3.X -= 5;
+                    bansheerect4.X -= 5;
+                    bansheerect5.X -= 5;
                 }
-                if (levelThreeTimer >= 130)
-				{
-					bansheerect3.X -= 0;
+                if (levelThreeTimer >= 125)
+                {
+                    bansheerect3.X -= 0;
                     bansheerect4.X -= 0;
                     bansheerect5.X -= 0;
                     bansheerect3.X = 800;
-					bansheerect4.X = 800;
-					bansheerect5.X = 800;
-					Charitys_IronyTheme.Stop();
-				}
-                if (levelThreeTimer >= 135)
-				{
-					floodTheme.Play();
+                    bansheerect4.X = 800;
+                    bansheerect5.X = 800;
+                    Charitys_IronyTheme.Stop();
+                }
+                if (levelThreeTimer >= 130)
+                {
+                    floodTheme.Play();
                     floodbomberrect.X -= 3;
                     floodbomberrect.Y += (int)(float)(Math.Sin(levelThreeTimer) * 2);
-
-				}
+                    floodSporeActive = true;
+                }
                 if (levelThreeTimer >= 145)
                 {
-					floodbomberrect.X -= 5;
+                    floodbomberrect.X -= 5;
                     floodedphantomrect.X -= 2;
-				}
-                if (floodbomberrect.X < -10) 
+                }
+                if (floodbomberrect.X < -10)
                 {
-                   floodbomberrect.X = 900;
-					floodbomberrect.Y = new Random().Next(0, 450);
-				}
+                    floodbomberrect.X = 900;
+                    floodbomberrect.Y = new Random().Next(0, 450);
+                }
                 if (floodedphantomrect.X < -10)
-				{
-					floodedphantomrect.X = 900;
-					floodedphantomrect.Y = new Random().Next(0, 450);
-				}
+                {
+                    floodedphantomrect.X = 900;
+                    floodedphantomrect.Y = new Random().Next(0, 450);
+                }
+
+                if (floodSporeActive == true)
+                { 
+                   for (int i = 0; i < floodSpore.Count; i++)
+                   {
+                     floodSpore[i] = new Rectangle(floodSpore[i].X, floodSpore[i].Y + (int)floodFallSpeed.Y, floodSpore[i].Width, floodSpore[i].Height);
+                     if (floodSpore[i].Y > 600)
+                     {
+                        floodSpore[i] = new Rectangle(generator.Next(0, 800), generator.Next(0, 600), 5, 5);
+
+					 }
+                   }
+                }
+					
+
+				
 
 			}
                 if (screen == Screen.GameOver)
@@ -2038,6 +2065,15 @@ namespace _1_5_summative__HALO_
 				{
 					_spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
 				}
+                if (floodSporeActive == true)
+                {
+					foreach (Rectangle floodSpore in floodSpore)
+					{
+						_spriteBatch.Draw(floodsporeTexture, floodSpore, Color.White);
+					}
+				}
+			    
+				
 			}
            
             _spriteBatch.End();
