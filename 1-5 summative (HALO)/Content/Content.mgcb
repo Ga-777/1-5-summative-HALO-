@@ -61,6 +61,12 @@
 /processorParam:Quality=Best
 /build:2-06 Moon Over Mombasa.wav
 
+#begin 21. Adjutant Resolution (1).wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:21. Adjutant Resolution (1).wav
+
 #begin banshee.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -513,6 +519,18 @@
 
 #begin Jersey15-Regular.ttf
 /copy:Jersey15-Regular.ttf
+
+#begin laserbeam.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:laserbeam.png
 
 #begin maintext.spritefont
 /importer:FontDescriptionImporter

@@ -59,14 +59,20 @@ namespace _1_5_summative__HALO_
         Texture2D coreTexture, core2Texture, core3Texture;
         Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
 		// level 2 textures and rectangles
-		Texture2D mountinTexture,ring2Texture, ringTreesTexture, sentinelTexture, enforcerTexture, controllerTexture;
-        Rectangle mountinrect1, mountinrect2, sentinelrect1, sentinelrect2,sentinelrect3, enforcerrect1, controllerrect;
+		Texture2D mountinTexture,ring2Texture, ringTreesTexture, sentinelTexture, enforcerTexture, controllerTexture, laserTexture;
+        Rectangle mountinrect1, mountinrect2, sentinelrect1, sentinelrect2,sentinelrect3, enforcerrect1, controllerrect, laserrect;
         int enforcerHealth = 5;
         Texture2D Installation_05Texture;
         Rectangle Installation_05rect;
         Rectangle controllerPositions;
-        // level 3 textures and rectangles
-        Texture2D highCharityloadingTexture, covenantCityleftTexture, covenantCityrightTexture;
+		// 2 boss
+		bool boss2Fight = false, guardianActive = true;
+		Texture2D guardianTexture;
+		Rectangle guardianrect;
+		int guardianHealth = 100;
+		SoundEffectInstance guardianTheme;
+		// level 3 textures and rectangles
+		Texture2D highCharityloadingTexture, covenantCityleftTexture, covenantCityrightTexture;
         Texture2D highCharityTexture, highCharity2Texture, highCharity3Texture, highCharity4Texture;
         Rectangle highCharityRect, covenantcityleftrect, covenantcityrightrect, bansheerect3, bansheerect4, bansheerect5;
         SoundEffectInstance Charitys_IronyTheme,floodTheme;
@@ -221,6 +227,8 @@ namespace _1_5_summative__HALO_
 
 			floodedphantomrect = new Rectangle(1200, 300, 150, 100);
 
+			guardianrect = new Rectangle(50, 800, 700, 1300);
+
 			floodSpore = new List<Rectangle>();
 
 			floodFallSpeed = new Vector2(0, 1);
@@ -351,6 +359,10 @@ namespace _1_5_summative__HALO_
 
 			floodsporeTexture = Content.Load<Texture2D>("flood spore");
 
+            guardianTheme = Content.Load<SoundEffect>("21. Adjutant Resolution (1)").CreateInstance();
+
+			guardianTexture = Content.Load<Texture2D>("guardian");
+
 			// intros
 			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
 
@@ -456,6 +468,7 @@ namespace _1_5_summative__HALO_
             if (screen == Screen.level3Intro)
             {
                 textTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                guardianTheme.Stop();
                 if (textTimer >= textTime)
                 {
                     textTimer = 0;
@@ -1312,149 +1325,221 @@ namespace _1_5_summative__HALO_
                     controllerrect.X -= 2;
 
                 }
+                if (levelTwoTimer >= 50)
+                {
+                    sentinelrect1.X -= 0;
+                    sentinelrect2.X -= 0;
+                    sentinelrect3.X -= 0;
+                    enforcerrect1.X -= 0;
+                    controllerrect.X -= 0;
+                    sentinelrect1.X = 800;
+                    sentinelrect2.X = 800;
+                    sentinelrect3.X = 800;
+                    enforcerrect1.X = 800;
+                    controllerrect.X = 800;
+                    beholdAPaleHorseTheme.Stop();
+                }
+                if (levelTwoTimer >= 55)
+                {
+                    if (guardianActive == true)
+                    {
+						guardianrect.Y -= 1;
+					}
+						
+                    guardianTheme.Play();
 
+                }
+                if (boss2Fight == false)
+                {
+                    
+                    if (guardianrect.Y <= 80)
+                    {
+                        guardianrect.Y = 80;
+                        guardianrect.Y -= 0;
+						boss2Fight = true;
+					}
+                }
+                if (boss2Fight == true)
+                {
+                    guardianrect.Y -= 0;
+                    if (guardianHealth == 0)
+					{
+						guardianrect.Y += 1;
+						if (guardianrect.Y >= 600)
+						{
+							guardianrect.X = 1200;
+							guardianrect.Y = 300;
+							levelTwoTimer = 0;
+							screen = Screen.level3Intro;
+						}
+					}
+                    guardianActive = false;
+					guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 2);
+					if (coreHealth == 3)
+					{
+						core1rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+					}
+					else if (coreHealth == 2)
+					{
+						core2rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+					}
+					else if (coreHealth == 1)
+					{
+						core3rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+					}
+					else if (coreHealth == 0)
+					{
+						coreHealth = 3;
+						
+						guardianHealth -= 25;
+					}
+
+
+
+
+				}
             }
-            if (screen == Screen.Level3)
-            {
-                levelThreeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                Charitys_IronyTheme.Play();
-                haloTheme.Stop();
-                haloflyingtheme.Stop();
-                blowMeAway.Stop();
+                if (screen == Screen.Level3)
+                {
+                    levelThreeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Charitys_IronyTheme.Play();
+                    haloTheme.Stop();
+                    haloflyingtheme.Stop();
+                    blowMeAway.Stop();
 
-                bansheerect3.X -= 3;
-                covenantcityleftrect.X -= 1;
-                covenantcityrightrect.X -= 1;
-                if (covenantcityleftrect.X <= -1000)
-                {
-                    covenantcityleftrect.X = 1000;
-                }
-                if (covenantcityrightrect.X <= -1000)
-                {
-                    covenantcityrightrect.X = 1000;
-                }
-
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                {
-                    peilcanrect.X -= 3;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                {
-                    peilcanrect.X += 3;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                {
-                    peilcanrect.Y -= 3;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                {
-                    peilcanrect.Y += 3;
-                }
-                if (bansheerect3.X <= -50)
-                {
-                    bansheerect3.X = 850;
-                    bansheerect3.Y = new Random().Next(0, 450);
-                }
-                if (bansheerect4.X <= -50)
-                {
-                    bansheerect4.X = 850;
-                    bansheerect4.Y = new Random().Next(0, 450);
-                }
-                if (bansheerect5.X <= -50)
-                {
-                    bansheerect5.X = 850;
-                    bansheerect5.Y = new Random().Next(0, 450);
-                }
-                if (peilcanrect.Intersects(bansheerect5))
-                {
-                    lifes--;
-                    peilcanrect.X = 200;
-                    peilcanrect.Y = 50;
-                    bansheerect5.X = 850;
-                    bansheerect5.Y = new Random().Next(0, 450);
-                }
-                if (peilcanrect.Intersects(bansheerect4))
-                {
-                    lifes--;
-                    peilcanrect.X = 200;
-                    peilcanrect.Y = 50;
-                    bansheerect4.X = 850;
-                    bansheerect4.Y = new Random().Next(0, 450);
-                }
-                if (peilcanrect.Intersects(bansheerect3))
-                {
-                    lifes--;
-                    peilcanrect.X = 200;
-                    peilcanrect.Y = 50;
-                    bansheerect3.X = 850;
-                    bansheerect3.Y = new Random().Next(0, 450);
-                }
-                if (levelThreeTimer >= 0)
-                {
-                    weaponsOn = true;
                     bansheerect3.X -= 3;
-                }
-                if (levelThreeTimer >= 10)
-                {
-                    bansheerect3.X -= 4;
-                    bansheerect4.X -= 4;
-                }
-                if (levelThreeTimer >= 20)
-                {
-                    bansheerect3.X -= 5;
-                    bansheerect4.X -= 5;
-                    bansheerect5.X -= 5;
-                }
-                if (levelThreeTimer >= 125)
-                {
-                    bansheerect3.X -= 0;
-                    bansheerect4.X -= 0;
-                    bansheerect5.X -= 0;
-                    bansheerect3.X = 800;
-                    bansheerect4.X = 800;
-                    bansheerect5.X = 800;
-                    Charitys_IronyTheme.Stop();
-                }
-                if (levelThreeTimer >= 130)
-                {
-                    floodTheme.Play();
-                    floodbomberrect.X -= 3;
-                    floodbomberrect.Y += (int)(float)(Math.Sin(levelThreeTimer) * 2);
-                    floodSporeActive = true;
-                }
-                if (levelThreeTimer >= 145)
-                {
-                    floodbomberrect.X -= 5;
-                    floodedphantomrect.X -= 2;
-                }
-                if (floodbomberrect.X < -10)
-                {
-                    floodbomberrect.X = 900;
-                    floodbomberrect.Y = new Random().Next(0, 450);
-                }
-                if (floodedphantomrect.X < -10)
-                {
-                    floodedphantomrect.X = 900;
-                    floodedphantomrect.Y = new Random().Next(0, 450);
-                }
+                    covenantcityleftrect.X -= 1;
+                    covenantcityrightrect.X -= 1;
+                    if (covenantcityleftrect.X <= -1000)
+                    {
+                        covenantcityleftrect.X = 1000;
+                    }
+                    if (covenantcityrightrect.X <= -1000)
+                    {
+                        covenantcityrightrect.X = 1000;
+                    }
 
-                if (floodSporeActive == true)
-                { 
-                   for (int i = 0; i < floodSpore.Count; i++)
-                   {
-                     floodSpore[i] = new Rectangle(floodSpore[i].X, floodSpore[i].Y + (int)floodFallSpeed.Y, floodSpore[i].Width, floodSpore[i].Height);
-                     if (floodSpore[i].Y > 600)
-                     {
-                        floodSpore[i] = new Rectangle(generator.Next(0, 800), generator.Next(0, 600), 5, 5);
+                    if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                    {
+                        peilcanrect.X -= 3;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                    {
+                        peilcanrect.X += 3;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                    {
+                        peilcanrect.Y -= 3;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                    {
+                        peilcanrect.Y += 3;
+                    }
+                    if (bansheerect3.X <= -50)
+                    {
+                        bansheerect3.X = 850;
+                        bansheerect3.Y = new Random().Next(0, 450);
+                    }
+                    if (bansheerect4.X <= -50)
+                    {
+                        bansheerect4.X = 850;
+                        bansheerect4.Y = new Random().Next(0, 450);
+                    }
+                    if (bansheerect5.X <= -50)
+                    {
+                        bansheerect5.X = 850;
+                        bansheerect5.Y = new Random().Next(0, 450);
+                    }
+                    if (peilcanrect.Intersects(bansheerect5))
+                    {
+                        lifes--;
+                        peilcanrect.X = 200;
+                        peilcanrect.Y = 50;
+                        bansheerect5.X = 850;
+                        bansheerect5.Y = new Random().Next(0, 450);
+                    }
+                    if (peilcanrect.Intersects(bansheerect4))
+                    {
+                        lifes--;
+                        peilcanrect.X = 200;
+                        peilcanrect.Y = 50;
+                        bansheerect4.X = 850;
+                        bansheerect4.Y = new Random().Next(0, 450);
+                    }
+                    if (peilcanrect.Intersects(bansheerect3))
+                    {
+                        lifes--;
+                        peilcanrect.X = 200;
+                        peilcanrect.Y = 50;
+                        bansheerect3.X = 850;
+                        bansheerect3.Y = new Random().Next(0, 450);
+                    }
+                    if (levelThreeTimer >= 0)
+                    {
+                        weaponsOn = true;
+                        bansheerect3.X -= 3;
+                    }
+                    if (levelThreeTimer >= 10)
+                    {
+                        bansheerect3.X -= 4;
+                        bansheerect4.X -= 4;
+                    }
+                    if (levelThreeTimer >= 20)
+                    {
+                        bansheerect3.X -= 5;
+                        bansheerect4.X -= 5;
+                        bansheerect5.X -= 5;
+                    }
+                    if (levelThreeTimer >= 125)
+                    {
+                        bansheerect3.X -= 0;
+                        bansheerect4.X -= 0;
+                        bansheerect5.X -= 0;
+                        bansheerect3.X = 800;
+                        bansheerect4.X = 800;
+                        bansheerect5.X = 800;
+                        Charitys_IronyTheme.Stop();
+                    }
+                    if (levelThreeTimer >= 130)
+                    {
+                        floodTheme.Play();
+                        floodbomberrect.X -= 3;
+                        floodbomberrect.Y += (int)(float)(Math.Sin(levelThreeTimer) * 2);
+                        floodSporeActive = true;
+                    }
+                    if (levelThreeTimer >= 145)
+                    {
+                        floodbomberrect.X -= 5;
+                        floodedphantomrect.X -= 2;
+                    }
+                    if (floodbomberrect.X < -10)
+                    {
+                        floodbomberrect.X = 900;
+                        floodbomberrect.Y = new Random().Next(0, 450);
+                    }
+                    if (floodedphantomrect.X < -10)
+                    {
+                        floodedphantomrect.X = 900;
+                        floodedphantomrect.Y = new Random().Next(0, 450);
+                    }
 
-					 }
-                   }
+                    if (floodSporeActive == true)
+                    {
+                        for (int i = 0; i < floodSpore.Count; i++)
+                        {
+                            floodSpore[i] = new Rectangle(floodSpore[i].X, floodSpore[i].Y + (int)floodFallSpeed.Y, floodSpore[i].Width, floodSpore[i].Height);
+                            if (floodSpore[i].Y > 600)
+                            {
+                                floodSpore[i] = new Rectangle(generator.Next(0, 800), generator.Next(0, 600), 5, 5);
+
+                            }
+                        }
+                    }
+
+
+
+
                 }
-					
-
-				
-
-			}
                 if (screen == Screen.GameOver)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
@@ -1495,6 +1580,7 @@ namespace _1_5_summative__HALO_
 
                     }
                 }
+            
 
 
 
@@ -1855,15 +1941,29 @@ namespace _1_5_summative__HALO_
 				{
 					_spriteBatch.Draw(plasmaShot, position, Color.White);
 				}
-				if (peilcanRightShow == true)
-				{
-					_spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
-				}
+				
 			  _spriteBatch.Draw(sentinelTexture, sentinelrect1, Color.White);
               _spriteBatch.Draw(sentinelTexture, sentinelrect2, Color.White);
               _spriteBatch.Draw(enforcerTexture, enforcerrect1, Color.White);
               _spriteBatch.Draw(controllerTexture, controllerrect, Color.White);
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+              _spriteBatch.Draw(guardianTexture, guardianrect, Color.White);
+				if (coreHealth == 3)
+				{
+					_spriteBatch.Draw(coreTexture, core1rect, Color.White);
+				}
+				else if (coreHealth == 2)
+				{
+					_spriteBatch.Draw(core2Texture, core2rect, Color.White);
+				}
+				else if (coreHealth == 1)
+				{
+					_spriteBatch.Draw(core3Texture, core3rect, Color.White);
+				}
+				if (peilcanRightShow == true)
+				{
+					_spriteBatch.Draw(peilcanTexture, peilcanrect, Color.White);
+				}
+				if (Keyboard.GetState().IsKeyDown(Keys.Left))
 				{
 					peilcanLeftShow = true;
 
@@ -1948,6 +2048,7 @@ namespace _1_5_summative__HALO_
                 {
                     _spriteBatch.DrawString(font, "3", new Vector2(20, 400), Color.White);
                 }
+
             }
 
 
