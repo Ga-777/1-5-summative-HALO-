@@ -72,9 +72,14 @@ namespace _1_5_summative__HALO_
 		int guardianHealth = 100;
 		SoundEffectInstance guardianTheme;
 
-		// shake event
-		// Screen shake variables
-		float shakeTime = 0f;
+        List<Vector2> bigplasmaPositions = new List<Vector2>();
+        List<Vector2> bigplasmaVelocities = new List<Vector2>();
+        Rectangle bigplasmarect;
+        private float bigplasmaTimer = 0;
+        private float bigplasmaTime = 3f;
+        // shake event
+        // Screen shake variables
+        float shakeTime = 0f;
 		float shakeMagnitude = 10f; // Pixels of max shake
 		Random random = new Random();
 
@@ -241,6 +246,8 @@ namespace _1_5_summative__HALO_
 
 			floodSpore = new List<Rectangle>();
 
+            
+
 			floodFallSpeed = new Vector2(0, 1);
 			for (int i = 0; i < 100; i++)
 			{
@@ -367,7 +374,7 @@ namespace _1_5_summative__HALO_
 
 			floodedphantomTexture = Content.Load<Texture2D>("floodedPhantom");
 
-			floodsporeTexture = Content.Load<Texture2D>("flood spore");
+			floodsporeTexture = Content.Load<Texture2D>("flood spore(1)");
 
             guardianTheme = Content.Load<SoundEffect>("21. Adjutant Resolution (1)").CreateInstance();
 
@@ -393,7 +400,7 @@ namespace _1_5_summative__HALO_
             mouse = Mouse.GetState();
             bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             plasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
+            bigplasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             missileTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
@@ -1352,11 +1359,11 @@ namespace _1_5_summative__HALO_
                     sentinelrect1.X = 800;
                     sentinelrect2.X = 800;
                     sentinelrect3.X = 800;
-                    enforcerrect1.X = 800;
+                    enforcerrect1.X = -80;
                     controllerrect.X = 800;
                     beholdAPaleHorseTheme.Stop();
 					
-                    shakeTime = 0.5f; // Shake for half a second
+                    shakeTime = 0.5f; // Shakes for half a second
 
 
 
@@ -1388,6 +1395,49 @@ namespace _1_5_summative__HALO_
                 {
 					shakeTime = 0;
 					guardianrect.Y -= 0;
+                    if (guardianHealth == 100)
+                    {
+                        if (bigplasmaTimer >= bigplasmaTime)
+                        {
+                            
+                            bigplasmaPositions.Add(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050));
+
+                            bigplasmaVelocities.Add(new Vector2(0, -2));
+
+                            bigplasmaVelocities.Add(new Vector2(0, 2));
+
+                            bigplasmaVelocities.Add(new Vector2(2, 0));
+
+                            bigplasmaVelocities.Add(new Vector2(-2, 0));
+
+                            bigplasmaTimer = 0;
+                        }
+                        for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
+                        {
+                            bigplasmaPositions[j] += bigplasmaVelocities[j];
+                            var pos = bigplasmaPositions[j];
+                            if (bigplasmaPositions[j].X < -330)
+                            {
+                                bigplasmaPositions.RemoveAt(j);
+                                bigplasmaVelocities.RemoveAt(j);
+                                continue;
+                            }
+                            if (peilcanrect.Contains(pos))
+                            {
+                                lifes--;
+                                peilcanrect.X = 200;
+                                peilcanrect.Y = 50;
+                                bigplasmaPositions.RemoveAt(j);
+                                bigplasmaVelocities.RemoveAt(j);
+                                continue;
+                            }
+
+                        }
+                    }
+                    if (guardianHealth > 75)
+                    {
+
+                    }
                     if (guardianHealth == 0)
 					{
 						guardianrect.Y += 1;
@@ -1957,29 +2007,32 @@ namespace _1_5_summative__HALO_
               _spriteBatch.Draw(ring2Texture, ring2rect, Color.White);
               _spriteBatch.Draw(mountinTexture, mountinrect1, Color.White);
               _spriteBatch.Draw(mountinTexture, mountinrect2, Color.White);
-				foreach (Vector2 position in bulletPositions)
-				{
-					_spriteBatch.Draw(bulletTexture, position, Color.White);
-				}
-				foreach (Vector2 position in missilePositions)
-				{
-					_spriteBatch.Draw(missileTexture, position, Color.White);
-				}
-				foreach (Vector2 position in plasmaPositions2)
-				{
-					_spriteBatch.Draw(plasmaShot, position, Color.White);
-				}
+				
 				
 			  _spriteBatch.Draw(sentinelTexture, sentinelrect1, Color.White);
               _spriteBatch.Draw(sentinelTexture, sentinelrect2, Color.White);
               _spriteBatch.Draw(enforcerTexture, enforcerrect1, Color.White);
               _spriteBatch.Draw(controllerTexture, controllerrect, Color.White);
               _spriteBatch.Draw(guardianTexture, guardianrect, Color.White);
-				
-				
-				
+                foreach (Vector2 position in bulletPositions)
+                {
+                    _spriteBatch.Draw(bulletTexture, position, Color.White);
+                }
+                foreach (Vector2 position in missilePositions)
+                {
+                    _spriteBatch.Draw(missileTexture, position, Color.White);
+                }
+                foreach (Vector2 position in plasmaPositions2)
+                {
+                    _spriteBatch.Draw(plasmaShot, position, Color.White);
+                }
+                foreach (Vector2 position in bigplasmaPositions)
+                {
+                    _spriteBatch.Draw(plasmaShot, position, Color.White);
+                }
 
-				if (coreHealth == 3)
+
+                if (coreHealth == 3)
 				{
 					_spriteBatch.Draw(coreTexture, core1rect, Color.White);
 				}
