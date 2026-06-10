@@ -71,6 +71,14 @@ namespace _1_5_summative__HALO_
 		Rectangle guardianrect;
 		int guardianHealth = 100;
 		SoundEffectInstance guardianTheme;
+
+		// shake event
+		// Screen shake variables
+		float shakeTime = 0f;
+		float shakeMagnitude = 10f; // Pixels of max shake
+		Random random = new Random();
+
+
 		// level 3 textures and rectangles
 		Texture2D highCharityloadingTexture, covenantCityleftTexture, covenantCityrightTexture;
         Texture2D highCharityTexture, highCharity2Texture, highCharity3Texture, highCharity4Texture;
@@ -106,7 +114,9 @@ namespace _1_5_summative__HALO_
         private float missileTime = 5f;
 
         private float shieldTimer = 0;
-        public Game1()
+		private float offsetY;
+
+		public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -1223,9 +1233,14 @@ namespace _1_5_summative__HALO_
                 mountinrect2.X -= 1;
                 sentinelrect1.X -= 3;
                 sentinelrect2.X -= 3;
+				
+                if (shakeTime > 0)
+				{
+					shakeTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+				}
 
 
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+				if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     peilcanrect.X -= 3;
                 }
@@ -1325,9 +1340,11 @@ namespace _1_5_summative__HALO_
                     controllerrect.X -= 2;
 
                 }
-                if (levelTwoTimer >= 50)
+                if (levelTwoTimer >= 3)
                 {
-                    sentinelrect1.X -= 0;
+                    
+					
+					sentinelrect1.X -= 0;
                     sentinelrect2.X -= 0;
                     sentinelrect3.X -= 0;
                     enforcerrect1.X -= 0;
@@ -1338,10 +1355,17 @@ namespace _1_5_summative__HALO_
                     enforcerrect1.X = 800;
                     controllerrect.X = 800;
                     beholdAPaleHorseTheme.Stop();
-                }
-                if (levelTwoTimer >= 55)
+					
+                    shakeTime = 0.5f; // Shake for half a second
+
+
+
+
+				}
+				if (levelTwoTimer >= 5)
                 {
-                    if (guardianActive == true)
+                    
+					if (guardianActive == true)
                     {
 						guardianrect.Y -= 1;
 					}
@@ -1357,11 +1381,13 @@ namespace _1_5_summative__HALO_
                         guardianrect.Y = 80;
                         guardianrect.Y -= 0;
 						boss2Fight = true;
+						
 					}
                 }
                 if (boss2Fight == true)
                 {
-                    guardianrect.Y -= 0;
+					shakeTime = 0;
+					guardianrect.Y -= 0;
                     if (guardianHealth == 0)
 					{
 						guardianrect.Y += 1;
@@ -1374,7 +1400,7 @@ namespace _1_5_summative__HALO_
 						}
 					}
                     guardianActive = false;
-					guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 2);
+					guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 1.5);
 					if (coreHealth == 3)
 					{
 						core1rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
@@ -1619,8 +1645,10 @@ namespace _1_5_summative__HALO_
 		protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            
-            _spriteBatch.Begin();
+			float offsetX = (float)(random.NextDouble() - 0.5) * shakeMagnitude * shakeTime;
+			float offsetY = (float)(random.NextDouble() - 0.5) * shakeMagnitude * shakeTime;
+			Matrix shakeMatrix = Matrix.CreateTranslation(offsetX, offsetY, 0f);
+			_spriteBatch.Begin(transformMatrix: shakeMatrix);
             if (screen == Screen.MainMenu)
             {
                 _spriteBatch.Draw(ringTexture, ringrect, Color.White);
@@ -1924,8 +1952,8 @@ namespace _1_5_summative__HALO_
             }
             if (screen == Screen.Level2)
 			{
-              
-              _spriteBatch.Draw(ringSkyTexture, ringSkyrect, Color.White);
+			  
+			  _spriteBatch.Draw(ringSkyTexture, ringSkyrect, Color.White);
               _spriteBatch.Draw(ring2Texture, ring2rect, Color.White);
               _spriteBatch.Draw(mountinTexture, mountinrect1, Color.White);
               _spriteBatch.Draw(mountinTexture, mountinrect2, Color.White);
@@ -1947,6 +1975,10 @@ namespace _1_5_summative__HALO_
               _spriteBatch.Draw(enforcerTexture, enforcerrect1, Color.White);
               _spriteBatch.Draw(controllerTexture, controllerrect, Color.White);
               _spriteBatch.Draw(guardianTexture, guardianrect, Color.White);
+				
+				
+				
+
 				if (coreHealth == 3)
 				{
 					_spriteBatch.Draw(coreTexture, core1rect, Color.White);
@@ -2032,6 +2064,15 @@ namespace _1_5_summative__HALO_
 				else if (lifes == 1)
 				{
 					_spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
+				}
+                if (levelTwoTimer >= 50)
+				{
+					
+					
+
+
+					
+
 				}
 			}
             if (screen == Screen.level3Intro)
