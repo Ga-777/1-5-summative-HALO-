@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -68,16 +69,22 @@ namespace _1_5_summative__HALO_
 		// 2 boss
 		bool boss2Fight = false, guardianActive = true;
 		Texture2D guardianTexture;
-		Rectangle guardianrect;
+		Rectangle guardianrect, guardianbackgroundrect;
 		int guardianHealth = 100;
 		SoundEffectInstance guardianTheme;
         Texture2D plasmaballTexture, EMPballTexture;
-
+        bool boss2Phase2 = false, boss2Phase3 = false;
+        Rectangle plasmaballrect, EMPballrect;
+        float phase2Timer = 0, phase2Time = 20f, phase3Timer = 0, phase3Time = 20f;
         List<Vector2> bigplasmaPositions = new List<Vector2>();
         List<Vector2> bigplasmaVelocities = new List<Vector2>();
         Rectangle bigplasmarect;
         private float bigplasmaTimer = 0;
-        private float bigplasmaTime = 3f;
+        private float bigplasmaTime = 0.2f;
+        Texture2D laserbeamTexture;
+        Rectangle laserbeamrect;
+        private float beamTimer2 = 0;
+        private float beamTime2 = 5f;
         // shake event
         // Screen shake variables
         float shakeTime = 0f;
@@ -245,7 +252,13 @@ namespace _1_5_summative__HALO_
 
 			guardianrect = new Rectangle(50, 800, 700, 1300);
 
-			floodSpore = new List<Rectangle>();
+            guardianbackgroundrect = new Rectangle(350, -100, 80, 100);
+
+            laserbeamrect = new Rectangle(-1000, -1111, 100, 1000);
+
+            EMPballrect = new Rectangle(100, -200, 200, 200);
+
+            floodSpore = new List<Rectangle>();
 
             
 
@@ -385,8 +398,12 @@ namespace _1_5_summative__HALO_
 
 			EMPballTexture = Content.Load<Texture2D>("plasmaball");
 
-			// intros
-			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
+            laserbeamTexture = Content.Load<Texture2D>("laserbeam");
+
+
+
+            // intros
+            new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
 
             Installation_05Texture = Content.Load<Texture2D>("Installation 05");
 
@@ -407,6 +424,7 @@ namespace _1_5_summative__HALO_
             plasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             bigplasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             missileTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            beamTimer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
             KeyboardState keyboardState = Keyboard.GetState();
@@ -1236,6 +1254,7 @@ namespace _1_5_summative__HALO_
             if (screen == Screen.Level2)
             {
                 levelTwoTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                 haloTheme.Stop();
                 haloflyingtheme.Stop();
                 blowMeAway.Stop();
@@ -1245,14 +1264,14 @@ namespace _1_5_summative__HALO_
                 mountinrect2.X -= 1;
                 sentinelrect1.X -= 3;
                 sentinelrect2.X -= 3;
-				
+
                 if (shakeTime > 0)
-				{
-					shakeTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-				}
+                {
+                    shakeTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
 
 
-				if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     peilcanrect.X -= 3;
                 }
@@ -1354,9 +1373,9 @@ namespace _1_5_summative__HALO_
                 }
                 if (levelTwoTimer >= 3)
                 {
-                    
-					
-					sentinelrect1.X -= 0;
+
+
+                    sentinelrect1.X -= 0;
                     sentinelrect2.X -= 0;
                     sentinelrect3.X -= 0;
                     enforcerrect1.X -= 0;
@@ -1367,54 +1386,60 @@ namespace _1_5_summative__HALO_
                     enforcerrect1.X = -80;
                     controllerrect.X = 800;
                     beholdAPaleHorseTheme.Stop();
-					
+
                     shakeTime = 0.5f; // Shakes for half a second
 
 
 
 
-				}
-				if (levelTwoTimer >= 5)
+                }
+                if (levelTwoTimer >= 5)
                 {
-                    
-					if (guardianActive == true)
+
+                    if (guardianActive == true)
                     {
-						guardianrect.Y -= 1;
-					}
-						
+                        guardianrect.Y -= 1;
+                    }
+
                     guardianTheme.Play();
 
                 }
                 if (boss2Fight == false)
                 {
-                    
+
                     if (guardianrect.Y <= 80)
                     {
                         guardianrect.Y = 80;
                         guardianrect.Y -= 0;
-						boss2Fight = true;
-						
-					}
+                        boss2Fight = true;
+
+                    }
                 }
                 if (boss2Fight == true)
                 {
-					shakeTime = 0;
-					guardianrect.Y -= 0;
+                    shakeTime = 0;
+                    guardianrect.Y -= 0;
                     if (guardianHealth == 100)
                     {
                         if (bigplasmaTimer >= bigplasmaTime)
                         {
-							//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
+                            //(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
 
-							bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
+                            bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
 
-                            bigplasmaVelocities.Add(new Vector2(0, -2));
+                            bigplasmaVelocities.Add(new Vector2(0, -3));
 
-                            bigplasmaVelocities.Add(new Vector2(0, 2));
+                            bigplasmaVelocities.Add(new Vector2(0, 3));
 
-                            bigplasmaVelocities.Add(new Vector2(2, 0));
+                            bigplasmaVelocities.Add(new Vector2(3, 0));
 
-                            bigplasmaVelocities.Add(new Vector2(-2, 0));
+                            bigplasmaVelocities.Add(new Vector2(-3, 0));
+
+                            bigplasmaVelocities.Add(new Vector2(3, -3));
+
+                            bigplasmaVelocities.Add(new Vector2(-3, -3));
+
+                            bigplasmaVelocities.Add(new Vector2(-3, 3));
 
                             bigplasmaTimer = 0;
                         }
@@ -1440,46 +1465,102 @@ namespace _1_5_summative__HALO_
 
                         }
                     }
-                    if (guardianHealth > 75)
+                    else if (guardianHealth == 75)
                     {
+                        guardianrect.Y -= 2;
+                        shakeMagnitude = 5;
+                        shakeTime = 0.5f;
+                        if (guardianrect.Y <= -1500)
+                        {
+                            guardianrect.Y = -1500;
+                            guardianrect.Y -= 0;
+                            boss2Phase2 = true;
 
+
+                        }
                     }
-                    if (guardianHealth == 0)
-					{
-						guardianrect.Y += 1;
-						if (guardianrect.Y >= 600)
-						{
-							guardianrect.X = 1200;
-							guardianrect.Y = 300;
-							levelTwoTimer = 0;
-							screen = Screen.level3Intro;
-						}
-					}
+
+
+                    else if (guardianHealth == 0)
+                    {
+                        guardianrect.Y += 1;
+
+                        if (guardianrect.Y >= 600)
+                        {
+                            guardianrect.X = 1200;
+                            guardianrect.Y = 300;
+                            levelTwoTimer = 0;
+                            screen = Screen.level3Intro;
+                            shakeMagnitude = 0;
+                            shakeTime = 0;
+                        }
+                    }
+
+                    guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 1.5);
+
+
                     guardianActive = false;
-					guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 1.5);
-					if (coreHealth == 3)
-					{
-						core1rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
-					}
-					else if (coreHealth == 2)
-					{
-						core2rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
-					}
-					else if (coreHealth == 1)
-					{
-						core3rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
-					}
-					else if (coreHealth == 0)
-					{
-						coreHealth = 3;
-						
-						guardianHealth -= 25;
-					}
+                    if (boss2Phase2 == true)
+                    {
+                        guardianbackgroundrect.Y += 1;
+                        phase2Timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (guardianbackgroundrect.Y >= 100)
+                        {
+
+                            guardianbackgroundrect.Y = 100;
+                            guardianbackgroundrect.Y += 0;
+
+                        }
+                        if (guardianbackgroundrect.Y >= 100)
+                        {
+                            EMPballrect.Y += 5;
+                            if (EMPballrect.Y >= 600)
+                            {
+                                EMPballrect.X = generator.Next(0, 600);
+                                EMPballrect.Y = -200;
+                                
+                            }
+                        }
+                        
+                    }
+                    if (EMPballrect.Intersects(peilcanrect))
+                    {
+                        lifes--;
+                        peilcanrect.X = 200;
+                        peilcanrect.Y = 50;
+                        EMPballrect.X = generator.Next(0, 600);
+                        EMPballrect.Y = -200;
+                    }
+                    if (phase2Timer >= phase2Time)
+                    {
+                        boss2Phase2 = false;
+                        guardianbackgroundrect.Y -= 2;
+                    }
+                        if (coreHealth == 3)
+                        {
+                            core1rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+                        }
+                        else if (coreHealth == 2)
+                        {
+                            core2rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+                        }
+                        else if (coreHealth == 1)
+                        {
+                            core3rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+                        }
+                        else if (coreHealth == 0)
+                        {
+                            coreHealth = 3;
+
+                            guardianHealth -= 25;
+                        }
 
 
 
 
-				}
+                    
+                }
             }
                 if (screen == Screen.Level3)
                 {
@@ -1622,6 +1703,7 @@ namespace _1_5_summative__HALO_
 
 
                 }
+            
                 if (screen == Screen.GameOver)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
@@ -1662,6 +1744,7 @@ namespace _1_5_summative__HALO_
 
                     }
                 }
+            
             
 
 
@@ -2011,7 +2094,11 @@ namespace _1_5_summative__HALO_
 			  
 			  _spriteBatch.Draw(ringSkyTexture, ringSkyrect, Color.White);
               _spriteBatch.Draw(ring2Texture, ring2rect, Color.White);
-              _spriteBatch.Draw(mountinTexture, mountinrect1, Color.White);
+                if (guardianHealth == 75)
+                {
+                    _spriteBatch.Draw(guardianTexture, guardianbackgroundrect, Color.White);
+                }
+                _spriteBatch.Draw(mountinTexture, mountinrect1, Color.White);
               _spriteBatch.Draw(mountinTexture, mountinrect2, Color.White);
 				
 				
@@ -2032,9 +2119,17 @@ namespace _1_5_summative__HALO_
                 {
                     _spriteBatch.Draw(plasmaShot, position, Color.White);
                 }
-                foreach (Vector2 position in bigplasmaPositions)
+                if (guardianHealth == 100)
                 {
-                    _spriteBatch.Draw(plasmaballTexture, position, Color.White);
+                    foreach (Vector2 position in bigplasmaPositions)
+                    {
+                        _spriteBatch.Draw(plasmaballTexture, position, Color.White);
+                    }
+
+                }
+                if (boss2Phase2 == true)
+                {
+                    _spriteBatch.Draw(EMPballTexture, EMPballrect, Color.White);
                 }
 
 
@@ -2109,7 +2204,11 @@ namespace _1_5_summative__HALO_
 					peilcanRightDownShow = false;
 
 				}
-				if (lifes == 3)
+                if (beamTimer2 >= 1)
+                {
+                    _spriteBatch.Draw(laserbeamTexture, laserbeamrect, Color.White);
+                }
+                if (lifes == 3)
 				{
 					_spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
 					_spriteBatch.Draw(peilcanTexture, playerLife2rect, Color.White);
