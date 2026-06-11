@@ -71,6 +71,7 @@ namespace _1_5_summative__HALO_
 		Rectangle guardianrect;
 		int guardianHealth = 100;
 		SoundEffectInstance guardianTheme;
+        Texture2D plasmaballTexture, EMPballTexture;
 
         List<Vector2> bigplasmaPositions = new List<Vector2>();
         List<Vector2> bigplasmaVelocities = new List<Vector2>();
@@ -379,6 +380,10 @@ namespace _1_5_summative__HALO_
             guardianTheme = Content.Load<SoundEffect>("21. Adjutant Resolution (1)").CreateInstance();
 
 			guardianTexture = Content.Load<Texture2D>("guardian");
+
+			plasmaballTexture = Content.Load<Texture2D>("plasmaball2 (1)");
+
+			EMPballTexture = Content.Load<Texture2D>("plasmaball");
 
 			// intros
 			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
@@ -1399,8 +1404,9 @@ namespace _1_5_summative__HALO_
                     {
                         if (bigplasmaTimer >= bigplasmaTime)
                         {
-                            
-                            bigplasmaPositions.Add(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050));
+							//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
+
+							bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
 
                             bigplasmaVelocities.Add(new Vector2(0, -2));
 
@@ -2028,7 +2034,7 @@ namespace _1_5_summative__HALO_
                 }
                 foreach (Vector2 position in bigplasmaPositions)
                 {
-                    _spriteBatch.Draw(plasmaShot, position, Color.White);
+                    _spriteBatch.Draw(plasmaballTexture, position, Color.White);
                 }
 
 
