@@ -15,6 +15,7 @@ namespace _1_5_summative__HALO_
     enum Screen
     {
         MainMenu,
+        HowToPlayScreen,
         intro,
         CutScreen1,
         Level1Intro,
@@ -37,6 +38,9 @@ namespace _1_5_summative__HALO_
         Rectangle window;
         MouseState mouse;
         Random generator = new Random();
+        Texture2D HTPButtonTexture, HTPButton2Texture, HTPScreenTexture;
+        Rectangle HTPButtonrect, HTPButton2rect;
+
         //
         Screen screen = Screen.MainMenu;
         // level 1 textures and rectangles
@@ -59,6 +63,7 @@ namespace _1_5_summative__HALO_
         Rectangle core1rect, core2rect, core3rect;
         Texture2D coreTexture, core2Texture, core3Texture;
         Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
+        SoundEffectInstance banshee_death, banshee_death2, banshee_death3, banshee_death4, banshee_death5;
 		// level 2 textures and rectangles
 		Texture2D mountinTexture,ring2Texture, ringTreesTexture, sentinelTexture, enforcerTexture, controllerTexture, laserTexture;
         Rectangle mountinrect1, mountinrect2, sentinelrect1, sentinelrect2,sentinelrect3, enforcerrect1, controllerrect, laserrect;
@@ -85,6 +90,10 @@ namespace _1_5_summative__HALO_
         Rectangle laserbeamrect;
         private float beamTimer2 = 0;
         private float beamTime2 = 5f;
+
+        private float plasmaDirectionsTimer = 0;
+        private float plasmaDirectionsTime = 3f;
+        bool plasmaDirectionsSwitches = false;
         // shake event
         // Screen shake variables
         float shakeTime = 0f;
@@ -144,6 +153,11 @@ namespace _1_5_summative__HALO_
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.ApplyChanges();
             cityrect = new Rectangle(0, 0, 1000, 500);
+
+            HTPButtonrect = new Rectangle(0,0, 70, 70);
+
+            HTPButton2rect = new Rectangle(0, 0, 70, 70);
+
             cityrect2 = new Rectangle(1000, 0, 1000, 500);
 
             cityrect3 = new Rectangle(1000, 0, 1000, 500);
@@ -288,6 +302,12 @@ namespace _1_5_summative__HALO_
 
             covenant_shipTexture = Content.Load<Texture2D>("covenant_ship");
 
+            HTPButtonTexture = Content.Load<Texture2D>("HTP button1");
+
+            HTPButton2Texture = Content.Load<Texture2D>("HTP button2");
+
+            HTPScreenTexture = Content.Load<Texture2D>("infor");
+
             ringTexture = Content.Load<Texture2D>("ring");
 
             bansheeTexture = Content.Load<Texture2D>("banshee");
@@ -404,8 +424,15 @@ namespace _1_5_summative__HALO_
 
             laserbeamTexture = Content.Load<Texture2D>("laserbeam");
 
+            banshee_death = Content.Load<SoundEffect>("banshee_explo1").CreateInstance();
 
+            banshee_death2 = Content.Load<SoundEffect>("banshee_explo1").CreateInstance();
 
+            banshee_death3 = Content.Load<SoundEffect>("banshee_explo1").CreateInstance();
+
+            banshee_death4 = Content.Load<SoundEffect>("banshee_explo1").CreateInstance();
+
+            banshee_death5 = Content.Load<SoundEffect>("banshee_explo1").CreateInstance();
             // intros
             new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
 
@@ -451,8 +478,11 @@ namespace _1_5_summative__HALO_
                 {
                     haloTheme.Play();
                 }
-
-
+                if (HTPButtonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
+                {
+                    screen = Screen.HowToPlayScreen;
+                }
+                
                 if (Keyboard.GetState().IsKeyDown(Keys.B))
                 {
                     blowMeAway.Play();
@@ -468,7 +498,13 @@ namespace _1_5_summative__HALO_
                     screen = Screen.level3Intro;
                 }
             }
-
+            if (screen == Screen.HowToPlayScreen)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.E))
+                {
+                    screen = Screen.MainMenu;
+                }
+            }
             if (screen == Screen.intro)
             {
 
@@ -558,6 +594,7 @@ namespace _1_5_summative__HALO_
                     bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                     bulletPositions.RemoveAt(i);
                     bulletVelocities.RemoveAt(i);
+                    banshee_death.Play();
                     continue;
                 }
 
@@ -566,6 +603,7 @@ namespace _1_5_summative__HALO_
                     bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                     bulletPositions.RemoveAt(i);
                     bulletVelocities.RemoveAt(i);
+                    banshee_death2.Play();
                     continue;
                 }
 
@@ -633,21 +671,24 @@ namespace _1_5_summative__HALO_
 					bansheerect3 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					bulletPositions.RemoveAt(i);
 					bulletVelocities.RemoveAt(i);
-					continue;
+                    banshee_death3.Play();
+                    continue;
 				}
 				if (bansheerect4.Contains(pos))
 				{
 					bansheerect4 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					bulletPositions.RemoveAt(i);
 					bulletVelocities.RemoveAt(i);
-					continue;
+                    banshee_death4.Play();
+                    continue;
 				}
 				if (bansheerect5.Contains(pos))
 				{
 					bansheerect5 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					bulletPositions.RemoveAt(i);
 					bulletVelocities.RemoveAt(i);
-					continue;
+                    banshee_death5.Play();
+                    continue;
 				}
 
 
@@ -675,6 +716,7 @@ namespace _1_5_summative__HALO_
                     bansheerect = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    banshee_death.Play();
                     continue;
                 }
                 if (bansheerect2.Contains(pos))
@@ -682,6 +724,7 @@ namespace _1_5_summative__HALO_
                     bansheerect2 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    banshee_death2.Play();
                     continue;
                 }
                 if (phantomrect.Contains(pos))
@@ -746,6 +789,7 @@ namespace _1_5_summative__HALO_
 					bansheerect3 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
+                    banshee_death3.Play();
 					continue;
 				}
 				if (bansheerect4.Contains(pos))
@@ -753,13 +797,15 @@ namespace _1_5_summative__HALO_
 					bansheerect4 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
-					continue;
+                    banshee_death4.Play();
+                    continue;
 				}
 				if (bansheerect5.Contains(pos))
 				{
 					bansheerect5 = new Rectangle(850, new Random().Next(0, 450), 60, 40);
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
+                    banshee_death5.Play();
 					continue;
 				}
 			}
@@ -1253,6 +1299,10 @@ namespace _1_5_summative__HALO_
 
 
                 }
+
+
+
+              
             }
 
             if (screen == Screen.Level2)
@@ -1468,6 +1518,7 @@ namespace _1_5_summative__HALO_
                             }
 
                         }
+                        guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 1.5);
                     }
                     else if (guardianHealth == 75)
                     {
@@ -1537,7 +1588,8 @@ namespace _1_5_summative__HALO_
 										}
 
 									}
-								}
+                                    guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 2);
+                                }
 
 							}
 							
@@ -1561,26 +1613,52 @@ namespace _1_5_summative__HALO_
 						{
 							if (boss2Phase5 == true)
 							{
-                                
-								guardianrect.Y += 2;
+                                plasmaDirectionsTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                guardianrect.Y += 2;
 								shakeMagnitude = 5;
 								shakeTime = 0.5f;
 								if (guardianrect.Y >= 50)
 								{
 									guardianrect.Y = 50;
 									guardianrect.Y -= 0;
-									bigplasmaTime = 0.1f;
+									bigplasmaTime = 0f;
 									if (bigplasmaTimer >= bigplasmaTime)
 									{
 										//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
 										bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
-										bigplasmaVelocities.Add(new Vector2(0, -4));
-										bigplasmaVelocities.Add(new Vector2(0, 4));
-										bigplasmaVelocities.Add(new Vector2(4, 0));
-										bigplasmaVelocities.Add(new Vector2(-4, 0));
-										bigplasmaVelocities.Add(new Vector2(4, -4));
-										bigplasmaVelocities.Add(new Vector2(-4, -4));
-										bigplasmaVelocities.Add(new Vector2(-4, 4));
+										if (plasmaDirectionsTime >= plasmaDirectionsTimer)
+                                        {
+                                            
+                                            if (plasmaDirectionsSwitches == false)
+                                            {
+                                                bigplasmaVelocities.Add(new Vector2(0, -5));
+                                                bigplasmaVelocities.Add(new Vector2(0, 5));
+                                                bigplasmaVelocities.Add(new Vector2(5, 0));
+                                                bigplasmaVelocities.Add(new Vector2(-5, 0));
+                                                
+                                            }
+                                            
+                                        }
+                                        if (plasmaDirectionsTimer >= plasmaDirectionsTime)
+                                        {
+                                            plasmaDirectionsSwitches = true;
+                                            if (plasmaDirectionsSwitches == true)
+                                            {
+                                                bigplasmaVelocities.Add(new Vector2(-5, -5));
+                                                bigplasmaVelocities.Add(new Vector2(5, 5));
+                                                bigplasmaVelocities.Add(new Vector2(5, -5));
+                                                bigplasmaVelocities.Add(new Vector2(-5, 5));
+                                            }
+                                            
+
+                                        }
+                                        if (plasmaDirectionsTimer >= 6)
+                                        {
+                                            plasmaDirectionsTimer = 0;
+                                            plasmaDirectionsSwitches = false;
+                                        }
+                                        
+                                        
 										bigplasmaTimer = 0;
 									}
 									for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
@@ -1604,7 +1682,8 @@ namespace _1_5_summative__HALO_
 										}
 									}
 								}
-							}
+                                guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 3);
+                            }
 					  }
 					}
 					else if (guardianHealth == 25)
@@ -1627,7 +1706,7 @@ namespace _1_5_summative__HALO_
                         }
                     }
 
-                    guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 1.5);
+                    
 
 
                     guardianActive = false;
@@ -1707,7 +1786,7 @@ namespace _1_5_summative__HALO_
 						}
 						if (guardianbackgroundrect2.Y >= 100)
 						{
-							EMPballrect.Y += 7;
+							EMPballrect.Y += 10;
 							if (EMPballrect.Y >= 600)
 							{
 								EMPballrect.X = generator.Next(0, 600);
@@ -2019,7 +2098,17 @@ namespace _1_5_summative__HALO_
                 _spriteBatch.Draw(ringTexture, ringrect, Color.White);
                 _spriteBatch.Draw(logoTexture, logorect, Color.White);
                 _spriteBatch.Draw(buttonTexture, buttonrect, Color.White);
+                _spriteBatch.Draw(HTPButtonTexture,HTPButtonrect, Color.White);
+                if (HTPButtonrect.Contains(mouse.X, mouse.Y))
+                {
+                    _spriteBatch.Draw(HTPButton2Texture, HTPButton2rect, Color.White);
+                }
 
+            }
+            if (screen == Screen.HowToPlayScreen)
+            {
+                _spriteBatch.Draw(HTPScreenTexture, window, Color.White);
+                _spriteBatch.DrawString(font, "Press E to exit", new Vector2(310, 470), Color.White);
             }
             if (screen == Screen.intro)
             {

@@ -55,6 +55,12 @@
 /processorParam:Quality=Best
 /build:21. Adjutant Resolution (1).wav
 
+#begin banshee_explo1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:banshee_explo1.wav
+
 #begin banshee.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -505,6 +511,42 @@
 /processorParam:TextureFormat=Color
 /build:high4.png
 
+#begin HTP button1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:HTP button1.png
+
+#begin HTP button2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:HTP button2.png
+
+#begin infor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:infor.png
+
 #begin Installation 05.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -730,6 +772,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ring.png
+
+#begin sent_explo.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sent_explo.wav
 
 #begin sentinel.png
 /importer:TextureImporter
