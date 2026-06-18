@@ -40,6 +40,7 @@ namespace _1_5_summative__HALO_
         Random generator = new Random();
         Texture2D HTPButtonTexture, HTPButton2Texture, HTPScreenTexture;
         Rectangle HTPButtonrect, HTPButton2rect;
+        SoundEffectInstance buttonUI;
 		
         // Explosion
 
@@ -49,6 +50,7 @@ namespace _1_5_summative__HALO_
         bool isExploding3 = false;
 		bool isExploding4 = false;
         bool isExploding5 = false;
+        bool isExploding6 = false;
 
 		float explosionTimer = 0f;
 		float explosionTime = 0.70f; 
@@ -72,6 +74,7 @@ namespace _1_5_summative__HALO_
         Texture2D plasmaShot;
         Rectangle plasmaShotrect;
         SpriteFont font;
+        SoundEffectInstance phantomDestroyed;
         Texture2D ringSkyTexture;
         Rectangle ringTreesrect, ringSkyrect, ring2rect, ringTreesrect2;
 		Texture2D energyShieldTexture1, energyShieldTexture2, energyShieldTexture3, energyShieldTexture4;
@@ -79,7 +82,7 @@ namespace _1_5_summative__HALO_
         Rectangle core1rect, core2rect, core3rect;
         Texture2D coreTexture, core2Texture, core3Texture;
         Rectangle playerLife1rect, playerLife2rect, playerLife3rect;
-        SoundEffectInstance banshee_death, banshee_death2, banshee_death3, banshee_death4, banshee_death5;
+        SoundEffectInstance banshee_death, banshee_death2, banshee_death3, banshee_death4, banshee_death5, phantomDamage;
 		// level 2 textures and rectangles
 		Texture2D mountinTexture,ring2Texture, ringTreesTexture, sentinelTexture, enforcerTexture, controllerTexture, laserTexture;
         Rectangle mountinrect1, mountinrect2, sentinelrect1, sentinelrect2,sentinelrect3, enforcerrect1, controllerrect, laserrect;
@@ -92,7 +95,7 @@ namespace _1_5_summative__HALO_
 		Texture2D guardianTexture;
 		Rectangle guardianrect, guardianbackgroundrect, guardianbackgroundrect2, guardianbackgroundrect3;
 		int guardianHealth = 100;
-		SoundEffectInstance guardianTheme;
+		SoundEffectInstance guardianTheme, cinematicRumble;
         Texture2D plasmaballTexture, EMPballTexture;
         bool boss2Phase2 = false, boss2Phase3 = false, boss2Phase4 = false, boss2Phase5 = false;
         Rectangle plasmaballrect, EMPballrect, EMPballrect2;
@@ -110,6 +113,8 @@ namespace _1_5_summative__HALO_
         private float plasmaDirectionsTimer = 0;
         private float plasmaDirectionsTime = 3f;
         bool plasmaDirectionsSwitches = false;
+
+        SoundEffectInstance missileFire, missileHit;
         // shake event
         // Screen shake variables
         float shakeTime = 0f;
@@ -130,6 +135,7 @@ namespace _1_5_summative__HALO_
         SoundEffectInstance haloTheme, haloflyingtheme, peilcanSound, radio1, bulletfire, brothersInArms,blowMeAway, moonOverMombasa;
         SoundEffectInstance beholdAPaleHorseTheme;
         int lifes = 3, phantomHealth = 3, bossShipHealth = 30;
+
         int energyShieldHealth = 8, coreHealth = 3;
         List<Vector2> bulletPositions = new List<Vector2>();
         List<Vector2> bulletVelocities = new List<Vector2>();
@@ -454,8 +460,20 @@ namespace _1_5_summative__HALO_
 
             plasmaExplosionTexture = Content.Load<Texture2D>("plasmaExplosion");
 
-			// intros
-			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
+            cinematicRumble = Content.Load<SoundEffect>("earth-rumble").CreateInstance();
+            
+            missileFire = Content.Load<SoundEffect>("missile-blast").CreateInstance();
+
+            missileHit = Content.Load<SoundEffect>("missile-explosion").CreateInstance();
+
+            phantomDamage = Content.Load<SoundEffect>("impact").CreateInstance();
+
+            phantomDestroyed = Content.Load<SoundEffect>("phantom_destroyed").CreateInstance();
+
+            buttonUI = Content.Load<SoundEffect>("buttonUI").CreateInstance();
+
+            // intros
+            new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
 
             Installation_05Texture = Content.Load<Texture2D>("Installation 05");
 
@@ -483,7 +501,7 @@ namespace _1_5_summative__HALO_
 
             if (buttonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
             {
-
+                buttonUI.Play();
                 haloTheme.Stop();
                 blowMeAway.Stop();
 
@@ -501,7 +519,9 @@ namespace _1_5_summative__HALO_
                 }
                 if (HTPButtonrect.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && screen == Screen.MainMenu)
                 {
+                    buttonUI.Play();
                     screen = Screen.HowToPlayScreen;
+
                 }
                 
                 if (Keyboard.GetState().IsKeyDown(Keys.B))
@@ -634,6 +654,8 @@ namespace _1_5_summative__HALO_
                 if (phantomrect.Contains(pos))
                 {
                     phantomHealth--;
+                    phantomDamage.Play();
+                    
                     bulletPositions.RemoveAt(i);
                     bulletVelocities.RemoveAt(i);
                     continue;
@@ -726,6 +748,7 @@ namespace _1_5_summative__HALO_
 
                 missilePositions.Add(peilcanrect.Location.ToVector2() + new Vector2(peilcanrect.Width, peilcanrect.Height / 2 - missilerect.Height / 2));
                 missileVelocities.Add(new Vector2(missileSpeed, 0));
+                missileFire.Play();
                 missileTimer = 0;
             }
             for (int k = missilePositions.Count - 1; k >= 0; k--)
@@ -736,6 +759,7 @@ namespace _1_5_summative__HALO_
                 {
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    
                     continue;
                 }
                 if (bansheerect.Contains(pos))
@@ -744,6 +768,7 @@ namespace _1_5_summative__HALO_
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
                     banshee_death.Play();
+                    missileHit.Play();
                     continue;
                 }
                 if (bansheerect2.Contains(pos))
@@ -752,13 +777,16 @@ namespace _1_5_summative__HALO_
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
                     banshee_death2.Play();
+                    missileHit.Play();
                     continue;
                 }
                 if (phantomrect.Contains(pos))
                 {
                     phantomHealth -= 2;
+                    missileHit.Play();
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
 
@@ -767,6 +795,7 @@ namespace _1_5_summative__HALO_
                     energyShieldHealth -= 2;
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
                 if (core1rect.Contains(pos))
@@ -774,6 +803,7 @@ namespace _1_5_summative__HALO_
                     coreHealth--;
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
                 if (core2rect.Contains(pos))
@@ -781,6 +811,7 @@ namespace _1_5_summative__HALO_
                     coreHealth--;
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
                 if (core3rect.Contains(pos))
@@ -788,6 +819,7 @@ namespace _1_5_summative__HALO_
                     coreHealth--;
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
                 if (sentinelrect1.Contains(pos) && screen == Screen.Level2)
@@ -795,6 +827,7 @@ namespace _1_5_summative__HALO_
                     sentinelrect1 = new Rectangle(900, new Random().Next(0, 450), 50, 50);
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
                 if (sentinelrect2.Contains(pos) && screen == Screen.Level2)
@@ -802,6 +835,7 @@ namespace _1_5_summative__HALO_
                     sentinelrect1 = new Rectangle(900, new Random().Next(0, 450), 50, 50);
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
                 if (enforcerrect1.Contains(pos) && screen == Screen.Level2)
@@ -809,6 +843,7 @@ namespace _1_5_summative__HALO_
                     enforcerHealth -= 2;
                     missilePositions.RemoveAt(k);
                     missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     continue;
                 }
                 if (bansheerect3.Contains(pos))
@@ -816,6 +851,7 @@ namespace _1_5_summative__HALO_
 					isExploding3 = true;
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     banshee_death3.Play();
 					continue;
 				}
@@ -824,6 +860,7 @@ namespace _1_5_summative__HALO_
 					isExploding4 = true;
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     banshee_death4.Play();
                     continue;
 				}
@@ -832,6 +869,7 @@ namespace _1_5_summative__HALO_
 					isExploding5 = true;
 					missilePositions.RemoveAt(k);
 					missileVelocities.RemoveAt(k);
+                    missileHit.Play();
                     banshee_death5.Play();
 					continue;
 				}
@@ -840,7 +878,7 @@ namespace _1_5_summative__HALO_
             {
 
                 explosionTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                bansheerect.X += 2;
+               
                 if (explosionTimer >= explosionTime)
                 {
                     explosionTimer = 0;
@@ -851,7 +889,7 @@ namespace _1_5_summative__HALO_
             }
             if (isExploding2 == true) 
             {
-				bansheerect2.X += 2;
+				
 				explosionTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 				if (explosionTimer >= explosionTime)
 				{
@@ -865,7 +903,7 @@ namespace _1_5_summative__HALO_
 			}
 			if (isExploding3 == true)
 			{
-				bansheerect3.X += 2;
+				
 				explosionTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 				if (explosionTimer >= explosionTime)
 				{
@@ -905,11 +943,29 @@ namespace _1_5_summative__HALO_
 
 
 			}
+            if (phantomHealth == 0)
+            {
+                isExploding6 = true;
+                phantomDestroyed.Play();
+            }
+            if (isExploding6 == true)
+            {
+                
+                explosionTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (explosionTimer >= explosionTime)
+                {
+                    explosionTimer = 0;
+                    phantomrect.X = new Random().Next(1000, 1500);
+                    phantomrect.Y = new Random().Next(0, 450);
+                    isExploding6 = false;
+                    phantomDestroyed.Stop();
+                    phantomHealth = 3;
+                }
+            }
 
 
 
-
-			if (bossFight == true)
+            if (bossFight == true)
             {
 
 
@@ -1122,7 +1178,11 @@ namespace _1_5_summative__HALO_
                 cityrect2.X -= 2;
                 build1rect.X -= 1;
                 covenantshiprect.X -= 1;
-                phantomrect.X -= 3;
+                if (isExploding6 == false)
+                {
+                    phantomrect.X -= 3;
+                }
+                
                 bossShiprect.X -= 0;
 
                 unscshiprect.X -= 1;
@@ -1221,7 +1281,11 @@ namespace _1_5_summative__HALO_
                 if (timer >= 0)
                 {
                     weaponsOn = true;
-                    bansheerect.X -= 3;
+                    if (isExploding == false)
+                    {
+                        bansheerect.X -= 3;
+                    }
+                    
 
 
                 }
@@ -1229,23 +1293,44 @@ namespace _1_5_summative__HALO_
 
                 if (timer >= 30)
                 {
-
-                    bansheerect.X -= 4;
-                    bansheerect2.X -= 4;
+                    if (isExploding == false)
+                    {
+                        bansheerect.X -= 4;
+                    }
+                    if (isExploding2 == false)
+                    {
+                        bansheerect2.X -= 4;
+                    }
+                    
 
 
 
                 }
                 if (timer >= 60)
                 {
-                    bansheerect.X -= 5;
-                    bansheerect2.X -= 5;
+
+                    if (isExploding == false)
+                    {
+                        bansheerect.X -= 5;
+                    }
+                    if (isExploding2 == false)
+                    {
+                        bansheerect2.X -= 5;
+                    }
+                    
 
                 }
                 if (timer >= 110)
                 {
-                    bansheerect.X -= 6;
-                    bansheerect2.X -= 6;
+                    if (isExploding == false)
+                    {
+                        bansheerect.X -= 6;
+                    }
+                    if (isExploding2 == false)
+                    {
+                        bansheerect2.X -= 6;
+                    }
+
                     radio1.Play();
                 }
                 if (timer >= 120)
@@ -1360,20 +1445,8 @@ namespace _1_5_summative__HALO_
 
 
 
-                if (phantomHealth == 0)
-                {
-                    phantomrect.X = new Random().Next(1000, 1500);
-                    phantomrect.Y = new Random().Next(0, 450);
-                    phantomHealth = 3;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                {
-                    bulletActive = true;
-                }
-                if (Keyboard.GetState().IsKeyUp(Keys.Space))
-                {
-                    bulletActive = false;
-                }
+                
+                
 
                 
                 if (bossShipHealth == 0)
@@ -1535,13 +1608,14 @@ namespace _1_5_summative__HALO_
                     enforcerrect1.X = -80;
                     controllerrect.X = 800;
                     beholdAPaleHorseTheme.Stop();
-
+                    cinematicRumble.Play();
                     shakeTime = 0.5f; // Shakes for half a second
 
 
 
 
                 }
+          
                 if (levelTwoTimer >= 5)
                 {
 
@@ -1549,7 +1623,7 @@ namespace _1_5_summative__HALO_
                     {
                         guardianrect.Y -= 1;
                     }
-
+                    
                     guardianTheme.Play();
 
                 }
@@ -1561,6 +1635,7 @@ namespace _1_5_summative__HALO_
                         guardianrect.Y = 80;
                         guardianrect.Y -= 0;
                         boss2Fight = true;
+                        
 
                     }
                 }
@@ -1568,6 +1643,8 @@ namespace _1_5_summative__HALO_
                 {
                     shakeTime = 0;
                     guardianrect.Y -= 0;
+                    cinematicRumble.Stop();
+
                     if (guardianHealth == 100)
                     {
                         if (bigplasmaTimer >= bigplasmaTime)
@@ -1631,8 +1708,8 @@ namespace _1_5_summative__HALO_
                         {
 							if (boss2Phase3 == true)
 							{
-								
-								guardianrect.Y += 2;
+                                cinematicRumble.Stop();
+                                guardianrect.Y += 2;
 								shakeMagnitude = 5;
 								shakeTime = 0.5f;
 								if (guardianrect.Y >= 50)
@@ -1712,10 +1789,12 @@ namespace _1_5_summative__HALO_
                                 guardianrect.Y += 2;
 								shakeMagnitude = 5;
 								shakeTime = 0.5f;
-								if (guardianrect.Y >= 50)
+                                cinematicRumble.Play();
+                                if (guardianrect.Y >= 50)
 								{
 									guardianrect.Y = 50;
-									guardianrect.Y -= 0;
+                                    cinematicRumble.Stop();
+                                    guardianrect.Y -= 0;
 									bigplasmaTime = 0f;
 									if (bigplasmaTimer >= bigplasmaTime)
 									{
@@ -1818,6 +1897,7 @@ namespace _1_5_summative__HALO_
 
                             guardianbackgroundrect.Y = 100;
                             guardianbackgroundrect.Y += 0;
+                            cinematicRumble.Stop();
 
                         }
                         if (guardianbackgroundrect.Y >= 100)
@@ -1838,7 +1918,8 @@ namespace _1_5_summative__HALO_
 						guardianrect.Y -= 2;
 						shakeMagnitude = 5;
 						shakeTime = 0.5f;
-						if (guardianrect.Y <= -1300)
+                        cinematicRumble.Play();
+                        if (guardianrect.Y <= -1300)
 						{
 							guardianrect.Y = -1300;
                             guardianrect.X = 0;
@@ -1855,7 +1936,8 @@ namespace _1_5_summative__HALO_
 						guardianrect.Y -= 2;
 						shakeMagnitude = 5;
 						shakeTime = 0.5f;
-						if (guardianrect.Y <= -1300)
+                        cinematicRumble.Play();
+                        if (guardianrect.Y <= -1300)
 						{
 							guardianrect.Y = -1300;
 							guardianrect.X = 0;
@@ -1881,7 +1963,8 @@ namespace _1_5_summative__HALO_
 						}
 						if (guardianbackgroundrect2.Y >= 100)
 						{
-							EMPballrect.Y += 10;
+                            cinematicRumble.Stop();
+                            EMPballrect.Y += 10;
 							if (EMPballrect.Y >= 600)
 							{
 								EMPballrect.X = generator.Next(0, 600);
@@ -2351,6 +2434,10 @@ namespace _1_5_summative__HALO_
 					_spriteBatch.Draw(plasmaExplosionTexture, bansheerect3, Color.White);
 
 				}
+                if (isExploding6 == true)
+                {
+                    _spriteBatch.Draw(plasmaExplosionTexture, phantomrect, Color.White);
+                }
 				if (energyShieldOff == false)
                 {
 

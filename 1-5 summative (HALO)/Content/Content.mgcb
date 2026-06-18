@@ -73,6 +73,12 @@
 /processorParam:TextureFormat=Color
 /build:banshee.png
 
+#begin bomb-explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bomb-explosion.wav
+
 #begin building1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -115,6 +121,12 @@
 /processorParam:Quality=Best
 /build:bulletfire.wav
 
+#begin buttonUI.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:buttonUI.wav
+
 #begin capbutton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -126,6 +138,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:capbutton.png
+
+#begin cinematic-rumble.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cinematic-rumble.wav
 
 #begin cityforeandbackground.png
 /importer:TextureImporter
@@ -282,6 +300,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:download (22) (1).png
+
+#begin earth-rumble.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:earth-rumble.wav
 
 #begin energy_shield1.png
 /importer:TextureImporter
@@ -535,6 +559,12 @@
 /processorParam:TextureFormat=Color
 /build:HTP button2.png
 
+#begin impact.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:impact.wav
+
 #begin infor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -580,6 +610,18 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:maintext.spritefont
+
+#begin missile-blast.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:missile-blast.wav
+
+#begin missile-explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:missile-explosion.wav
 
 #begin missile.png
 /importer:TextureImporter
@@ -742,6 +784,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:peilcansound.wav
+
+#begin phantom_destroyed.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:phantom_destroyed.wav
 
 #begin plasmaball.png
 /importer:TextureImporter
