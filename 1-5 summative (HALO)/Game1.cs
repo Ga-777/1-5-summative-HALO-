@@ -91,13 +91,13 @@ namespace _1_5_summative__HALO_
         Rectangle Installation_05rect;
         Rectangle controllerPositions;
 		// 2 boss
-		bool boss2Fight = false, guardianActive = true, bossmovement = false, bossmovement2 = false, bossmovement3 = false;
+		bool boss2Fight = false, guardianActive = true, bossmovement = false, bossmovement2 = false, bossmovement3 = false, plasma1 = false, plasma2 = false, plasma3 = false, plasma4 = false;
 		Texture2D guardianTexture;
 		Rectangle guardianrect, guardianbackgroundrect, guardianbackgroundrect2, guardianbackgroundrect3;
 		int guardianHealth = 100;
 		SoundEffectInstance guardianTheme, cinematicRumble;
         Texture2D plasmaballTexture, EMPballTexture;
-        bool boss2Phase2 = false, boss2Phase3 = false, boss2Phase4 = false, boss2Phase5 = false;
+        bool boss2Phase2 = false, boss2Phase3 = false, boss2Phase4 = false, boss2Phase5 = false, boss2Phase6 = false, boss2Phase7 = false;
         Rectangle plasmaballrect, EMPballrect, EMPballrect2;
         float phase2Timer = 0, phase2Time = 20f, phase3Timer = 0, phase3Time = 20f, phase4Timer = 0, phase4Time = 20f;
         List<Vector2> bigplasmaPositions = new List<Vector2>();
@@ -1647,232 +1647,342 @@ namespace _1_5_summative__HALO_
 
                     if (guardianHealth == 100)
                     {
-                        if (bigplasmaTimer >= bigplasmaTime)
+                        plasma1 = true;
+                        if (plasma1 == true)
                         {
-                            //(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
+							if (bigplasmaTimer >= bigplasmaTime)
+							{
+								//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
 
-                            bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
+								bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
 
-                            bigplasmaVelocities.Add(new Vector2(0, -3));
+								bigplasmaVelocities.Add(new Vector2(0, -3));
 
-                            bigplasmaVelocities.Add(new Vector2(0, 3));
+								bigplasmaVelocities.Add(new Vector2(0, 3));
 
-                            bigplasmaVelocities.Add(new Vector2(3, 0));
+								bigplasmaVelocities.Add(new Vector2(3, 0));
 
-                            bigplasmaVelocities.Add(new Vector2(-3, 0));
+								bigplasmaVelocities.Add(new Vector2(-3, 0));
 
-                            bigplasmaVelocities.Add(new Vector2(3, -3));
+								bigplasmaVelocities.Add(new Vector2(3, -3));
 
-                            bigplasmaVelocities.Add(new Vector2(-3, -3));
+								bigplasmaVelocities.Add(new Vector2(-3, -3));
 
-                            bigplasmaVelocities.Add(new Vector2(-3, 3));
+								bigplasmaVelocities.Add(new Vector2(-3, 3));
 
-                            bigplasmaTimer = 0;
-                        }
-                        for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
-                        {
-                            bigplasmaPositions[j] += bigplasmaVelocities[j];
-                            var pos = bigplasmaPositions[j];
-                            if (bigplasmaPositions[j].X < -330)
-                            {
-                                bigplasmaPositions.RemoveAt(j);
-                                bigplasmaVelocities.RemoveAt(j);
-                                continue;
-                            }
-                            if (peilcanrect.Contains(pos))
-                            {
-                                lifes--;
-                                peilcanrect.X = 200;
-                                peilcanrect.Y = 50;
-                                bigplasmaPositions.RemoveAt(j);
-                                bigplasmaVelocities.RemoveAt(j);
-                                continue;
-                            }
+								bigplasmaTimer = 0;
+							}
+							for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
+							{
+								bigplasmaPositions[j] += bigplasmaVelocities[j];
+								var pos = bigplasmaPositions[j];
+								if (bigplasmaPositions[j].X < -330)
+								{
+									bigplasmaPositions.RemoveAt(j);
+									bigplasmaVelocities.RemoveAt(j);
+									continue;
+								}
+								if (peilcanrect.Contains(pos))
+								{
+									lifes--;
+									peilcanrect.X = 200;
+									peilcanrect.Y = 50;
+									bigplasmaPositions.RemoveAt(j);
+									bigplasmaVelocities.RemoveAt(j);
+									continue;
+								}
 
-                        }
+							}
+						}
+                        
                         guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 1.5);
                     }
                     else if (guardianHealth == 75)
                     {
+                        plasma1 = false;
 
-						if (phase2Timer <= phase2Time)
-						{
-							bossmovement = true;
-						}
-						
-						if (phase2Timer >= phase2Time)
-						{
-							bossmovement = false;
-						}
+                        if (phase2Timer <= phase2Time)
+                        {
+                            bossmovement = true;
+                        }
+
+                        if (phase2Timer >= phase2Time)
+                        {
+                            bossmovement = false;
+                        }
                         if (bossmovement == false)
                         {
-							if (boss2Phase3 == true)
-							{
+                            if (boss2Phase3 == true)
+                            {
                                 cinematicRumble.Stop();
                                 guardianrect.Y += 2;
-								shakeMagnitude = 5;
-								shakeTime = 0.5f;
-								if (guardianrect.Y >= 50)
-								{
-									guardianrect.Y = 50;
-									guardianrect.Y -= 0;
+                                shakeMagnitude = 5;
+                                shakeTime = 0.5f;
+                                plasma2 = true;
+                                if (guardianrect.Y >= 50)
+                                {
+                                    guardianrect.Y = 50;
+                                    guardianrect.Y -= 0;
                                     bigplasmaTime = 0.1f;
-									if (bigplasmaTimer >= bigplasmaTime)
-									{
-										//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
-
-										bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
-
-										bigplasmaVelocities.Add(new Vector2(0, -4));
-
-										bigplasmaVelocities.Add(new Vector2(0, 4));
-
-										bigplasmaVelocities.Add(new Vector2(4, 0));
-
-										bigplasmaVelocities.Add(new Vector2(-4, 0));
-
-										bigplasmaVelocities.Add(new Vector2(4, -4));
-
-										bigplasmaVelocities.Add(new Vector2(-4, -4));
-
-										bigplasmaVelocities.Add(new Vector2(-4, 4));
-
-										bigplasmaTimer = 0;
-									}
-									for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
-									{
-										bigplasmaPositions[j] += bigplasmaVelocities[j];
-										var pos = bigplasmaPositions[j];
-										if (bigplasmaPositions[j].X < -330)
+                                    if (plasma2 == true)
+                                    {
+										if (bigplasmaTimer >= bigplasmaTime)
 										{
-											bigplasmaPositions.RemoveAt(j);
-											bigplasmaVelocities.RemoveAt(j);
-											continue;
-										}
-										if (peilcanrect.Contains(pos))
-										{
-											lifes--;
-											peilcanrect.X = 200;
-											peilcanrect.Y = 50;
-											bigplasmaPositions.RemoveAt(j);
-											bigplasmaVelocities.RemoveAt(j);
-											continue;
-										}
+											//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
 
+											bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
+
+											bigplasmaVelocities.Add(new Vector2(0, -4));
+
+											bigplasmaVelocities.Add(new Vector2(0, 4));
+
+											bigplasmaVelocities.Add(new Vector2(4, 0));
+
+											bigplasmaVelocities.Add(new Vector2(-4, 0));
+
+											bigplasmaVelocities.Add(new Vector2(4, -4));
+
+											bigplasmaVelocities.Add(new Vector2(-4, -4));
+
+											bigplasmaVelocities.Add(new Vector2(-4, 4));
+
+											bigplasmaTimer = 0;
+										}
+										for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
+										{
+											bigplasmaPositions[j] += bigplasmaVelocities[j];
+											var pos = bigplasmaPositions[j];
+											if (bigplasmaPositions[j].X < -330)
+											{
+												bigplasmaPositions.RemoveAt(j);
+												bigplasmaVelocities.RemoveAt(j);
+												continue;
+											}
+											if (peilcanrect.Contains(pos))
+											{
+												lifes--;
+												peilcanrect.X = 200;
+												peilcanrect.Y = 50;
+												bigplasmaPositions.RemoveAt(j);
+												bigplasmaVelocities.RemoveAt(j);
+												continue;
+											}
+
+										}
 									}
+                                    
                                     guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 2);
                                 }
 
-							}
-							
-						}
+                            }
 
-					}
+                        }
+
+                    }
                     else if (guardianHealth == 50)
                     {
-						
-					  if (phase3Timer <= phase3Time)
-                      {
-                         bossmovement2 = true;
-                      }
-                      if (phase3Timer >= phase3Time)
-                      {
-                            bossmovement2 = false;
-                            
+                        plasma2 = false;
 
-                      }
-                      if (bossmovement2 == false)
-						{
-							if (boss2Phase5 == true)
-							{
+                        if (phase3Timer <= phase3Time)
+                        {
+                            bossmovement2 = true;
+                        }
+                        if (phase3Timer >= phase3Time)
+                        {
+                            bossmovement2 = false;
+
+
+                        }
+                        if (bossmovement2 == false)
+                        {
+                            if (boss2Phase5 == true)
+                            {
                                 plasmaDirectionsTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                                 guardianrect.Y += 2;
-								shakeMagnitude = 5;
-								shakeTime = 0.5f;
+                                shakeMagnitude = 5;
+                                shakeTime = 0.5f;
                                 cinematicRumble.Play();
+                                plasma3 = true;
                                 if (guardianrect.Y >= 50)
-								{
-									guardianrect.Y = 50;
+                                {
+                                    guardianrect.Y = 50;
                                     cinematicRumble.Stop();
                                     guardianrect.Y -= 0;
-									bigplasmaTime = 0f;
-									if (bigplasmaTimer >= bigplasmaTime)
-									{
-										//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
-										bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
-										if (plasmaDirectionsTime >= plasmaDirectionsTimer)
-                                        {
-                                            
-                                            if (plasmaDirectionsSwitches == false)
-                                            {
-                                                bigplasmaVelocities.Add(new Vector2(0, -5));
-                                                bigplasmaVelocities.Add(new Vector2(0, 5));
-                                                bigplasmaVelocities.Add(new Vector2(5, 0));
-                                                bigplasmaVelocities.Add(new Vector2(-5, 0));
-                                                
-                                            }
-                                            
-                                        }
-                                        if (plasmaDirectionsTimer >= plasmaDirectionsTime)
-                                        {
-                                            plasmaDirectionsSwitches = true;
-                                            if (plasmaDirectionsSwitches == true)
-                                            {
-                                                bigplasmaVelocities.Add(new Vector2(-5, -5));
-                                                bigplasmaVelocities.Add(new Vector2(5, 5));
-                                                bigplasmaVelocities.Add(new Vector2(5, -5));
-                                                bigplasmaVelocities.Add(new Vector2(-5, 5));
-                                            }
-                                            
+                                    bigplasmaTime = 0f;
+                                    if (plasma3 == true)
+                                    {
+										if (bigplasmaTimer >= bigplasmaTime)
+										{
+											//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
+											bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
+											if (plasmaDirectionsTime >= plasmaDirectionsTimer)
+											{
 
-                                        }
-                                        if (plasmaDirectionsTimer >= 6)
-                                        {
-                                            plasmaDirectionsTimer = 0;
-                                            plasmaDirectionsSwitches = false;
-                                        }
-                                        
-                                        
-										bigplasmaTimer = 0;
-									}
-									for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
-									{
-										bigplasmaPositions[j] += bigplasmaVelocities[j];
-										var pos = bigplasmaPositions[j];
-										if (bigplasmaPositions[j].X < -330)
-										{
-											bigplasmaPositions.RemoveAt(j);
-											bigplasmaVelocities.RemoveAt(j);
-											continue;
+												if (plasmaDirectionsSwitches == false)
+												{
+													bigplasmaVelocities.Add(new Vector2(0, -5));
+													bigplasmaVelocities.Add(new Vector2(0, 5));
+													bigplasmaVelocities.Add(new Vector2(5, 0));
+													bigplasmaVelocities.Add(new Vector2(-5, 0));
+
+												}
+
+											}
+											if (plasmaDirectionsTimer >= plasmaDirectionsTime)
+											{
+												plasmaDirectionsSwitches = true;
+												if (plasmaDirectionsSwitches == true)
+												{
+													bigplasmaVelocities.Add(new Vector2(-5, -5));
+													bigplasmaVelocities.Add(new Vector2(5, 5));
+													bigplasmaVelocities.Add(new Vector2(5, -5));
+													bigplasmaVelocities.Add(new Vector2(-5, 5));
+												}
+
+
+											}
+											if (plasmaDirectionsTimer >= 6)
+											{
+												plasmaDirectionsTimer = 0;
+												plasmaDirectionsSwitches = false;
+											}
+
+
+											bigplasmaTimer = 0;
 										}
-										if (peilcanrect.Contains(pos))
+										for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
 										{
-											lifes--;
-											peilcanrect.X = 200;
-											peilcanrect.Y = 50;
-											bigplasmaPositions.RemoveAt(j);
-											bigplasmaVelocities.RemoveAt(j);
-											continue;
+											bigplasmaPositions[j] += bigplasmaVelocities[j];
+											var pos = bigplasmaPositions[j];
+											if (bigplasmaPositions[j].X < -330)
+											{
+												bigplasmaPositions.RemoveAt(j);
+												bigplasmaVelocities.RemoveAt(j);
+												continue;
+											}
+											if (peilcanrect.Contains(pos))
+											{
+												lifes--;
+												peilcanrect.X = 200;
+												peilcanrect.Y = 50;
+												bigplasmaPositions.RemoveAt(j);
+												bigplasmaVelocities.RemoveAt(j);
+												continue;
+											}
 										}
 									}
-								}
+                                    
+                                }
                                 guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 3);
                             }
-					  }
-					}
-					else if (guardianHealth == 25)
-					{
+                        }
+                    }
+                    else if (guardianHealth == 25)
+                    {
+                        plasma3 = false;
+                        if (phase4Timer <= phase4Time)
+                        {
+                            bossmovement3 = true;
+                        }
+                        if (phase4Timer >= phase4Time)
+                        {
+                            bossmovement3 = false;
 
-					}
 
-					else if (guardianHealth == 0)
+                        }
+                        if (bossmovement3 == false)
+                        {
+                            if (boss2Phase7 == true)
+                            {
+                                plasmaDirectionsTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                guardianrect.Y += 2;
+                                shakeMagnitude = 5;
+                                shakeTime = 0.5f;
+                                cinematicRumble.Play();
+                                boss2Phase5 = false;
+                                plasma4 = true;
+                                if (guardianrect.Y >= 50)
+                                {
+                                    guardianrect.Y = 50;
+                                    cinematicRumble.Stop();
+                                    guardianrect.Y -= 0;
+                                    bigplasmaTime = 0f;
+                                    if (plasma4 == true)
+                                    {
+										if (bigplasmaTimer >= bigplasmaTime)
+										{
+
+											bigplasmaPositions.Add(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050));
+
+
+											if (plasmaDirectionsTimer <= 0)
+											{
+												bigplasmaVelocities.Add(new Vector2(-5, 0));
+											}
+											if (plasmaDirectionsTimer <= 2)
+											{
+												bigplasmaVelocities.Add(new Vector2(-5, -2));
+											}
+											if (plasmaDirectionsTimer <= 4)
+											{
+												bigplasmaVelocities.Add(new Vector2(-5, -4));
+											}
+											if (plasmaDirectionsTimer <= 6)
+											{
+												bigplasmaVelocities.Add(new Vector2(0, -5));
+											}
+											if (plasmaDirectionsTimer <= 8)
+											{
+												bigplasmaVelocities.Add(new Vector2(-5, 4));
+											}
+											if (plasmaDirectionsTimer <= 10)
+											{
+												bigplasmaVelocities.Add(new Vector2(5, 4));
+											}
+											if (plasmaDirectionsTimer >= 12)
+											{
+												plasmaDirectionsTimer = 0;
+
+											}
+
+
+											bigplasmaTimer = 0;
+										}
+										for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
+										{
+											bigplasmaPositions[j] += bigplasmaVelocities[j];
+											var pos = bigplasmaPositions[j];
+											if (bigplasmaPositions[j].X < -330)
+											{
+												bigplasmaPositions.RemoveAt(j);
+												bigplasmaVelocities.RemoveAt(j);
+												continue;
+											}
+											if (peilcanrect.Contains(pos))
+											{
+												lifes--;
+												peilcanrect.X = 200;
+												peilcanrect.Y = 50;
+												bigplasmaPositions.RemoveAt(j);
+												bigplasmaVelocities.RemoveAt(j);
+												continue;
+											}
+										}
+									}
+                                    
+                                }
+                            }
+                        }
+                    }
+
+                    else if (guardianHealth == 0)
                     {
                         guardianrect.Y += 1;
 
                         if (guardianrect.Y >= 600)
                         {
                             guardianrect.X = 1200;
-                            
+
                             levelTwoTimer = 0;
                             screen = Screen.level3Intro;
                             shakeMagnitude = 0;
@@ -1880,164 +1990,220 @@ namespace _1_5_summative__HALO_
                         }
                     }
 
-                    
 
 
-                    guardianActive = false;
-                    if (boss2Phase2 == true)
-                    {
-                       
-						phase2Timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-						
-                       
 
-						guardianbackgroundrect.Y += 1;
-						if (guardianbackgroundrect.Y >= 100)
-                        {
-
-                            guardianbackgroundrect.Y = 100;
-                            guardianbackgroundrect.Y += 0;
-                            cinematicRumble.Stop();
-
-                        }
-                        if (guardianbackgroundrect.Y >= 100)
-                        {
-                            EMPballrect.Y += 5;
-                            if (EMPballrect.Y >= 600)
+                            guardianActive = false;
+                            if (boss2Phase2 == true)
                             {
-                                EMPballrect.X = generator.Next(0, 600);
-                                EMPballrect.Y = -200;
-                                
+
+                                phase2Timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+
+
+                                guardianbackgroundrect.Y += 1;
+                                if (guardianbackgroundrect.Y >= 100)
+                                {
+
+                                    guardianbackgroundrect.Y = 100;
+                                    guardianbackgroundrect.Y += 0;
+                                    cinematicRumble.Stop();
+
+                                }
+                                if (guardianbackgroundrect.Y >= 100)
+                                {
+                                    EMPballrect.Y += 5;
+                                    if (EMPballrect.Y >= 600)
+                                    {
+                                        EMPballrect.X = generator.Next(0, 600);
+                                        EMPballrect.Y = -200;
+
+                                    }
+                                }
+
+
                             }
-                        }
-                        
-                        
-                    }
-					if (bossmovement == true)
-					{
-						guardianrect.Y -= 2;
-						shakeMagnitude = 5;
-						shakeTime = 0.5f;
-                        cinematicRumble.Play();
-                        if (guardianrect.Y <= -1300)
+                            if (bossmovement == true)
+                            {
+                                guardianrect.Y -= 2;
+                                shakeMagnitude = 5;
+                                shakeTime = 0.5f;
+                                cinematicRumble.Play();
+                                if (guardianrect.Y <= -1300)
+                                {
+                                    guardianrect.Y = -1300;
+                                    guardianrect.X = 0;
+                                    guardianrect.Y -= 0;
+                                    boss2Phase2 = true;
+
+
+                                }
+                            }
+
+
+                            if (bossmovement2 == true)
+                            {
+                                guardianrect.Y -= 2;
+                                shakeMagnitude = 5;
+                                shakeTime = 0.5f;
+                                cinematicRumble.Play();
+                                if (guardianrect.Y <= -1300)
+                                {
+                                    guardianrect.Y = -1300;
+                                    guardianrect.X = 0;
+                                    guardianrect.Y -= 0;
+
+                                    boss2Phase4 = true;
+
+
+                                }
+                            }
+						if (bossmovement3 == true)
 						{
-							guardianrect.Y = -1300;
-                            guardianrect.X = 0;
-							guardianrect.Y -= 0;
-							boss2Phase2 = true;
-
-
-						}
-					}
-                    
-				   
-                    if (bossmovement2 == true)
-                    {
-						guardianrect.Y -= 2;
-						shakeMagnitude = 5;
-						shakeTime = 0.5f;
-                        cinematicRumble.Play();
-                        if (guardianrect.Y <= -1300)
-						{
-							guardianrect.Y = -1300;
-							guardianrect.X = 0;
-							guardianrect.Y -= 0;
-							
-                            boss2Phase4 = true;
-
-
-						}
-					}
-                     
-                    if (boss2Phase4 == true)
-                    {
-						guardianbackgroundrect2.Y += 1;
-						phase3Timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-						if (guardianbackgroundrect2.Y >= 100)
-						{
-
-							guardianbackgroundrect2.Y = 100;
-							guardianbackgroundrect2.Y += 0;
-
-						}
-						if (guardianbackgroundrect2.Y >= 100)
-						{
-                            cinematicRumble.Stop();
-                            EMPballrect.Y += 10;
-							if (EMPballrect.Y >= 600)
+							guardianrect.Y -= 2;
+							shakeMagnitude = 20;
+							shakeTime = 0.5f;
+							cinematicRumble.Play();
+							if (guardianrect.Y <= -1300)
 							{
-								EMPballrect.X = generator.Next(0, 600);
-								EMPballrect.Y = -200;
+								guardianrect.Y = -1300;
+								guardianrect.X = 0;
+								guardianrect.Y -= 0;
+
+								boss2Phase6 = true;
+
 
 							}
 						}
-					}
-
-
-
-
-					
-
-
-
-					if (EMPballrect.Intersects(peilcanrect))
-                    {
-                        lifes--;
-                        peilcanrect.X = 200;
-                        peilcanrect.Y = 50;
-                        EMPballrect.X = generator.Next(0, 600);
-                        EMPballrect.Y = -200;
-                    }
-                    if (phase2Timer >= phase2Time)
-                    {
-                        boss2Phase2 = false;
-                        guardianbackgroundrect.Y -= 2;
-                    }
-                    if (guardianbackgroundrect.Y <= -500)
-                    {
-                        guardianbackgroundrect.Y = -500;
-						
-						boss2Phase3 = true;
-                        boss2Phase2 = false;
-                        
-                    }
-                    if (phase3Timer >= phase3Time)
-                    {
-                      boss2Phase4 = false;
-                      guardianbackgroundrect2.Y -= 2;
-
-
-
-                    }
-					if (guardianbackgroundrect2.Y <= -500)
-					{
-						guardianbackgroundrect2.Y = -500;
-
-						boss2Phase5 = true;
-						
-
-					}
-
-
-					    if (coreHealth == 3)
+						if (boss2Phase4 == true)
                         {
-                            core1rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
-                        }
-                        else if (coreHealth == 2)
-                        {
-                            core2rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
-                        }
-                        else if (coreHealth == 1)
-                        {
-                            core3rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
-                        }
-                        else if (coreHealth == 0)
-                        {
-                            coreHealth = 3;
+                                guardianbackgroundrect2.Y += 1;
+                                phase3Timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                            guardianHealth -= 25;
+                                if (guardianbackgroundrect2.Y >= 100)
+                                {
+
+                                    guardianbackgroundrect2.Y = 100;
+                                    guardianbackgroundrect2.Y += 0;
+
+                                }
+                                if (guardianbackgroundrect2.Y >= 100)
+                                {
+                                    cinematicRumble.Stop();
+                                    EMPballrect.Y += 10;
+                                    if (EMPballrect.Y >= 600)
+                                    {
+                                        EMPballrect.X = generator.Next(0, 600);
+                                        EMPballrect.Y = -200;
+
+                                    }
+                                }
                         }
+						if (boss2Phase6 == true)
+						{
+							guardianbackgroundrect3.Y += 1;
+							phase4Timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+							if (guardianbackgroundrect3.Y >= 100)
+							{
+
+								guardianbackgroundrect3.Y = 100;
+								guardianbackgroundrect3.Y += 0;
+
+							}
+							if (guardianbackgroundrect3.Y >= 100)
+							{
+								cinematicRumble.Stop();
+								EMPballrect.Y += 10;
+								if (EMPballrect.Y >= 600)
+								{
+									EMPballrect.X = generator.Next(0, 600);
+									EMPballrect.Y = -200;
+
+								}
+							}
+						}
+
+
+
+
+
+
+
+
+						if (EMPballrect.Intersects(peilcanrect))
+                            {
+                                lifes--;
+                                peilcanrect.X = 200;
+                                peilcanrect.Y = 50;
+                                EMPballrect.X = generator.Next(0, 600);
+                                EMPballrect.Y = -200;
+                            }
+                            if (phase2Timer >= phase2Time)
+                            {
+                                boss2Phase2 = false;
+                                guardianbackgroundrect.Y -= 2;
+                            }
+                            if (guardianbackgroundrect.Y <= -500)
+                            {
+                                guardianbackgroundrect.Y = -500;
+
+                                boss2Phase3 = true;
+                                boss2Phase2 = false;
+
+                            }
+                            if (phase3Timer >= phase3Time)
+                            {
+                                boss2Phase4 = false;
+                                guardianbackgroundrect2.Y -= 2;
+
+
+
+                            }
+                            if (guardianbackgroundrect2.Y <= -500)
+                            {
+                                guardianbackgroundrect2.Y = -500;
+
+                                boss2Phase5 = true;
+
+
+                            }
+						if (phase4Timer >= phase4Time)
+						{
+							  boss2Phase6 = false;
+							  guardianbackgroundrect3.Y -= 3;
+
+							if (guardianbackgroundrect3.Y <= -500)
+							{
+								guardianbackgroundrect3.Y = -500;
+
+								
+                                boss2Phase7 = true;
+
+							}
+
+						}
+
+
+						    if (coreHealth == 3)
+                            {
+                                core1rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+                            }
+                            else if (coreHealth == 2)
+                            {
+                                core2rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+                            }
+                            else if (coreHealth == 1)
+                            {
+                                core3rect = new Rectangle(guardianrect.X + 325, guardianrect.Y + 230, 50, 30);
+                            }
+                            else if (coreHealth == 0)
+                            {
+                                coreHealth = 3;
+
+                                guardianHealth -= 25;
+                            }
+                    
 
 
 
@@ -2621,7 +2787,7 @@ namespace _1_5_summative__HALO_
               _spriteBatch.Draw(ring2Texture, ring2rect, Color.White);
 			  _spriteBatch.Draw(guardianTexture, guardianbackgroundrect, Color.White);
               _spriteBatch.Draw(guardianTexture, guardianbackgroundrect2, Color.White);
-
+			  _spriteBatch.Draw(guardianTexture, guardianbackgroundrect3, Color.White);
 
 
 
@@ -2678,6 +2844,16 @@ namespace _1_5_summative__HALO_
 						}
 					}
 				}
+				else if (guardianHealth == 25)
+				{
+					if (boss2Phase6 == false && bossmovement3 == false && guardianrect.Y >= 50)
+					{
+						foreach (Vector2 position in bigplasmaPositions)
+						{
+							_spriteBatch.Draw(plasmaballTexture, position, Color.White);
+						}
+					}
+				}
 				if (boss2Phase2 == true)
                 {
                     _spriteBatch.Draw(EMPballTexture, EMPballrect, Color.White);
@@ -2686,7 +2862,10 @@ namespace _1_5_summative__HALO_
 				{
 					_spriteBatch.Draw(EMPballTexture, EMPballrect, Color.White);
 				}
-
+				if (boss2Phase6 == true)
+				{
+					_spriteBatch.Draw(EMPballTexture, EMPballrect, Color.White);
+				}
 
 				if (coreHealth == 3)
 				{
