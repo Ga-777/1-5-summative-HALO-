@@ -102,10 +102,33 @@ namespace _1_5_summative__HALO_
         float phase2Timer = 0, phase2Time = 20f, phase3Timer = 0, phase3Time = 20f, phase4Timer = 0, phase4Time = 20f;
         List<Vector2> bigplasmaPositions = new List<Vector2>();
         List<Vector2> bigplasmaVelocities = new List<Vector2>();
-        Rectangle bigplasmarect;
-        private float bigplasmaTimer = 0;
+
+		List<Vector2> bigplasmaPositions2 = new List<Vector2>();
+		List<Vector2> bigplasmaVelocities2 = new List<Vector2>();
+		
+        List<Vector2> bigplasmaPositions3 = new List<Vector2>();
+		List<Vector2> bigplasmaVelocities3 = new List<Vector2>();
+
+		List<Vector2> bigplasmaPositions4 = new List<Vector2>();
+		List<Vector2> bigplasmaVelocities4 = new List<Vector2>();
+
+		Rectangle bigplasmarect;
+		Rectangle bigplasmarect2;
+		Rectangle bigplasmarect3;
+
+		private float bigplasmaTimer = 0;
         private float bigplasmaTime = 0.2f;
-        Texture2D laserbeamTexture;
+
+		private float bigplasmaTimer2 = 0;
+		private float bigplasmaTime2 = 0.2f;
+
+		private float bigplasmaTimer3 = 0;
+		private float bigplasmaTime3 = 0.2f;
+
+		private float bigplasmaTimer4 = 0;
+		private float bigplasmaTime4 = 0.2f;
+
+		Texture2D laserbeamTexture;
         Rectangle laserbeamrect;
         private float beamTimer2 = 0;
         private float beamTime2 = 5f;
@@ -493,7 +516,9 @@ namespace _1_5_summative__HALO_
             bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             plasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             bigplasmaTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            missileTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+			bigplasmaTimer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
+			bigplasmaTimer3 += (float)gameTime.ElapsedGameTime.TotalSeconds;
+			missileTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             beamTimer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
@@ -1723,39 +1748,39 @@ namespace _1_5_summative__HALO_
                                 {
                                     guardianrect.Y = 50;
                                     guardianrect.Y -= 0;
-                                    bigplasmaTime = 0.1f;
+                                    bigplasmaTime2 = 0.1f;
                                     if (plasma2 == true)
                                     {
-										if (bigplasmaTimer >= bigplasmaTime)
+										if (bigplasmaTimer2 >= bigplasmaTime2)
 										{
 											//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
 
-											bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
+											bigplasmaPositions2.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
 
-											bigplasmaVelocities.Add(new Vector2(0, -4));
+											bigplasmaVelocities2.Add(new Vector2(0, -4));
 
-											bigplasmaVelocities.Add(new Vector2(0, 4));
+											bigplasmaVelocities2.Add(new Vector2(0, 4));
 
-											bigplasmaVelocities.Add(new Vector2(4, 0));
+											bigplasmaVelocities2.Add(new Vector2(4, 0));
 
-											bigplasmaVelocities.Add(new Vector2(-4, 0));
+											bigplasmaVelocities2.Add(new Vector2(-4, 0));
 
-											bigplasmaVelocities.Add(new Vector2(4, -4));
+											bigplasmaVelocities2.Add(new Vector2(4, -4));
 
-											bigplasmaVelocities.Add(new Vector2(-4, -4));
+											bigplasmaVelocities2.Add(new Vector2(-4, -4));
 
-											bigplasmaVelocities.Add(new Vector2(-4, 4));
+											bigplasmaVelocities2.Add(new Vector2(-4, 4));
 
-											bigplasmaTimer = 0;
+											bigplasmaTimer2 = 0;
 										}
-										for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
+										for (int j = bigplasmaPositions2.Count - 1; j >= 0; j--)
 										{
-											bigplasmaPositions[j] += bigplasmaVelocities[j];
-											var pos = bigplasmaPositions[j];
-											if (bigplasmaPositions[j].X < -330)
+											bigplasmaPositions2[j] += bigplasmaVelocities2[j];
+											var pos = bigplasmaPositions2[j];
+											if (bigplasmaPositions2[j].X < -330)
 											{
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
+												bigplasmaPositions2.RemoveAt(j);
+												bigplasmaVelocities2.RemoveAt(j);
 												continue;
 											}
 											if (peilcanrect.Contains(pos))
@@ -1763,8 +1788,8 @@ namespace _1_5_summative__HALO_
 												lifes--;
 												peilcanrect.X = 200;
 												peilcanrect.Y = 50;
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
+												bigplasmaPositions2.RemoveAt(j);
+												bigplasmaVelocities2.RemoveAt(j);
 												continue;
 											}
 
@@ -1808,22 +1833,22 @@ namespace _1_5_summative__HALO_
                                     guardianrect.Y = 50;
                                     cinematicRumble.Stop();
                                     guardianrect.Y -= 0;
-                                    bigplasmaTime = 0f;
+                                    bigplasmaTime3 = 0f;
                                     if (plasma3 == true)
                                     {
-										if (bigplasmaTimer >= bigplasmaTime)
+										if (bigplasmaTimer3 >= bigplasmaTime3)
 										{
 											//(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)
-											bigplasmaPositions.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
+											bigplasmaPositions3.Add((guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050)));
 											if (plasmaDirectionsTime >= plasmaDirectionsTimer)
 											{
 
 												if (plasmaDirectionsSwitches == false)
 												{
-													bigplasmaVelocities.Add(new Vector2(0, -5));
-													bigplasmaVelocities.Add(new Vector2(0, 5));
-													bigplasmaVelocities.Add(new Vector2(5, 0));
-													bigplasmaVelocities.Add(new Vector2(-5, 0));
+													bigplasmaVelocities3.Add(new Vector2(0, -5));
+													bigplasmaVelocities3.Add(new Vector2(0, 5));
+													bigplasmaVelocities3.Add(new Vector2(5, 0));
+													bigplasmaVelocities3.Add(new Vector2(-5, 0));
 
 												}
 
@@ -1833,10 +1858,10 @@ namespace _1_5_summative__HALO_
 												plasmaDirectionsSwitches = true;
 												if (plasmaDirectionsSwitches == true)
 												{
-													bigplasmaVelocities.Add(new Vector2(-5, -5));
-													bigplasmaVelocities.Add(new Vector2(5, 5));
-													bigplasmaVelocities.Add(new Vector2(5, -5));
-													bigplasmaVelocities.Add(new Vector2(-5, 5));
+													bigplasmaVelocities3.Add(new Vector2(-5, -5));
+													bigplasmaVelocities3.Add(new Vector2(5, 5));
+													bigplasmaVelocities3.Add(new Vector2(5, -5));
+													bigplasmaVelocities3.Add(new Vector2(-5, 5));
 												}
 
 
@@ -1848,16 +1873,16 @@ namespace _1_5_summative__HALO_
 											}
 
 
-											bigplasmaTimer = 0;
+											bigplasmaTimer3 = 0;
 										}
-										for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
+										for (int j = bigplasmaPositions3.Count - 1; j >= 0; j--)
 										{
-											bigplasmaPositions[j] += bigplasmaVelocities[j];
-											var pos = bigplasmaPositions[j];
-											if (bigplasmaPositions[j].X < -330)
+											bigplasmaPositions3[j] += bigplasmaVelocities3[j];
+											var pos = bigplasmaPositions3[j];
+											if (bigplasmaPositions3[j].X < -330)
 											{
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
+												bigplasmaPositions3.RemoveAt(j);
+												bigplasmaVelocities3.RemoveAt(j);
 												continue;
 											}
 											if (peilcanrect.Contains(pos))
@@ -1865,8 +1890,8 @@ namespace _1_5_summative__HALO_
 												lifes--;
 												peilcanrect.X = 200;
 												peilcanrect.Y = 50;
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
+												bigplasmaPositions3.RemoveAt(j);
+												bigplasmaVelocities3.RemoveAt(j);
 												continue;
 											}
 										}
@@ -1906,38 +1931,38 @@ namespace _1_5_summative__HALO_
                                     guardianrect.Y = 50;
                                     cinematicRumble.Stop();
                                     guardianrect.Y -= 0;
-                                    bigplasmaTime = 0f;
+                                    bigplasmaTime4 = 0f;
                                     if (plasma4 == true)
                                     {
-										if (bigplasmaTimer >= bigplasmaTime)
+										if (bigplasmaTimer4 >= bigplasmaTime4)
 										{
 
-											bigplasmaPositions.Add(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050));
+											bigplasmaPositions4.Add(guardianrect.Location.ToVector2() + new Vector2(guardianrect.Width - 360, guardianrect.Height - 1050));
 
 
 											if (plasmaDirectionsTimer <= 0)
 											{
-												bigplasmaVelocities.Add(new Vector2(-5, 0));
+												bigplasmaVelocities4.Add(new Vector2(-5, 0));
 											}
 											if (plasmaDirectionsTimer <= 2)
 											{
-												bigplasmaVelocities.Add(new Vector2(-5, -2));
+												bigplasmaVelocities4.Add(new Vector2(-5, -2));
 											}
 											if (plasmaDirectionsTimer <= 4)
 											{
-												bigplasmaVelocities.Add(new Vector2(-5, -4));
+												bigplasmaVelocities4.Add(new Vector2(-5, -4));
 											}
 											if (plasmaDirectionsTimer <= 6)
 											{
-												bigplasmaVelocities.Add(new Vector2(0, -5));
+												bigplasmaVelocities4.Add(new Vector2(0, -5));
 											}
 											if (plasmaDirectionsTimer <= 8)
 											{
-												bigplasmaVelocities.Add(new Vector2(-5, 4));
+												bigplasmaVelocities4.Add(new Vector2(-5, 4));
 											}
 											if (plasmaDirectionsTimer <= 10)
 											{
-												bigplasmaVelocities.Add(new Vector2(5, 4));
+												bigplasmaVelocities4.Add(new Vector2(5, 4));
 											}
 											if (plasmaDirectionsTimer >= 12)
 											{
@@ -1946,25 +1971,24 @@ namespace _1_5_summative__HALO_
 											}
 
 
-											bigplasmaTimer = 0;
+											bigplasmaTimer4 = 0;
 										}
-										for (int j = bigplasmaPositions.Count - 1; j >= 0; j--)
+										for (int j = bigplasmaPositions4.Count - 1; j >= 0; j--)
 										{
-											bigplasmaPositions[j] += bigplasmaVelocities[j];
-											var pos = bigplasmaPositions[j];
-											if (bigplasmaPositions[j].X < -330)
+											bigplasmaPositions4[j] += bigplasmaVelocities4[j];
+											var pos = bigplasmaPositions4[j];
+											if (bigplasmaPositions4[j].X < -330)
 											{
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
+												bigplasmaPositions4.RemoveAt(j);
+												bigplasmaVelocities4.RemoveAt(j);
 												continue;
 											}
 											if (peilcanrect.Contains(pos))
 											{
 												lifes--;
-												peilcanrect.X = 200;
-												peilcanrect.Y = 50;
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
+												
+												bigplasmaPositions4.RemoveAt(j);
+												bigplasmaVelocities4.RemoveAt(j);
 												continue;
 											}
 										}
@@ -2828,7 +2852,7 @@ namespace _1_5_summative__HALO_
 					
                     if (boss2Phase2 == false && bossmovement == false && guardianrect.Y >= 50)
 					{
-						foreach (Vector2 position in bigplasmaPositions)
+						foreach (Vector2 position in bigplasmaPositions2)
 						{
 							_spriteBatch.Draw(plasmaballTexture, position, Color.White);
 						}
@@ -2838,7 +2862,7 @@ namespace _1_5_summative__HALO_
 				{
 					if (boss2Phase4 == false && bossmovement2 == false && guardianrect.Y >= 50)
 					{
-						foreach (Vector2 position in bigplasmaPositions)
+						foreach (Vector2 position in bigplasmaPositions3)
 						{
 							_spriteBatch.Draw(plasmaballTexture, position, Color.White);
 						}
@@ -2848,7 +2872,7 @@ namespace _1_5_summative__HALO_
 				{
 					if (boss2Phase6 == false && bossmovement3 == false && guardianrect.Y >= 50)
 					{
-						foreach (Vector2 position in bigplasmaPositions)
+						foreach (Vector2 position in bigplasmaPositions4)
 						{
 							_spriteBatch.Draw(plasmaballTexture, position, Color.White);
 						}
