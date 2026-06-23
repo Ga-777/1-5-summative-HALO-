@@ -111,7 +111,19 @@ namespace _1_5_summative__HALO_
         bool boss2Phase2 = false, boss2Phase3 = false, boss2Phase4 = false, boss2Phase5 = false, boss2Phase6 = false, boss2Phase7 = false;
         Rectangle plasmaballrect, EMPballrect, EMPballrect2;
         float phase2Timer = 0, phase2Time = 20f, phase3Timer = 0, phase3Time = 20f, phase4Timer = 0, phase4Time = 20f;
-        List<Vector2> bigplasmaPositions = new List<Vector2>();
+
+        // 3 boss
+        Texture2D floodBossTexture;
+        Rectangle floodBossrect;
+        int floodBosshealth = 30;
+        bool floodBoss = false;
+		bool boss3Phase2 = false, boss3Phase3 = false, boss3Phase4 = false, boss3Phase5 = false, boss3Phase6 = false, boss3Phase7 = false;
+        bool flooddMovement = false;
+
+		private float floodTimer = 0;
+		private float floodTime = 20;
+
+		List<Vector2> bigplasmaPositions = new List<Vector2>();
         List<Vector2> bigplasmaVelocities = new List<Vector2>();
 
 		List<Vector2> bigplasmaPositions2 = new List<Vector2>();
@@ -339,6 +351,8 @@ namespace _1_5_summative__HALO_
 
 			floodSpore = new List<Rectangle>();
 
+            floodBossrect = new Rectangle(450, -300, 300, 300);
+
             
 
 			floodFallSpeed = new Vector2(0, 1);
@@ -514,6 +528,8 @@ namespace _1_5_summative__HALO_
 			floodDeath = Content.Load<SoundEffect>("flood_bodyfall_combatform1").CreateInstance();
 
             floodCloudTexture = Content.Load<Texture2D>("floodCloud");
+
+            floodBossTexture = Content.Load<Texture2D>("floodboss");
 
 			// intros
 			new_mombasaIntroTexture = Content.Load<Texture2D>("New Mombasa");
@@ -1292,7 +1308,7 @@ namespace _1_5_summative__HALO_
 
                         peilcanrect.X = -10;
 
-                        if (timer >= 7)
+                        if (timer >= 6)
                         {
                             moonOverMombasa.Stop();
                             screen = Screen.Level1;
@@ -2561,25 +2577,27 @@ namespace _1_5_summative__HALO_
 					  if (peilcanrect.Intersects(bansheerect5))
 					  {
 						lifes--;
+                        playerLife = true;
 
 						isExploding5 = true;
 					  }
 					  if (peilcanrect.Intersects(bansheerect4))
 					  {
 						lifes--;
-
+						playerLife = true;
 						isExploding4 = true;
 					  }
 					  if (peilcanrect.Intersects(bansheerect3))
 					  {
 						lifes--;
-
+						playerLife = true;
 						isExploding3 = true;
 					  }
 					  if (peilcanrect.Intersects(floodbomberrect))
 					  {
                         lifes--;
-                        isExploding11 = true;
+						playerLife = true;
+						isExploding11 = true;
 					  }
 				    }
                     
@@ -2674,11 +2692,72 @@ namespace _1_5_summative__HALO_
                             }
                         }
                     }
+                    if (levelThreeTimer >= 150)
+                    {
+					  bansheerect3.X -= 0;
+					  bansheerect4.X -= 0;
+					  bansheerect5.X -= 0;
+                      floodbomberrect.X -= 0;
+                      floodedphantomrect.X -= 0;
+					  bansheerect3.X = 800;
+					  bansheerect4.X = 800;
+					  bansheerect5.X = 800;
+                      floodbomberrect.X = 800;
+                      floodedphantomrect.X = 800;
+
+                      floodBoss = true;
+
+				    }
+                    if (floodBoss == true)
+                    {
+                      if (floodBosshealth >= 20)
+                      {
+						if (flooddMovement == false)
+						{
+							floodBossrect.Y += 2;
+							if (floodBossrect.Y >= 200)
+							{
+								boss3Phase2 = true;
+								flooddMovement = true;
+
+
+							}
+						}
+						if (boss3Phase2 == true)
+						{
+							
+							floodBossrect.Y -= 2;
+							if (floodBossrect.Y <= 0)
+							{
+								boss3Phase2 = false;
+								flooddMovement = false;
+
+							}
+						}
+						energyShield1rect = new Rectangle(floodBossrect.X + -100, floodBossrect.Y, 100, 300);
+						if (energyShieldOff == true)
+						{
+							shieldTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+						}
+
+						if (shieldTimer >= 10f && energyShieldOff == true)
+						{
+
+							energyShieldHealth = 8;
+							energyShieldOff = false;
+							shieldTimer = 0;
+						}
+					  }
+                      
+
+
+				    }
+                    
+				
 
 
 
-
-                }
+			    }
             
                 if (screen == Screen.GameOver)
                 {
@@ -2706,9 +2785,9 @@ namespace _1_5_summative__HALO_
                         peilcanrect3.X = 0;
                         peilcanrect3.Y = 600;
 
-                        bansheerect.X = 850;
+                        bansheerect.X = 800;
                         bansheerect.Y = new Random().Next(0, 450);
-                        bansheerect2.X = 850;
+                        bansheerect2.X = 900;
                         bansheerect2.Y = new Random().Next(0, 450);
                         phantomrect.X = new Random().Next(1000, 1500);
                         phantomrect.Y = new Random().Next(0, 450);
@@ -3352,7 +3431,9 @@ namespace _1_5_summative__HALO_
 			  _spriteBatch.Draw(bansheeTexture, bansheerect5, Color.White);
               _spriteBatch.Draw(floodbomberTexture, floodbomberrect, Color.White);
 			  _spriteBatch.Draw(floodedphantomTexture, floodedphantomrect, Color.White);
-              if (isExploding10 == true)
+              _spriteBatch.Draw(floodBossTexture, floodBossrect, Color.White);
+			
+			  if (isExploding10 == true)
               {
                 _spriteBatch.Draw(floodCloudTexture, floodbomberrect, Color.White);
 			  }
@@ -3439,7 +3520,34 @@ namespace _1_5_summative__HALO_
 					peilcanRightDownShow = false;
 
 				}
-                
+				if (floodBosshealth >= 20)
+                {
+					if (energyShieldHealth >= 8)
+					{
+						_spriteBatch.Draw(energyShieldTexture1, energyShield1rect, Color.White);
+					}
+					else if (energyShieldHealth >= 6)
+					{
+						_spriteBatch.Draw(energyShieldTexture2, energyShield1rect, Color.White);
+					}
+					else if (energyShieldHealth >= 4)
+					{
+						_spriteBatch.Draw(energyShieldTexture3, energyShield1rect, Color.White);
+					}
+					else if (energyShieldHealth >= 2)
+					{
+						_spriteBatch.Draw(energyShieldTexture4, energyShield1rect, Color.White);
+					}
+					else if (energyShieldHealth <= 0)
+					{
+						energyShieldOff = true;
+					}
+					else if (shieldTimer >= 5f)
+					{
+
+					}
+
+				}
 				if (lifes == 3)
 				{
 					_spriteBatch.Draw(peilcanTexture, playerLife1rect, Color.White);
