@@ -2234,35 +2234,27 @@ namespace _1_5_summative__HALO_
 
 											bigplasmaTimer4 = 0;
 										}
-										for (int j = bigplasmaPositions4.Count - 1; j >= 0; j--)
-										{
-											bigplasmaPositions4[j] += bigplasmaVelocities4[j];
-											var pos = bigplasmaPositions4[j];
-											if (bigplasmaPositions4[j].X < -330)
-											{
-												bigplasmaPositions4.RemoveAt(j);
-												bigplasmaVelocities4.RemoveAt(j);
-												continue;
-											}
-											if (playerLife == false)
-											{
-												if (peilcanrect.Contains(pos))
-												{
-													lifes--;
+                                        int count = Math.Min(bigplasmaPositions4.Count, bigplasmaVelocities4.Count);
+                                        for (int j = bigplasmaPositions4.Count - 1; j >= 0; j--)
+                                        {
+                                            // use the smaller count so indexing is safe
 
-													playerLife = true;
-													bigplasmaPositions.RemoveAt(j);
-													bigplasmaVelocities.RemoveAt(j);
-													continue;
-												}
-											}
-											if (peilcanrect.Contains(pos))
-											{
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
-												continue;
-											}
-										}
+
+                                            bigplasmaPositions4[j] += bigplasmaVelocities4[j];
+                                            var pos = bigplasmaPositions4[j];
+
+                                            // ... collision checks ...
+
+                                            if (peilcanrect.Contains(pos)) // when removing, keep both lists consistent
+                                            {
+                                                if (j < bigplasmaPositions4.Count) bigplasmaPositions4.RemoveAt(j);
+                                                if (j < bigplasmaVelocities4.Count) bigplasmaVelocities4.RemoveAt(j);
+                                                playerLife = true;
+                                            }
+
+
+                                        }
+                                    
 										guardianrect.X += (int)(float)(Math.Sin(levelTwoTimer) * 3);
 									}
                                     
