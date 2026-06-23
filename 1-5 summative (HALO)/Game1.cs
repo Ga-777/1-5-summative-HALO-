@@ -261,7 +261,7 @@ namespace _1_5_summative__HALO_
 
             bansheerect3 = new Rectangle(900, 0, 60, 40);
 
-			logorect = new Rectangle(200, 100, 400, 300);
+			logorect = new Rectangle(200, -50, 400, 500);
 
             buttonrect = new Rectangle(300, 400, 200, 50);
 
@@ -395,7 +395,7 @@ namespace _1_5_summative__HALO_
 
             unscShipTexture = Content.Load<Texture2D>("UNSC_ship");
 
-            logoTexture = Content.Load<Texture2D>("halo_logo");
+            logoTexture = Content.Load<Texture2D>("logo2");
 
             haloTheme = Content.Load<SoundEffect>("halo_theme").CreateInstance();
 
