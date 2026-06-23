@@ -44,7 +44,7 @@ namespace _1_5_summative__HALO_
 		
         bool playerLife = false;
 
-        private float playerLifeTimer = 0, playerLifeTime = 0.10f;
+        private float playerLifeTimer = 0, playerLifeTime = 0.70f;
 
 
         // Explosion
