@@ -1853,10 +1853,10 @@ namespace _1_5_summative__HALO_
                 }
                 if (levelTwoTimer >= 40)
                 {
-                    controllerrect.X -= 2;
+                    
 
                 }
-                if (levelTwoTimer >= 5)
+                if (levelTwoTimer >= 55)
                 {
 
 
@@ -1879,7 +1879,7 @@ namespace _1_5_summative__HALO_
 
                 }
           
-                if (levelTwoTimer >= 6)
+                if (levelTwoTimer >= 60)
                 {
 
                     if (guardianActive == true)
