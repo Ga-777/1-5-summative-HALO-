@@ -73,6 +73,12 @@
 /processorParam:TextureFormat=Color
 /build:banshee.png
 
+#begin bigExplosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bigExplosion.wav
+
 #begin bomb-explosion.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -300,6 +306,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:download (22) (1).png
+
+#begin dragon-studio-massive-explosion-3-397984.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:dragon-studio-massive-explosion-3-397984.mp3
 
 #begin earth-rumble.wav
 /importer:WavImporter
