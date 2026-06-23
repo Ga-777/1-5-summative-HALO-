@@ -403,6 +403,12 @@
 /processorParam:TextureFormat=Color
 /build:flood spore(1).png
 
+#begin flood_bodyfall_combatform1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:flood_bodyfall_combatform1.wav
+
 #begin floodbomber.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -415,6 +421,18 @@
 /processorParam:TextureFormat=Color
 /build:floodbomber.png
 
+#begin floodCloud.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:floodCloud.png
+
 #begin floodedPhantom.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -426,6 +444,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:floodedPhantom.png
+
+#begin GAME OVER.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GAME OVER.png
 
 #begin guardian.png
 /importer:TextureImporter
@@ -844,6 +874,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:radio1.wav
+
+#begin rescopicsound-elemental-magic-spell-impact-outgoing-228342.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:rescopicsound-elemental-magic-spell-impact-outgoing-228342.wav
 
 #begin ring_sky.png
 /importer:TextureImporter
