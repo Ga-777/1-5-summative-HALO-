@@ -2021,34 +2021,25 @@ namespace _1_5_summative__HALO_
 
 											bigplasmaTimer2 = 0;
 										}
+										int count = Math.Min(bigplasmaPositions2.Count, bigplasmaVelocities2.Count);
 										for (int j = bigplasmaPositions2.Count - 1; j >= 0; j--)
 										{
+											// use the smaller count so indexing is safe
+
+
 											bigplasmaPositions2[j] += bigplasmaVelocities2[j];
 											var pos = bigplasmaPositions2[j];
-											if (bigplasmaPositions2[j].X < -330)
-											{
-												bigplasmaPositions2.RemoveAt(j);
-												bigplasmaVelocities2.RemoveAt(j);
-												continue;
-											}
-											if (playerLife == false)
-											{
-												if (peilcanrect.Contains(pos))
-												{
-													lifes--;
 
-													playerLife = true;
-													bigplasmaPositions.RemoveAt(j);
-													bigplasmaVelocities.RemoveAt(j);
-													continue;
-												}
-											}
-											if (peilcanrect.Contains(pos))
+											// ... collision checks ...
+
+											if (peilcanrect.Contains(pos)) // when removing, keep both lists consistent
 											{
-												bigplasmaPositions.RemoveAt(j);
-												bigplasmaVelocities.RemoveAt(j);
-												continue;
+												if (j < bigplasmaPositions2.Count) bigplasmaPositions2.RemoveAt(j);
+												if (j < bigplasmaVelocities2.Count) bigplasmaVelocities2.RemoveAt(j);
+												playerLife = true;
+                                                lifes--;
 											}
+
 
 										}
 									}
